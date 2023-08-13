@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=1
 ModuleClosedNodes4=1
-NavigationStack=AS_Settings,Base_Resize,93,0,AS_Settings,DesignerCreateView,93,0,AS_Settings,getValueType_Custom,1137,0,AS_Settings,getValueType_ComboBox,1116,0,AS_Settings,AddBottomText,462,0,AS_Settings,AddInternBottomText,484,3,AS_Settings,AddInternProperty,645,0,AS_Settings,MeasureMultilineTextHeight,1467,6,Visual Designer,frm_main.bal,-100,1,AS_Settings,AddProperty2List,576,6,AS_Properties,Process_Globals,3,0
+NavigationStack=AS_Settings,AddBottomText,462,0,AS_Settings,AddInternBottomText,484,3,AS_Settings,AddInternProperty,645,0,AS_Settings,MeasureMultilineTextHeight,1467,6,Visual Designer,frm_main.bal,-100,1,AS_Settings,AddProperty2List,576,6,AS_Properties,Process_Globals,3,0,B4XMainPage,ShowInputBox,107,0,B4XMainPage,CreateLabel,109,6,B4XMainPage,AS_Settings1_CustomDrawProperty,85,6
 SelectedBuild=0
 VisibleModules=3,2,1

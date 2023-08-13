@@ -40,7 +40,15 @@ V1.02
 	-AS_Settings
 		-BugFixes in Property_SegmentedTab
 			-AS_SegmentedTab V1.18+ needed
-	
+		-Add AddProperty_Chooser - looks like an AddProperty_Text, but is a label with click event
+		-Add Event ChooserTextFieldClicked - Is triggered when you click on an AddProperty_Chooser
+		-Add AddProperty_Custom - Is a CustomDrawProperty field, the CustomDrawProperty event is triggered, there you can add your own layout
+		-Add Event CustomDrawProperty - You can now add your custom property layout
+		-Add CustomDrawProperty_Add - You can add any view with this function and It is automatically added to the layout, you don't have to worry about where to put it
+		-Add CustomDrawProperty_AddChooser - A chooser view is created
+		-Add CustomDrawProperty_AddText - A simple text item
+		
+
 	SegmentedTab, PlusMinus und dieses Example Projekt updaten wegen abhängikeiten
 #End If
 
@@ -100,7 +108,7 @@ Sub Class_Globals
 	Type ASSettings_Group(Key As String,Name As String,Properties As List)
 	Type ASSettings_Property(PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,ValueType As String,Value As Object,DisplayValueText As String,ItemList As List,ItemMap As Map,ValueTypeTextProperties As ASSettings_ValueTypeTextProperties,ValueTypeSegmentedTabProperties As Object,ValueTypePlusMinusProperties As Object,isLast As Boolean,Group As ASSettings_Group)
 	Type ASSettings_CustomDrawProperty(Group As ASSettings_Group,Property As ASSettings_Property,PropertyViews As ASSettings_PropertyViews,PropertySettingViews As ASSettings_PropertySettingViews)
-	Type ASSettings_PropertyViews(RootBackgroundPanel As B4XView,BackgroundPanel As B4XView,IconImageView As B4XView,NameLabel As B4XView)
+	Type ASSettings_PropertyViews(RootBackgroundPanel As B4XView,LeftBackgroundPanel As B4XView,RightBackgroundPanel As B4XView,IconImageView As B4XView,NameLabel As B4XView)
 	Type ASSettings_PropertySettingViews(BackgroundPanel As B4XView,ActionButtonArrowLabel As B4XView,ActionValueLabel As B4XView)
 	
 	Type ASSettings_BottomTextProperty(xFont As B4XFont,TextColor As Int)
@@ -800,9 +808,6 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As ASSettings_
 			#End If
 				xpnl_PropertyBackground.AddView(xlbl_ActionValue,xpnl_Property.Width/2 + Gap,0,xlbl_ActionIcon.Left - xpnl_Property.Width/2 - Gap*2,xpnl_Property.Height)
 			
-				PropertySettingViews.ActionButtonArrowLabel = xlbl_ActionIcon
-				PropertySettingViews.ActionValueLabel = xlbl_ActionValue
-			
 			#If B4J
 				xlbl_ActionIcon.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
 				xlbl_ActionValue.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
@@ -812,7 +817,8 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As ASSettings_
 			xpnl_PropertyBackground.Left = 0
 			xpnl_PropertyBackground.Width = xpnl_Property.Width
 			
-		Case getValueType_Custom
+			PropertySettingViews.ActionButtonArrowLabel = xlbl_ActionIcon
+			PropertySettingViews.ActionValueLabel = xlbl_ActionValue
 			
 		Case getValueType_Chooser
 			
@@ -1002,11 +1008,12 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As ASSettings_
 				
 		Case getValueType_Custom
 			
+
+			
 	End Select
-		
+	
+	Dim PropertyViews As ASSettings_PropertyViews = CreateASSettings_PropertyViews(xpnl_Background,xpnl_Property,xpnl_PropertyBackground,xiv_Icon,xlbl_PropertyName)
 	PropertySettingViews.BackgroundPanel = xpnl_PropertyBackground
-		
-	Dim PropertyViews As ASSettings_PropertyViews = CreateASSettings_PropertyViews(xpnl_Background,xpnl_Property,xiv_Icon,xlbl_PropertyName)
 	CustomDrawProperty(CreateASSettings_CustomDrawProperty(Property.Group,Property,PropertyViews,PropertySettingViews))
 	
 End Sub
@@ -1049,6 +1056,70 @@ Public Sub Refresh
 	xclv_main.Refresh
 	
 End Sub
+
+#Region CustomDrawProperty
+
+Public Sub CustomDrawProperty_Add(Parent As B4XView,View As B4XView,Width As Float,Height As Float) As B4XView
+	
+	Parent.AddView(View,0,Parent.Height/2 - Height/2,Width,Height)
+	
+	For i = Parent.NumberOfViews -1 To 0 Step -1
+		
+		Parent.GetView(i).Left = IIf(i = (Parent.NumberOfViews-1),Parent.Width - m_Padding - Parent.GetView(i).Width,Parent.GetView(i+1).Left - m_Padding - Parent.GetView(i).Width)
+		
+	Next
+
+	Return View
+	
+End Sub
+'Creates a label view int he style of the textfield
+'Event Example:
+'Private Sub EventName_Clicked(Property As ASSettings_Property,View As Object)
+'	Log("CustomDrawProperty Chooser Clicked")
+'End Sub
+Public Sub CustomDrawProperty_AddChooser(Callback As Object, EventName As String) As B4XView
+	
+	Dim xlbl_TextField As B4XView = CreateLabel("xlbl_CustomDrawTextField")
+	xlbl_TextField.SetColorAndBorder(getValueTypeTextProperties.Color,0,0,getValueTypeTextProperties.CornerRadius)
+	xlbl_TextField.Font = getValueTypeTextProperties.xFont
+	xlbl_TextField.SetTextAlignment("CENTER","CENTER")
+	xlbl_TextField.Text = ""
+'	If Property.DisplayValueText = "" Then
+'		xlbl_TextField.Text = Property.Value
+'	Else
+'		xlbl_TextField.Text = Property.DisplayValueText
+'	End If
+	'xlbl_TextField.Tag = getValueTypeTextProperties
+	xlbl_TextField.TextColor = getValueTypeTextProperties.TextColor
+	xlbl_TextField.Tag = CreateMap("Callback":Callback,"EventName":EventName)
+	Return xlbl_TextField
+	
+End Sub
+'Creates a normal text label without a style
+Public Sub CustomDrawProperty_AddText(Callback As Object, EventName As String, Text As String) As B4XView
+	
+	Dim xlbl_Separator As B4XView = CreateLabel("xlbl_CustomDrawText")
+	xlbl_Separator.TextColor = getValueTypeTextProperties.TextColor
+	xlbl_Separator.Text = Text
+	xlbl_Separator.Font = getValueTypeTextProperties.xFont
+	xlbl_Separator.SetTextAlignment("CENTER","CENTER")
+	xlbl_Separator.Tag = CreateMap("Callback":Callback,"EventName":EventName)
+	Return xlbl_Separator
+	
+End Sub
+#If B4J
+Private Sub xlbl_CustomDrawTextField_MouseClicked (EventData As MouseEvent)
+#Else
+Private Sub xlbl_CustomDrawTextField_Click
+#End If
+	Dim xlbl_TextField As B4XView = Sender
+	Dim m_Map As Map = xlbl_TextField.Tag
+	If xui.SubExists(m_Map.Get("Callback"), m_Map.Get("EventName") & "_Clicked",2) Then
+		CallSub3(m_Map.Get("Callback"), m_Map.Get("EventName") & "_Clicked",xclv_main.GetValue(xclv_main.GetItemFromView(xlbl_TextField)),xlbl_TextField)
+	End If
+End Sub
+
+#End Region
 
 #Region Properties
 
@@ -1663,35 +1734,6 @@ Public Sub CreateASSettings_Group (Key As String, Name As String, Properties As 
 	Return t1
 End Sub
 
-Public Sub CreateASSettings_CustomDrawProperty (Group As ASSettings_Group, Property As ASSettings_Property, PropertyViews As ASSettings_PropertyViews, PropertySettingViews As ASSettings_PropertySettingViews) As ASSettings_CustomDrawProperty
-	Dim t1 As ASSettings_CustomDrawProperty
-	t1.Initialize
-	t1.Group = Group
-	t1.Property = Property
-	t1.PropertyViews = PropertyViews
-	t1.PropertySettingViews = PropertySettingViews
-	Return t1
-End Sub
-
-Public Sub CreateASSettings_PropertyViews (RootBackgroundPanel As B4XView, BackgroundPanel As B4XView, IconImageView As B4XView, NameLabel As B4XView) As ASSettings_PropertyViews
-	Dim t1 As ASSettings_PropertyViews
-	t1.Initialize
-	t1.RootBackgroundPanel = RootBackgroundPanel
-	t1.BackgroundPanel = BackgroundPanel
-	t1.IconImageView = IconImageView
-	t1.NameLabel = NameLabel
-	Return t1
-End Sub
-
-Public Sub CreateASSettings_PropertySettingViews (BackgroundPanel As B4XView, ActionButtonArrowLabel As B4XView, ActionValueLabel As B4XView) As ASSettings_PropertySettingViews
-	Dim t1 As ASSettings_PropertySettingViews
-	t1.Initialize
-	t1.BackgroundPanel = BackgroundPanel
-	t1.ActionButtonArrowLabel = ActionButtonArrowLabel
-	t1.ActionValueLabel = ActionValueLabel
-	Return t1
-End Sub
-
 Public Sub CreateASSettings_ValueTypeTextProperties (Width As Float, Height As Float, xFont As B4XFont, TextColor As Int, Color As Int, InputType As String, Format As String, CornerRadius As Float) As ASSettings_ValueTypeTextProperties
 	Dim t1 As ASSettings_ValueTypeTextProperties
 	t1.Initialize
@@ -1747,3 +1789,24 @@ Public Sub CreateASSettings_BottomTextProperty (xFont As B4XFont, TextColor As I
 End Sub
 
 #End Region
+
+Public Sub CreateASSettings_PropertyViews (RootBackgroundPanel As B4XView, LeftBackgroundPanel As B4XView, RightBackgroundPanel As B4XView, IconImageView As B4XView, NameLabel As B4XView) As ASSettings_PropertyViews
+	Dim t1 As ASSettings_PropertyViews
+	t1.Initialize
+	t1.RootBackgroundPanel = RootBackgroundPanel
+	t1.LeftBackgroundPanel = LeftBackgroundPanel
+	t1.RightBackgroundPanel = RightBackgroundPanel
+	t1.IconImageView = IconImageView
+	t1.NameLabel = NameLabel
+	Return t1
+End Sub
+
+Public Sub CreateASSettings_CustomDrawProperty (Group As ASSettings_Group, Property As ASSettings_Property, PropertyViews As ASSettings_PropertyViews, PropertySettingViews As ASSettings_PropertySettingViews) As ASSettings_CustomDrawProperty
+	Dim t1 As ASSettings_CustomDrawProperty
+	t1.Initialize
+	t1.Group = Group
+	t1.Property = Property
+	t1.PropertyViews = PropertyViews
+	t1.PropertySettingViews = PropertySettingViews
+	Return t1
+End Sub
