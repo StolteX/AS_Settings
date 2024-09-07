@@ -111,7 +111,7 @@ V2.06
 			-You can call GetProperty and this specified value is taken as the default value
 			-No need to call GetPropertyDefault anymore
 		-Add GetDefaultValue - Returns the default value that was set with SetDefaultValue
-V2.07 (nicht öffentlicht)
+V2.07
 	-AS_SettingsPage
 		-BugFix on Refresh
 #End If

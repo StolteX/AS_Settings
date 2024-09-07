@@ -32,7 +32,7 @@ Sub Class_Globals
 	Private isMainPage As Boolean = False
 	Private m_BottomText As String
 	Private m_Height As Float = 500dip
-	Private isVisible As Boolean = False
+	Private isVisible As Boolean = False 'Ignore
 	
 	#If B4I
 	Private nome As NativeObject=Me
