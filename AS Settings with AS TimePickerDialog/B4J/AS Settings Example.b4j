@@ -3,20 +3,19 @@ Build1=Default,com.stotlex.settings.timepicker
 File1=frm_main.bjl
 FileGroup1=Default Group
 Group=Default Group
-Library1=b4xpages
-Library2=jcore
-Library3=jfx
-Library4=jsql
-Library5=keyvaluestore
-Library6=xui views
-Library7=as_timepickerdialog
-Module1=|relative|..\..\AS_Properties
-Module2=|relative|..\..\AS_Settings
-Module3=|relative|..\B4XMainPage
+Library1=as_timepickerdialog
+Library2=b4xpages
+Library3=jcore
+Library4=jfx
+Library5=jsql
+Library6=keyvaluestore
+Library7=xui views
+Library8=as_settings
+Module1=|relative|..\B4XMainPage
 NumberOfFiles=1
-NumberOfLibraries=7
-NumberOfModules=3
-Version=9.8
+NumberOfLibraries=8
+NumberOfModules=1
+Version=10
 @EndOfDesignText@
 #Region Project Attributes 
 	#MainFormWidth: 600

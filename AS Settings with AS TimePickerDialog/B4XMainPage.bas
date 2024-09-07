@@ -29,12 +29,12 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	
 	B4XPages.SetTitle(Me,"AS Settings Example")
 	
-	AS_Settings1.AddGroup("Advanced","Advanced Settings")
+	AS_Settings1.MainPage.AddGroup("Advanced","Advanced Settings")
 	
-	AS_Settings1.AddProperty_Chooser("Advanced","PropertyName_1","TimePicker Example","",Null,"",110dip)
-	AS_Settings1.AddProperty_Custom("Advanced","PropertyName_2","2 TimePickers","",Null,"")
+	AS_Settings1.MainPage.AddProperty_Chooser("Advanced","PropertyName_1","TimePicker Example","",Null,"",110dip)
+	AS_Settings1.MainPage.AddProperty_Custom("Advanced","PropertyName_2","2 TimePickers","",Null,"")
 	
-	AS_Settings1.Create
+	AS_Settings1.MainPage.Create
 	
 End Sub
 
@@ -44,19 +44,19 @@ Private Sub B4XPage_KeyboardStateChanged (Height As Float)
 	
 End Sub
 
-Private Sub AS_Settings1_ValueChanged(Property As ASSettings_Property, Value As Object)
+Private Sub AS_Settings1_ValueChanged(Property As AS_Settings_Property, Value As Object)
 	Log("ValueChanged " & Property.PropertyName & ": " & Value)
 End Sub
 
 
-Private Sub AS_Settings1_ChooserTextFieldClicked(Property As ASSettings_Property)
+Private Sub AS_Settings1_ChooserTextFieldClicked(Property As AS_Settings_Property)
 
 		ShowTimePicker(Property)
 	
 End Sub
 
 
-Private Sub ShowTimePicker(Property As ASSettings_Property)
+Private Sub ShowTimePicker(Property As AS_Settings_Property)
 	
 	TimePicker.Initialize(Root)
 	TimePicker.SetDarkMode
@@ -72,13 +72,13 @@ Private Sub ShowTimePicker(Property As ASSettings_Property)
 		AS_Properties.PutProperty(Property.PropertyName,Property.Value)
 		AS_Properties.PutPropertyDisplayValueText(Property.PropertyName,Property.DisplayValueText)
 	
-		AS_Settings1.Refresh
+		AS_Settings1.GetTopPage.Refresh
 
 	End If
 	
 End Sub
 
-Private Sub AS_Settings1_CustomDrawProperty(CustomDrawProperty As ASSettings_CustomDrawProperty)
+Private Sub AS_Settings1_CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
 	
 	If CustomDrawProperty.Property.PropertyName = "PropertyName_2" Then
 		
@@ -86,15 +86,15 @@ Private Sub AS_Settings1_CustomDrawProperty(CustomDrawProperty As ASSettings_Cus
 		
 		Dim BackgroundPanel As B4XView = CustomDrawProperty.PropertyViews.RightBackgroundPanel
 		
-		AS_Settings1.CustomDrawProperty_Add(BackgroundPanel, AS_Settings1.CustomDrawProperty_AddChooser(Me,"TimeStart"),60dip,AS_Settings1.ValueTypeTextProperties.Height).Text = m_PropertyValues.GetDefault("StartHour","14") & ":" & NumberFormat(m_PropertyValues.GetDefault("StartMinute","00"),2,0)
-		AS_Settings1.CustomDrawProperty_Add(BackgroundPanel, AS_Settings1.CustomDrawProperty_AddText(Me,"","-"),20dip,AS_Settings1.ValueTypeTextProperties.Height)
-		AS_Settings1.CustomDrawProperty_Add(BackgroundPanel, AS_Settings1.CustomDrawProperty_AddChooser(Me,"TimeEnd"),60dip,AS_Settings1.ValueTypeTextProperties.Height).Text = m_PropertyValues.GetDefault("EndHour","15") & ":" & NumberFormat(m_PropertyValues.GetDefault("EndMinute","00"),2,0)
+		AS_Settings1.GetTopPage.CustomDrawProperty_Add(BackgroundPanel, AS_Settings1.GetTopPage.CustomDrawProperty_AddChooser(Me,"TimeStart"),60dip,AS_Settings1.PropertyProperties.FieldHeight).Text = m_PropertyValues.GetDefault("StartHour","14") & ":" & NumberFormat(m_PropertyValues.GetDefault("StartMinute","00"),2,0)
+		AS_Settings1.GetTopPage.CustomDrawProperty_Add(BackgroundPanel, AS_Settings1.GetTopPage.CustomDrawProperty_AddText(Me,"","-"),20dip,AS_Settings1.PropertyProperties.FieldHeight)
+		AS_Settings1.GetTopPage.CustomDrawProperty_Add(BackgroundPanel, AS_Settings1.GetTopPage.CustomDrawProperty_AddChooser(Me,"TimeEnd"),60dip,AS_Settings1.PropertyProperties.FieldHeight).Text = m_PropertyValues.GetDefault("EndHour","15") & ":" & NumberFormat(m_PropertyValues.GetDefault("EndMinute","00"),2,0)
 		
 	End If
 	
 End Sub
 
-Private Sub TimeStart_Clicked(Property As ASSettings_Property,View As Object)
+Private Sub TimeStart_Clicked(Property As AS_Settings_Property,View As Object)
 	
 	TimePicker.Initialize(Root)
 	TimePicker.SetDarkMode
@@ -121,7 +121,7 @@ Private Sub TimeStart_Clicked(Property As ASSettings_Property,View As Object)
 	
 End Sub
 
-Private Sub TimeEnd_Clicked(Property As ASSettings_Property,View As Object)
+Private Sub TimeEnd_Clicked(Property As AS_Settings_Property,View As Object)
 	
 	TimePicker.Initialize(Root)
 	TimePicker.SetDarkMode

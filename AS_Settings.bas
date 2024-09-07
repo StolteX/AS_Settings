@@ -47,13 +47,78 @@ V1.02
 		-Add CustomDrawProperty_Add - You can add any view with this function and It is automatically added to the layout, you don't have to worry about where to put it
 		-Add CustomDrawProperty_AddChooser - A chooser view is created
 		-Add CustomDrawProperty_AddText - A simple text item
-		
-
-	SegmentedTab, PlusMinus und dieses Example Projekt updaten wegen abhängikeiten
+V1.03
+	-AS_Settings
+		-Add ResetGroups - Removes the groups, so that you can fill the view with new groups, without the groups that were previously visible
+V1.04
+	-AS_Settings
+		-Description BugFixes
+V1.05
+	-AS_Settings
+		-B4J Focused TextField at start bugfix
+		-Add SetProperty_Boolean - Sets the value of a property as if the user had clicked the switch
+			-The _ValueChanged event is triggered
+		-Add GetProperty - Gets the property object
+V2.00
+	-AS_Settings
+		-Add AddSpaceItem
+		-Add AddDescriptionItem
+		-Add multi page support
+		-Events should be added again, as all type names have changed
+V2.01
+	-AS_SettingsPage
+		-Add AddProperty_SelectionList - You can create single choice or multiple choice options
+			-MultiSelect - If true more than one item can selected. If false only one item is selected if you click, it deselect the previous item
+			-CanDeselectAll - If false, then the last item cannot be deselected, it need min one selected
+	-AS_Settings
+		-Add Designer Property SelectionItemSelectionColor - Color of the selection indicator
+			-Default: White
+		-Add Type AS_Settings_Property_SelectionList
+		-Add Type AS_Settings_SelectionListItem
+		-Add CreateSelectionListItem - Needed to build the items
+V2.02
+	-AS_SettingsPage
+		-Added seperators to the SelectionList property
+		-The ValueChanged event works now with the SelectionList Property
+		-The .Refresh function is now smooth
+		-BugFixes on the PropertyName height and Description height
+V2.03
+	-AS_Settings
+		-BugFixes and Improvements
+		-Add CreateList - Creates an list with just one line of code
+		-Add Designer Property PropertyTextColor
+		-Add set Theme
+		-Add get Theme_Dark
+		-Add get Theme_Light
+		-Add Designer Property ThemeChangeTransition
+			-Default: Fade
+V2.04
+	-AS_SettingsPage
+		-if you now specify your own width for the property AddProperty_Text, you can now use more space
+		-BugFixes
+V2.05
+	-AS_SettingsPage
+		-SelectionList is now using more space
+		-Add Property Custom
+		-Add Event CustomDrawCustomProperty
+	-AS_Settings
+		-Add Event GroupHeaderClicked
+V2.06
+	-AS_SettingsPage
+		-Add AddProperty_ComboBox2 - The value is displayed in the ComboBox and the key is used for selection and stored in the database
+	-AS_Properties
+		-Add SetDefaultValue - Defines the default value globally for this property
+			-You can call GetProperty and this specified value is taken as the default value
+			-No need to call GetPropertyDefault anymore
+		-Add GetDefaultValue - Returns the default value that was set with SetDefaultValue
+V2.07 (nicht öffentlicht)
+	-AS_SettingsPage
+		-BugFix on Refresh
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
 
+#DesignerProperty: Key: ThemeChangeTransition, DisplayName: ThemeChangeTransition, FieldType: String, DefaultValue: Fade, List: None|Fade
 #DesignerProperty: Key: SaveMode, DisplayName: SaveMode, FieldType: String, DefaultValue: Automatic, List: Automatic|Manual
 
 #DesignerProperty: Key: BackgroundColor, DisplayName: BackgroundColor, FieldType: Color, DefaultValue: 0xFF131416, Description: You can use the built-in color picker to find the color values.
@@ -62,6 +127,7 @@ V1.02
 #DesignerProperty: Key: GroupNameBackgroundColor, DisplayName: GroupNameBackgroundColor, FieldType: Color, DefaultValue: 0xFF131416, Description: You can use the built-in color picker to find the color values.
 
 #DesignerProperty: Key: PropertyColor, DisplayName: PropertyColor, FieldType: Color, DefaultValue: 0xFF202125, Description: You can use the built-in color picker to find the color values.
+#DesignerProperty: Key: PropertyTextColor, DisplayName: PropertyTextColor, FieldType: Color, DefaultValue: 0xFFFFFFFF, Description: You can use the built-in color picker to find the color values.
 #DesignerProperty: Key: CornerRadius, DisplayName: CornerRadius, FieldType: Int, DefaultValue: 10, MinRange: 0, MaxRange: 50
 #DesignerProperty: Key: PropertyHeight, DisplayName: PropertyHeight, FieldType: Int, DefaultValue: 60, MinRange: 0
 #DesignerProperty: Key: PropertySeperator, DisplayName: PropertySeperator, FieldType: Boolean, DefaultValue: True
@@ -70,6 +136,8 @@ V1.02
 #DesignerProperty: Key: SwitchThumbColor, DisplayName: SwitchThumbColor, FieldType: Color, DefaultValue: 0xFFFFFFFF, Description: You can use the built-in color picker to find the color values.
 #DesignerProperty: Key: SwitchTrueColor, DisplayName: SwitchTrueColor, FieldType: Color, DefaultValue: 0xFF2D8879, Description: You can use the built-in color picker to find the color values.
 #DesignerProperty: Key: SwitchFalseColor, DisplayName: SwitchFalseColor, FieldType: Color, DefaultValue: 0xFF3C4043, Description: You can use the built-in color picker to find the color values.
+
+#DesignerProperty: Key: SelectionItemSelectionColor, DisplayName: SelectionItemSelectionColor, FieldType: Color, DefaultValue: 0xFFFFFFFF, Description: Color of the selection indicator
 
 #IF SETTINGS_SegmentedTab
 #DesignerProperty: Key: SegmentedTabBackgroundColor, DisplayName: SegmentedTabBackgroundColor, FieldType: Color, DefaultValue: 0xFF3D3C40, Description: You can use the built-in color picker to find the color values.
@@ -97,37 +165,57 @@ V1.02
 #DesignerProperty: Key: BottomText, DisplayName: BottomText, FieldType: String, DefaultValue: , Description: Version 1.0.2
 #DesignerProperty: Key: BottomTextTextColor, DisplayName: BottomTextTextColor, FieldType: Color, DefaultValue: 0xFFFFFFFF
 
-#Event: ActionClicked(Property As ASSettings_Property)
-#Event: ChooserTextFieldClicked(Property As ASSettings_Property)
-#Event: ValueChanged(Property As ASSettings_Property, Value As Object)
+#Event: ActionClicked(Property As AS_Settings_Property)
+#Event: ChooserTextFieldClicked(Property As AS_Settings_Property)
+#Event: ValueChanged(Property As AS_Settings_Property, Value As Object)
 
-#Event: CustomDrawProperty(CustomDrawProperty As ASSettings_CustomDrawProperty)
+#Event: CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
+#Event: CustomDrawCustomProperty(CustomProperty AS AS_Settings_CustomDrawCustomProperty)
+#Event: GroupHeaderClicked(Group As AS_Settings_Group)
 
 Sub Class_Globals
 	
-	Type ASSettings_Group(Key As String,Name As String,Properties As List)
-	Type ASSettings_Property(PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,ValueType As String,Value As Object,DisplayValueText As String,ItemList As List,ItemMap As Map,ValueTypeTextProperties As ASSettings_ValueTypeTextProperties,ValueTypeSegmentedTabProperties As Object,ValueTypePlusMinusProperties As Object,isLast As Boolean,Group As ASSettings_Group)
-	Type ASSettings_CustomDrawProperty(Group As ASSettings_Group,Property As ASSettings_Property,PropertyViews As ASSettings_PropertyViews,PropertySettingViews As ASSettings_PropertySettingViews)
-	Type ASSettings_PropertyViews(RootBackgroundPanel As B4XView,LeftBackgroundPanel As B4XView,RightBackgroundPanel As B4XView,IconImageView As B4XView,NameLabel As B4XView)
-	Type ASSettings_PropertySettingViews(BackgroundPanel As B4XView,ActionButtonArrowLabel As B4XView,ActionValueLabel As B4XView)
+	'Property Types
+	Type AS_Settings_Property_Boolean(Property As AS_Settings_Property)
+	Type AS_Settings_Property_Action(Property As AS_Settings_Property)
+	Type AS_Settings_Property_ActionClean(Property As AS_Settings_Property)
+	Type AS_Settings_Property_Text(Property As AS_Settings_Property,Width As Float,InputType As String)
+	Type AS_Settings_Property_ComboBox(Property As AS_Settings_Property,ItemList As List,KeyValue As B4XOrderedMap)
+	Type AS_Settings_Property_Chooser(Property As AS_Settings_Property,Width As Float)
+	Type AS_Settings_Property_Custom(Property As AS_Settings_Property,Height As Float)
+	Type AS_Settings_Property_SelectionList(Property As AS_Settings_Property,ListItems As List,MultiSelect As Boolean,CanDeselectAll As Boolean)
 	
-	Type ASSettings_BottomTextProperty(xFont As B4XFont,TextColor As Int)
+	Type AS_Settings_SelectionListItem(DisplayName As String,Icon As B4XBitmap,Value As Object)
 	
-	Type ASSettings_ValueTypeTextProperties(Width As Float,Height As Float,xFont As B4XFont,TextColor As Int,Color As Int,InputType As String,Format As String,CornerRadius As Float)
+	Type AS_Settings_SpaceItem(GroupKey As String,Height As Float,BackgroundColor As Int)
+	Type AS_Settings_DescriptionItem(GroupKey As String,Text As String,SidePadding As Float,TopPadding As Float,xFont As B4XFont,HorizontalAlignment As String)
+	
+	'Normal Types
+	Type AS_Settings_Group(Key As String,Name As String,Properties As List)
+	Type AS_Settings_Property(PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,PropertyType As Object,isLast As Boolean,Group As AS_Settings_Group,Value As Object,DefaultValue As Object,DisplayValueText As String,View As Object)
+	Type AS_Settings_CustomDrawProperty(Group As AS_Settings_Group,Property As AS_Settings_Property,PropertyViews As AS_Settings_PropertyViews,PropertySettingViews As AS_Settings_PropertySettingViews)
+	Type AS_Settings_CustomDrawCustomProperty(Group As AS_Settings_Group,Property As AS_Settings_Property,BackgroundPanel As B4XView,Height As Float)
+	Type AS_Settings_PropertyViews(RootBackgroundPanel As B4XView,LeftBackgroundPanel As B4XView,RightBackgroundPanel As B4XView,IconImageView As B4XView,NameLabel As B4XView,DescriptionLabel As B4XView)
+	Type AS_Settings_PropertySettingViews(BackgroundPanel As B4XView,ActionButtonArrowLabel As B4XView,ActionValueLabel As B4XView)
+	Type AS_Settings_SwitchProperties(FalseColor As Int,TrueColor As Int,ThumbColor As Int)
+	Type AS_Settings_BottomTextProperty(xFont As B4XFont,TextColor As Int)
+	
+	Type AS_Settings_Property_Properties(Width As Float,Height As Float,xFont As B4XFont,TextColor As Int,BackgroundColor As Int,DescriptionTextColor As Int,FieldBackgroundColor As Int,FieldHeight As Float,InputType As String,Format As String,CornerRadius As Float)
 	#IF SETTINGS_SegmentedTab
-	Type ASSettings_ValueTypeSegmentedTabProperties(Width As Float,CornerRadius As Float,ShowSeperators As Boolean,BackgroundColor As Int,SelectionColor As Int,SeperatorColor As Int,TextColor As Int,xFont As B4XFont)
+	Type AS_Settings_Property_SegmentedTab(Property As AS_Settings_Property,Width As Float,CornerRadius As Float,ShowSeperators As Boolean,BackgroundColor As Int,SelectionColor As Int,SeperatorColor As Int,TextColor As Int,xFont As B4XFont,ItemMap As Map)
 	#End If
 	#If SETTINGS_PlusMinus
-	Type ASSettings_ValueTypePlusMinusProperties(CornerRadius As Float,ShowDivider As Boolean,BackgroundColor As Int,DividerColor As Int,HaloColor As Int,TextColor As Int,xFont As B4XFont,ShowHaloEffect As Boolean,MinValue As Int,MaxValue As Int,Increment As Int,Prefix As String,Suffix As String)
+	Type AS_Settings_Property_PlusMinus(Property As AS_Settings_Property,CornerRadius As Float,ShowDivider As Boolean,BackgroundColor As Int,DividerColor As Int,HaloColor As Int,TextColor As Int,xFont As B4XFont,ShowHaloEffect As Boolean,MinValue As Int,MaxValue As Int,Increment As Int,Prefix As String,Suffix As String,PropertyProperties As AS_Settings_Property_Properties)
 	#End If
 		
-	Private g_ValueTypeTextProperties As ASSettings_ValueTypeTextProperties
-	Private g_BottomTextProperties As ASSettings_BottomTextProperty
+	Private g_PropertyProperties As AS_Settings_Property_Properties
+	Private g_BottomTextProperties As AS_Settings_BottomTextProperty
+	Private g_SwitchProperties As AS_Settings_SwitchProperties
 	#IF SETTINGS_SegmentedTab
-	Private g_ValueTypeSegmentedTabProperties As ASSettings_ValueTypeSegmentedTabProperties
+	Private g_SegmentedTabProperties As AS_Settings_Property_SegmentedTab
 	#End IF
 	#If SETTINGS_PlusMinus
-	Private g_ValueTypePlusMinusProperties As ASSettings_ValueTypePlusMinusProperties
+	Private g_PlusMinusProperties As AS_Settings_Property_PlusMinus
 	#End If
 	
 	Private mEventName As String 'ignore
@@ -136,1018 +224,367 @@ Sub Class_Globals
 	Private xui As XUI 'ignore
 	Public Tag As Object
 	
-	Private xclv_main As CustomListView
-	Private isReady As Boolean = False
-	
-	Private lstGroups As List
+	Private xpnl_Pages As B4XView
+	Private xiv_RefreshImage As B4XView
 	
 	Private m_BackgroundColor As Int
-	Private m_PropertyColor As Int
 	Private m_Padding As Float = 10dip
-	Private m_SwitchThumbColor As Int
-	Private m_SwitchTrueColor As Int
-	Private m_SwitchFalseColor As Int
 	Private m_PropertySeperator As Boolean
 	Private m_PropertySeperatorColor As Int
 	Private m_CornerRadius As Int
-	Private m_PropertyHeight As Float
 	Private m_GroupHeight As Float
 	Private m_GroupNameBackgroundColor As Int
+	Private m_ArrowColor As Int
+	Private m_DragIndicatorColor As Int
+	Private m_GroupNameTextColor As Int
+	Private m_SecondPageShadowColor As Int
+	Private m_SecondPageHeaderTextColor As Int
+	Private m_ExitIconColor As Int
 	Private m_HapticFeedback As Boolean
 	Private m_SaveMode As String
 	Private m_ShowMadeWithLove As Boolean
 	Private m_MadeWithLoveTextColor As Int
-	Private m_BottomText As String
+	Private m_HeaderHeight As Float = 65dip
+	Private m_SelectionItemSelectionColor As Int
+	Private m_ThemeChangeTransition As String
+	Private lst_Pages As List
+	Private lst_CreatedPages As List
+	
+	Private m_MainPage As AS_SettingsPage
 
+	Type AS_Settings_Theme(PlusMinus_TextColor As Int,PlusMinus_HaloColor As Int,PlusMius_DividerColor As Int,PlusMinus_BackgroundColor As Int,SegmentedTab_TextColor As Int,SegmentedTab_SeperatorColor As Int,SegmentedTab_SelectionColor As Int,SegmentedTab_BackgroundColor As Int,ExitIconColor As Int,SecondPageHeaderTextColor As Int,SecondPageShadowColor As Int,DragIndicatorColor As Int,ArrowColor As Int,BackgroundColor As Int,GroupNameBackgroundColor As Int,GroupNameTextColor As Int,PropertyColor As Int,PropertyTextColor As Int,DescriptionTextColor As Int,FieldBackgroundColor As Int,PropertySeperatorColor As Int,SwitchThumbColor As Int,SwitchTrueColor As Int,SwitchFalseColor As Int,SelectionItemSelectionColor As Int,SegmentedTabBackgroundColor As Int,SegmentedTabSelectionColor As Int,SegmentedTabTextColor As Int,SegmentedTabSeperatorsColor As Int,PlusMinusBackgroundColor As Int,PlusMinusTextColor As Int,PlusMinusHaloColor As Int,PlusMinusDividerColor As Int,MadeWithLoveTextColor As Int,BottomTextTextColor As Int)
+
+End Sub
+
+
+
+Public Sub getTheme_Light As AS_Settings_Theme
+	
+	Dim Theme As AS_Settings_Theme
+	Theme.Initialize
+	
+	Theme.BackgroundColor = xui.Color_White
+	Theme.PropertySeperatorColor = 0x28000000
+	Theme.GroupNameBackgroundColor = xui.Color_White
+	Theme.GroupNameTextColor = xui.Color_Black
+	Theme.MadeWithLoveTextColor = xui.Color_Black
+	Theme.SelectionItemSelectionColor = xui.Color_Black
+	Theme.PropertyColor = xui.Color_ARGB(255,235, 235, 235)
+	Theme.PropertyTextColor = xui.Color_Black
+	Theme.DescriptionTextColor = xui.Color_ARGB(152,0,0,0)
+	Theme.FieldBackgroundColor = xui.Color_ARGB(255,212, 212, 212)
+	Theme.ArrowColor = xui.Color_ARGB(152,0,0,0)
+	Theme.DragIndicatorColor = xui.Color_ARGB(152,0,0,0)
+	Theme.SecondPageShadowColor = xui.Color_ARGB(152,0,0,0)
+	Theme.SecondPageHeaderTextColor = xui.Color_ARGB(152,0,0,0)
+	Theme.ExitIconColor = xui.Color_ARGB(80,0,0,0)
+	
+	#IF SETTINGS_SegmentedTab
+	Theme.SegmentedTab_BackgroundColor = xui.Color_ARGB(255,61, 60, 64)
+	Theme.SegmentedTab_SelectionColor = xui.Color_ARGB(255,115, 114, 120)
+	Theme.SegmentedTab_SeperatorColor = xui.Color_ARGB(80,0,0,0)
+	Theme.SegmentedTab_TextColor = xui.Color_Black
+	#End If
+	
+	#If SETTINGS_PlusMinus
+	Theme.PlusMinus_BackgroundColor = xui.Color_ARGB(255,60, 64, 67)
+	Theme.PlusMius_DividerColor = xui.Color_ARGB(80,255,255,255)
+	Theme.PlusMinus_HaloColor = xui.Color_ARGB(80,0,0,0)
+	Theme.PlusMinus_TextColor = xui.Color_White
+	#End If
+	
+	Theme.BottomTextTextColor = xui.Color_Black
+	Theme.SwitchFalseColor = 0xFF3C4043
+	Theme.SwitchTrueColor = 0xFF2D8879
+	Theme.SwitchThumbColor = xui.Color_White
+	
+	Return Theme
+	
+End Sub
+
+Public Sub getTheme_Dark As AS_Settings_Theme
+	
+	Dim Theme As AS_Settings_Theme
+	Theme.Initialize
+	
+	Theme.BackgroundColor = 0xFF131416
+	Theme.PropertySeperatorColor = 0x28FFFFFF
+	Theme.GroupNameBackgroundColor = 0xFF131416
+	Theme.GroupNameTextColor = xui.Color_White
+	Theme.MadeWithLoveTextColor = xui.Color_White
+	Theme.SelectionItemSelectionColor = xui.Color_White
+	Theme.PropertyColor = 0xFF202125
+	Theme.PropertyTextColor = xui.Color_White
+	Theme.DescriptionTextColor = xui.Color_ARGB(152,255,255,255)
+	Theme.FieldBackgroundColor = xui.Color_ARGB(255,60, 64, 67)
+	Theme.ArrowColor = xui.Color_ARGB(152,255,255,255)
+	Theme.DragIndicatorColor = xui.Color_ARGB(152,255,255,255)
+	Theme.SecondPageShadowColor = xui.Color_ARGB(200,0,0,0)
+	Theme.SecondPageHeaderTextColor = xui.Color_ARGB(152,255,255,255)
+	Theme.ExitIconColor = xui.Color_ARGB(80,255,255,255)
+	
+	#IF SETTINGS_SegmentedTab
+	Theme.SegmentedTab_BackgroundColor = xui.Color_ARGB(255,61, 60, 64)
+	Theme.SegmentedTab_SelectionColor = xui.Color_ARGB(255,115, 114, 120)
+	Theme.SegmentedTab_SeperatorColor = xui.Color_ARGB(80,255,255,255)
+	Theme.SegmentedTab_TextColor = xui.Color_White
+	#End If
+	
+	#If SETTINGS_PlusMinus
+	Theme.PlusMinus_BackgroundColor = xui.Color_ARGB(255,60, 64, 67)
+	Theme.PlusMius_DividerColor = xui.Color_ARGB(80,255,255,255)
+	Theme.PlusMinus_HaloColor =  xui.Color_ARGB(80,255,255,255)
+	Theme.PlusMinus_TextColor = xui.Color_White
+	#End If
+	
+	Theme.BottomTextTextColor = 0xFFFFFFFF
+	Theme.SwitchFalseColor = 0xFF3C4043
+	Theme.SwitchTrueColor = 0xFF2D8879
+	Theme.SwitchThumbColor = 0xFFFFFFFF
+	
+	Return Theme
+	
+End Sub
+
+Public Sub setTheme(Theme As AS_Settings_Theme)
+	
+	xiv_RefreshImage.SetBitmap(mBase.Snapshot)
+	xiv_RefreshImage.SetVisibleAnimated(0,True)
+	
+	Sleep(0)
+	
+	m_BackgroundColor = Theme.BackgroundColor
+	m_PropertySeperatorColor = Theme.PropertySeperatorColor
+	m_GroupNameBackgroundColor = Theme.GroupNameBackgroundColor
+	m_GroupNameTextColor = Theme.GroupNameTextColor
+	m_MadeWithLoveTextColor = Theme.MadeWithLoveTextColor
+	m_SelectionItemSelectionColor = Theme.SelectionItemSelectionColor
+	g_PropertyProperties.BackgroundColor = Theme.PropertyColor
+	g_PropertyProperties.TextColor = Theme.PropertyTextColor
+	g_PropertyProperties.FieldBackgroundColor = Theme.FieldBackgroundColor
+	g_PropertyProperties.DescriptionTextColor = Theme.DescriptionTextColor
+	m_ArrowColor = Theme.ArrowColor
+	m_DragIndicatorColor = Theme.DragIndicatorColor
+	m_SecondPageShadowColor = Theme.SecondPageShadowColor
+	m_SecondPageHeaderTextColor = Theme.SecondPageHeaderTextColor
+	m_ExitIconColor = Theme.ExitIconColor
+	
+	#IF SETTINGS_SegmentedTab
+	g_SegmentedTabProperties.BackgroundColor = Theme.SegmentedTab_BackgroundColor
+	g_SegmentedTabProperties.TextColor = Theme.SegmentedTab_TextColor
+	g_SegmentedTabProperties.SelectionColor = Theme.SegmentedTab_SelectionColor
+	g_SegmentedTabProperties.SeperatorColor = Theme.SegmentedTab_SeperatorColor
+	#End If
+	
+	#If SETTINGS_PlusMinus
+	g_PlusMinusProperties.BackgroundColor = Theme.PlusMinus_BackgroundColor
+	g_PlusMinusProperties.TextColor = Theme.PlusMinus_TextColor
+	g_PlusMinusProperties.DividerColor = Theme.PlusMius_DividerColor
+	g_PlusMinusProperties.HaloColor = Theme.PlusMinus_HaloColor
+	#End If
+	
+	g_BottomTextProperties.TextColor = Theme.BottomTextTextColor
+	g_SwitchProperties.FalseColor = Theme.SwitchFalseColor
+	g_SwitchProperties.TrueColor = Theme.SwitchTrueColor
+	g_SwitchProperties.ThumbColor = Theme.SwitchThumbColor
+	
+	For Each Page As AS_SettingsPage In lst_CreatedPages
+		Page.Refresh
+	Next
+	
+	Sleep(250)
+	
+	Select m_ThemeChangeTransition
+		Case "None"
+			xiv_RefreshImage.SetVisibleAnimated(0,False)
+		Case "Fade"
+			xiv_RefreshImage.SetVisibleAnimated(250,False)
+	End Select
+	
 End Sub
 
 Public Sub Initialize (Callback As Object, EventName As String)
 	mEventName = EventName
 	mCallBack = Callback
-	lstGroups.Initialize
+	lst_Pages.Initialize
+	lst_CreatedPages.Initialize
 End Sub
 
 'Base type must be Object
 Public Sub DesignerCreateView (Base As Object, Lbl As Label, Props As Map)
 	mBase = Base
     Tag = mBase.Tag
-    mBase.Tag = Me 
+	mBase.Tag = Me
+
+	AS_Properties.Initialize
+	xpnl_Pages = xui.CreatePanel("")
+	mBase.AddView(xpnl_Pages,0,0,mBase.Width,mBase.Height)
+
+	m_MainPage.Initialize(Me,"")
+	lst_Pages.Add(m_MainPage)
+	lst_CreatedPages.Add(m_MainPage)
 
 	IniProps(Props)
-	AS_Properties.Initialize
-	xclv_main = ini_xclv("xclv_main",mBase,xui.IsB4J)
+	
+	xiv_RefreshImage = CreateImageView("")
+	xiv_RefreshImage.Visible = False
+	mBase.AddView(xiv_RefreshImage,0,0,mBase.Width,mBase.Height)
+	
+	#If B4A
+	Base_Resize(mBase.Width,mBase.Height)
+	#End If
+	
+End Sub
+
+Public Sub getMainPage As AS_SettingsPage
+	Return m_MainPage
+End Sub
+
+Public Sub getPages As B4XView
+	Return xpnl_Pages
 End Sub
 
 Public Sub Base_Resize (Width As Double, Height As Double)
-  
+	xiv_RefreshImage.SetLayoutAnimated(0,0,0,Width,Height)
 	mBase.Color = m_BackgroundColor
   
-	xclv_main.AsView.SetLayoutAnimated(0,xclv_main.AsView.Left,xclv_main.AsView.Top,Width,Height)
-	xclv_main.Base_Resize(Width,Height)
+  	xpnl_Pages.Width = Width
+	xpnl_Pages.Height = Height
+  
+	For i = 0 To lst_Pages.Size -1		
+		lst_Pages.Get(i).As(AS_SettingsPage).Base_Resize(Width,Height)		
+	Next
+  
+	'xclv_main.AsView.SetLayoutAnimated(0,xclv_main.AsView.Left,xclv_main.AsView.Top,Width,Height)
+	'xclv_main.Base_Resize(Width,Height)
   
 End Sub
 
 Private Sub IniProps(Props As Map)
 	
 	m_BackgroundColor = xui.PaintOrColorToColor(Props.Get("BackgroundColor"))
-	m_PropertyColor = xui.PaintOrColorToColor(Props.Get("PropertyColor"))
-	m_SwitchThumbColor = xui.PaintOrColorToColor(Props.Get("SwitchThumbColor"))
-	m_SwitchTrueColor = xui.PaintOrColorToColor(Props.Get("SwitchTrueColor"))
-	m_SwitchFalseColor = xui.PaintOrColorToColor(Props.Get("SwitchFalseColor"))
 	m_PropertySeperator = Props.Get("PropertySeperator")
 	m_PropertySeperatorColor = xui.PaintOrColorToColor(Props.Get("PropertySeperatorColor"))
 	m_CornerRadius = Props.Get("CornerRadius")
-	m_PropertyHeight = DipToCurrent(Props.Get("PropertyHeight"))
 	m_GroupNameBackgroundColor = xui.PaintOrColorToColor(Props.Get("GroupNameBackgroundColor"))
+	m_GroupNameTextColor = xui.Color_White
 	m_GroupHeight = DipToCurrent(Props.Get("GroupHeight"))
 	m_HapticFeedback = Props.Get("HapticFeedback")
 	m_SaveMode = Props.GetDefault("SaveMode","Automatic")
 	m_ShowMadeWithLove = Props.GetDefault("ShowMadeWithLove",False)
 	m_MadeWithLoveTextColor = xui.PaintOrColorToColor(Props.GetDefault("MadeWithLoveTextColor",0xFFFFFFFF))
-	m_BottomText = Props.GetDefault("BottomText","")
+	m_MainPage.BottomText = Props.GetDefault("BottomText","")
+	m_SelectionItemSelectionColor = xui.PaintOrColorToColor(Props.GetDefault("SelectionItemSelectionColor",0xFFFFFFFF))
+	m_ArrowColor = xui.Color_ARGB(152,255,255,255)
+	m_SecondPageShadowColor = xui.Color_ARGB(200,0,0,0)
+	m_SecondPageHeaderTextColor = xui.Color_White
+	m_ExitIconColor = xui.Color_ARGB(80,255,255,255)
+	m_ThemeChangeTransition = Props.GetDefault("ThemeChangeTransition","Fade")
 	
-	g_ValueTypeTextProperties = CreateASSettings_ValueTypeTextProperties(mBase.Width/4,m_PropertyHeight/2,xui.CreateDefaultFont(18),xui.Color_White,xui.Color_ARGB(255,60, 64, 67),getInputType_Text,"",5dip)
+	g_PropertyProperties = CreateAS_Settings_Property_Properties(mBase.Width/4,DipToCurrent(Props.Get("PropertyHeight")),xui.CreateDefaultFont(18),xui.PaintOrColorToColor(Props.GetDefault("PropertyTextColor",0xFFFFFFFF)),xui.PaintOrColorToColor(Props.Get("PropertyColor")),xui.Color_ARGB(152,255,255,255),xui.Color_ARGB(255,60, 64, 67),DipToCurrent(Props.Get("PropertyHeight"))/2,getInputType_Text,"",5dip)
 	#IF SETTINGS_SegmentedTab
-	g_ValueTypeSegmentedTabProperties = CreateASSettings_ValueTypeSegmentedTabProperties(0,diptocurrent(Props.GetDefault("SegmentedTabCornerRadius",5dip)),Props.GetDefault("SegmentedTabShowSeperators",False),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabBackgroundColor",0xFF3D3C40)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSelectionColor",0xFF737278)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSeperatorsColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabTextColor",0xFFFFFFFF)),xui.CreateDefaultBoldFont(15))
+	g_SegmentedTabProperties = CreateAS_Settings_SegmentedTabProperties(0,DipToCurrent(Props.GetDefault("SegmentedTabCornerRadius",5dip)),Props.GetDefault("SegmentedTabShowSeperators",False),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabBackgroundColor",0xFF3D3C40)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSelectionColor",0xFF737278)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSeperatorsColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabTextColor",0xFFFFFFFF)),xui.CreateDefaultBoldFont(15))
 	#End If
 	#If SETTINGS_PlusMinus
-	g_ValueTypePlusMinusProperties = CreateASSettings_ValueTypePlusMinusProperties(Props.GetDefault("PlusMinusCornerRadius",5dip),Props.GetDefault("PlusMinusShowDivider",True),xui.PaintOrColorToColor(Props.GetDefault("PlusMinusBackgroundColor",0xFF3D3C40)),xui.PaintOrColorToColor(Props.GetDefault("PlusMinusDividerColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("PlusMinusHaloColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("PlusMinusTextColor",0xFFFFFFFF)),xui.CreateDefaultFont(20),True)
+	g_PlusMinusProperties = CreateAS_Settings_Property_PlusMinus(Props.GetDefault("PlusMinusCornerRadius",5dip),Props.GetDefault("PlusMinusShowDivider",True),xui.PaintOrColorToColor(Props.GetDefault("PlusMinusBackgroundColor",0xFF3D3C40)),xui.PaintOrColorToColor(Props.GetDefault("PlusMinusDividerColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("PlusMinusHaloColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("PlusMinusTextColor",0xFFFFFFFF)),xui.CreateDefaultFont(20),True)
 	#End If
 	
-	g_BottomTextProperties = CreateASSettings_BottomTextProperty(xui.CreateDefaultFont(15),xui.PaintOrColorToColor(Props.GetDefault("BottomTextTextColor",0xFFFFFFFF)))
-	
+	g_BottomTextProperties = CreateAS_Settings_BottomTextProperty(xui.CreateDefaultFont(15),xui.PaintOrColorToColor(Props.GetDefault("BottomTextTextColor",0xFFFFFFFF)))
+	g_SwitchProperties = CreateAS_Settings_SwitchProperties(xui.PaintOrColorToColor(Props.Get("SwitchFalseColor")),xui.PaintOrColorToColor(Props.Get("SwitchTrueColor")),xui.PaintOrColorToColor(Props.Get("SwitchThumbColor")))
+
 End Sub
-
-Private Sub ini_xclv(EventName As String,Parent As B4XView,ShowScrollBar As Boolean) As CustomListView
-	Dim tmplbl As Label
-	tmplbl.Initialize("")
- 
- 	Dim clv As CustomListView
- 
-	Dim tmpmap As Map
-	tmpmap.Initialize
-	tmpmap.Put("DividerColor",0x00FFFFFF)
-	tmpmap.Put("DividerHeight",0)
-	tmpmap.Put("PressedColor",0x00FFFFFF)
-	tmpmap.Put("InsertAnimationDuration",0)
-	tmpmap.Put("ListOrientation","Vertical")
-	tmpmap.Put("ShowScrollBar",xui.IsB4J)
-	clv.Initialize(Me,EventName)
-	clv.DesignerCreateView(Parent,tmplbl,tmpmap)
-
-	#If B4I
-	Do While clv.sv.IsInitialized = False
-		'Sleep(0)
-	Loop
-	Dim sv As ScrollView = clv.sv
-	sv.Color = xui.Color_Transparent'xui.Color_ARGB(255,32, 33, 37)
-	#End If
-	
-	Return clv
-	
-End Sub
-
-Public Sub AddGroup(Key As String,Name As String)
-	
-	Dim lst_Properties As List
-	lst_Properties.Initialize
-	
-	Dim Group As ASSettings_Group = CreateASSettings_Group(Key,Name,lst_Properties)
-	lstGroups.Add(Group)
-	
-End Sub
-
-'<code>AS_Settings1.AddProperty_Boolean("General","PropertyName_1","Boolean Property True",Null,True)</code>
-Public Sub AddProperty_Boolean(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As Boolean)
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Properties As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_Boolean
-	Property.Icon = Icon
-	Property.ValueTypeTextProperties = g_ValueTypeTextProperties
-	Property.Value = DefaultValue
-	
-	lst_Properties.Add(Property)
-	
-End Sub
-
-Public Sub AddProperty_Text(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As Object,Width As Float,InputType As String)
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Property As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_Text
-	Property.Icon = Icon
-	
-	Dim ValueTypeTextProperties As ASSettings_ValueTypeTextProperties
-	ValueTypeTextProperties.Initialize
-	ValueTypeTextProperties.Width = Width
-	ValueTypeTextProperties.Height = g_ValueTypeTextProperties.Height
-	ValueTypeTextProperties.Color = g_ValueTypeTextProperties.Color
-	ValueTypeTextProperties.TextColor = g_ValueTypeTextProperties.TextColor
-	ValueTypeTextProperties.xFont = g_ValueTypeTextProperties.xFont
-	ValueTypeTextProperties.CornerRadius = g_ValueTypeTextProperties.CornerRadius
-	ValueTypeTextProperties.InputType = InputType
-	'ValueTypeTextProperties.Format = Format
-	Property.ValueTypeTextProperties = ValueTypeTextProperties
-	Property.Value = DefaultValue
-	
-	lst_Property.Add(Property)
-	
-End Sub
-
-Public Sub AddProperty_Action(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As Object)
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Properties As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_Action
-	Property.Icon = Icon
-	Property.ValueTypeTextProperties = g_ValueTypeTextProperties
-	Property.Value = DefaultValue
-	
-	lst_Properties.Add(Property)
-	
-End Sub
-
-Public Sub AddProperty_ActionClean(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap)
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Properties As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_ActionClean
-	Property.Icon = Icon
-	Property.ValueTypeTextProperties = g_ValueTypeTextProperties
-	
-	lst_Properties.Add(Property)
-	
-End Sub
-
-Public Sub AddProperty_ComboBox(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As String,ItemList As List)
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Properties As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_ComboBox
-	Property.Icon = Icon
-	Property.ItemList = ItemList
-	Property.ValueTypeTextProperties = g_ValueTypeTextProperties
-	Property.Value = DefaultValue
-	
-	lst_Properties.Add(Property)
-	
-End Sub
-
-Public Sub AddProperty_Chooser(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As String,Width As Float) As ASSettings_Property
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Properties As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_Chooser
-	Property.Icon = Icon
-	Property.ValueTypeTextProperties = g_ValueTypeTextProperties
-	Property.Value = DefaultValue
-
-	Dim ValueTypeTextProperties As ASSettings_ValueTypeTextProperties
-	ValueTypeTextProperties.Initialize
-	ValueTypeTextProperties.Width = Width
-	ValueTypeTextProperties.Height = g_ValueTypeTextProperties.Height
-	ValueTypeTextProperties.Color = g_ValueTypeTextProperties.Color
-	ValueTypeTextProperties.TextColor = g_ValueTypeTextProperties.TextColor
-	ValueTypeTextProperties.xFont = g_ValueTypeTextProperties.xFont
-	ValueTypeTextProperties.CornerRadius = g_ValueTypeTextProperties.CornerRadius
-	Property.ValueTypeTextProperties = ValueTypeTextProperties
-	
-	lst_Properties.Add(Property)
-	
-	Return Property
-	
-End Sub
-
-'Add your own layout over the CustomDraw Event
-Public Sub AddProperty_Custom(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As String)
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Properties As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_Custom
-	Property.Icon = Icon
-	Property.Value = DefaultValue
-	
-	lst_Properties.Add(Property)
-	
-End Sub
-
-#If SETTINGS_SegmentedTab
-'Width: If 0 then the full width is used
-'<code>AS_Settings1.AddProperty_SegmentedTab("Basic","PropertyName_1","Segmented Example 1",Null,1,CreateMap("Option 1":"Value1","Option 2":"Value2"),200dip)</code>
-Public Sub AddProperty_SegmentedTab(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As String,ItemMap As Map,Width As Float)
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Properties As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_SegmentedTab
-	Property.Icon = Icon
-	Property.ItemMap = ItemMap
-	Property.ValueTypeTextProperties = g_ValueTypeTextProperties
-	Property.Value = DefaultValue
-	
-	Dim ValueTypeSegmentedTabProperties As ASSettings_ValueTypeSegmentedTabProperties = g_ValueTypeSegmentedTabProperties
-	ValueTypeSegmentedTabProperties.Width = Width
-
-	Property.ValueTypeSegmentedTabProperties = ValueTypeSegmentedTabProperties
-	
-	lst_Properties.Add(Property)
-	
-End Sub
-
-#End If
-
-#If SETTINGS_PlusMinus
-Public Sub AddProperty_PlusMinus(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As String,MinValue As Int,MaxValue As Int,Increment As Int,Prefix As String,Suffix As String)
-	
-	Dim Group As ASSettings_Group = GetGroup(GroupKey)
-	Dim lst_Properties As List = Group.Properties
-	
-	Dim Property As ASSettings_Property
-	Property.Initialize
-	Property.PropertyName = PropertyName
-	Property.DisplayName = DisplayName
-	Property.Description = Description
-	Property.ValueType = getValueType_PlusMinus
-	Property.Icon = Icon
-	Property.ValueTypeTextProperties = g_ValueTypeTextProperties
-	Property.Value = DefaultValue
-	
-	Dim ValueTypePlusMinusProperties As ASSettings_ValueTypePlusMinusProperties
-	ValueTypePlusMinusProperties.Initialize	
-	ValueTypePlusMinusProperties.BackgroundColor = g_ValueTypePlusMinusProperties.BackgroundColor
-	ValueTypePlusMinusProperties.CornerRadius = g_ValueTypePlusMinusProperties.CornerRadius
-	ValueTypePlusMinusProperties.DividerColor = g_ValueTypePlusMinusProperties.DividerColor
-	ValueTypePlusMinusProperties.HaloColor = g_ValueTypePlusMinusProperties.HaloColor
-	ValueTypePlusMinusProperties.ShowDivider = g_ValueTypePlusMinusProperties.ShowDivider
-	ValueTypePlusMinusProperties.ShowHaloEffect = g_ValueTypePlusMinusProperties.ShowHaloEffect
-	ValueTypePlusMinusProperties.TextColor = g_ValueTypePlusMinusProperties.TextColor
-	ValueTypePlusMinusProperties.xFont = g_ValueTypePlusMinusProperties.xFont
-	
-	ValueTypePlusMinusProperties.MinValue = MinValue
-	ValueTypePlusMinusProperties.MaxValue = MaxValue
-	ValueTypePlusMinusProperties.Increment = Increment
-	ValueTypePlusMinusProperties.Prefix = Prefix
-	ValueTypePlusMinusProperties.Suffix = Suffix
-	Property.ValueTypePlusMinusProperties = ValueTypePlusMinusProperties
-	
-	lst_Properties.Add(Property)
-	
-End Sub
-#End If
-
-Public Sub Create
-	
-	xclv_main.Clear
-	
-	For Each Group As ASSettings_Group In lstGroups
-		
-		AddGroup2List(Group)
-
-	Next
-	
-	If m_ShowMadeWithLove Then
-		AddMadeWithLove
-	End If
-	
-	If m_BottomText <> "" Then
-		AddBottomText
-	End If
-	
-	Dim xpnl_Placeholder As B4XView = xui.CreatePanel("")
-	xpnl_Placeholder.Color = m_BackgroundColor
-	xpnl_Placeholder.SetLayoutAnimated(0,0,0,mBase.Width,20dip)
-	#If B4I
-	xpnl_Placeholder.Height = xpnl_Placeholder.Height + 60dip
-	#End If
-	xclv_main.Add(xpnl_Placeholder,"")
-	
-	XUIViewsUtils.AddStubToCLVIfNeeded(xclv_main, m_BackgroundColor)
-	
-	Sleep(500)
-	isReady = True
-	
-End Sub
-
-Private Sub AddBottomText
-	
-	Dim xpnl_Background As B4XView = xui.CreatePanel("")
-	xpnl_Background.Color = m_BackgroundColor
-	
-	Dim xlbl As B4XView = CreateLabel("")
-	xlbl.Width = mBase.Width
-	xlbl.Text = m_BottomText
-	xlbl.Font = g_BottomTextProperties.xFont
-		#If B4I
-	xlbl.As(Label).Multiline = True
-	#Else If B4J
-	xlbl.As(Label).WrapText = True
-	#Else B4A
-	xlbl.As(Label).SingleLine = False
-	#End If
-	
-	xpnl_Background.SetLayoutAnimated(0,0,0,mBase.Width,MeasureMultilineTextHeight(xlbl) + 10dip)
-	
-	xclv_main.Add(xpnl_Background,"BottomText")
-	
-End Sub
-
-Private Sub AddInternBottomText(xpnl_Background As B4XView)
-	
-	Dim xlbl As B4XView = CreateLabel("")
-	xlbl.Width = mBase.Width
-	xlbl.Text = m_BottomText
-	xlbl.Font = g_BottomTextProperties.xFont
-	xlbl.SetTextAlignment("CENTER","CENTER")
-	xlbl.TextColor = g_BottomTextProperties.TextColor
-			#If B4I
-	xlbl.As(Label).Multiline = True
-	#Else If B4J
-	xlbl.As(Label).WrapText = True
-	#Else B4A
-	xlbl.As(Label).SingleLine = False
-	#End If
-	
-	Dim LabelHeight As Float = MeasureMultilineTextHeight(xlbl)
-	
-	xpnl_Background.AddView(xlbl,0,xpnl_Background.Height/2 - LabelHeight/2,mBase.Width,LabelHeight)
-	'xpnl_Background.Color = xui.Color_Red
-	
-End Sub
-
-Private Sub AddMadeWithLove
-	
-	Dim xpnl_Background As B4XView = xui.CreatePanel("")
-	xpnl_Background.Color = m_BackgroundColor
-	xpnl_Background.SetLayoutAnimated(0,0,0,mBase.Width,40dip)
-	
-	xclv_main.Add(xpnl_Background,"MadeWithLove")
-	
-End Sub
-
-Private Sub AdInternMadeWithLove(xpnl_Background As B4XView)
-	Dim xpnl_MadeWithLoveBackground As B4XView = xui.CreatePanel("")
-	xpnl_MadeWithLoveBackground.SetLayoutAnimated(0,0,xpnl_Background.Height/2 - 20dip/2,mBase.Width,20dip)
-	
-	Dim xlbl_MadeWithLove As B4XView = CreateLabel("")
-	xlbl_MadeWithLove.TextColor = m_MadeWithLoveTextColor
-	xlbl_MadeWithLove.Font = xui.CreateDefaultFont(15)
-	
-	Dim MadeWithLoveBadge As MadeWithLove
-	MadeWithLoveBadge.Initialize(Me,"MadeWithLove")
-	
-	MadeWithLoveBadge.DesignerCreateView(xpnl_MadeWithLoveBackground,xlbl_MadeWithLove,CreateMap())
-	
-	xpnl_Background.AddView(xpnl_MadeWithLoveBackground,0,xpnl_MadeWithLoveBackground.Top,mBase.Width,xpnl_MadeWithLoveBackground.Height)
-
-	'xpnl_Background.Color = xui.Color_Blue
-End Sub
-
-Private Sub AddGroup2List(Group As ASSettings_Group)
-	
-	Dim Height As Float = m_GroupHeight
-	Dim xpnl_Group As B4XView = xui.CreatePanel("")
-	xpnl_Group.SetLayoutAnimated(0,0,0,mBase.Width,Height)
-	xpnl_Group.Color = m_BackgroundColor
-	xclv_main.Add(xpnl_Group,Group)
-	
-	Dim Properties As List = Group.Properties
-	
-	AddGroupBorder2List(True)
-	For i = 0 To Properties.Size -1
-		Dim Property As ASSettings_Property = Properties.Get(i)
-		Property.Group = Group
-		Property.isLast = IIf(i = Properties.Size -1,True,False)
-		'AddInternProperty(Group,Property,IIf(i = Properties.Size -1,True,False))
-		AddProperty2List(Property)
-	Next
-	AddGroupBorder2List(False)
-	
-End Sub
-
-Private Sub AddProperty2List(Property As ASSettings_Property)
-	
-	Dim xpnl_Background As B4XView = xui.CreatePanel("")
-	xpnl_Background.SetLayoutAnimated(0,0,0,mBase.Width,m_PropertyHeight)
-	xpnl_Background.Color = m_BackgroundColor
-	
-	If Property.Description <> "" Then
-
-		Dim Gap As Float = 5dip
-
-		Dim xlbl_Name As B4XView = CreateLabel("")
-		xlbl_Name.Font = xui.CreateDefaultBoldFont(18)
-		xlbl_Name.Text = Property.DisplayName
-		xlbl_Name.Width = mBase.Width/2 - Gap
-			#If B4I
-		xlbl_Name.As(Label).Multiline = True
-	#Else If B4J
-	xlbl_Name.As(Label).WrapText = True
-	#Else B4A
-	xlbl_Name.As(Label).SingleLine = False
-	#End If
-		
-		Dim xlbl_Description As B4XView = CreateLabel("")
-		xlbl_Description.Font = xui.CreateDefaultFont(15)
-		xlbl_Description.Text = Property.Description
-		xlbl_Description.Width = mBase.Width/2 - Gap
-			#If B4I
-		xlbl_Description.As(Label).Multiline = True
-	#Else If B4J
-	xlbl_Description.As(Label).WrapText = True
-	#Else B4A
-	xlbl_Description.As(Label).SingleLine = False
-	#End If
-
-		Dim NameHeight As Float = MeasureMultilineTextHeight(xlbl_Name) + IIf(xui.IsB4A,xlbl_Name.Font.Size + 5dip,0)
-		Dim DescriptionHeight As Float = MeasureMultilineTextHeight(xlbl_Description) + IIf(xui.IsB4A,xlbl_Description.Font.Size + 5dip,0)
-		
-		If NameHeight + DescriptionHeight >= m_PropertyHeight Then
-			xpnl_Background.Height = NameHeight + DescriptionHeight + 10dip
-		End If
-		
-	End If
-	
-	xclv_main.Add(xpnl_Background,Property)
-	
-End Sub
-
-Private Sub AddInternGroup(xpnl_Group As B4XView,Group As ASSettings_Group)
-		
-	Dim Height As Float = m_GroupHeight
-	
-	Dim xlbl_GroupName As B4XView = CreateLabel("")
-	xlbl_GroupName.Text = Group.Name
-	xlbl_GroupName.Font = xui.CreateDefaultBoldFont(20)
-	xlbl_GroupName.TextColor = xui.Color_White
-	xlbl_GroupName.SetTextAlignment("CENTER","LEFT")
-	xpnl_Group.Color = m_GroupNameBackgroundColor
-		
-	xpnl_Group.AddView(xlbl_GroupName,m_Padding,0,mBase.Width - (m_Padding*2),Height)
-		
-End Sub
-
-Private Sub AddInternProperty(xpnl_Background As B4XView,Property As ASSettings_Property)
-	
-	Dim Gap As Float = 5dip
-	
-	Dim xpnl_Property As B4XView = xui.CreatePanel("")
-	xpnl_Background.AddView(xpnl_Property,m_Padding,0,mBase.Width - (m_Padding*2),xpnl_Background.Height)
-	#if b4j
-	xpnl_Property.Width = xpnl_Property.Width - 20dip
-	#End If
-	xpnl_Property.Color = m_PropertyColor
-	Dim xlbl_PropertyName As B4XView = CreateLabel("")
-	xlbl_PropertyName.Text = Property.DisplayName
-	xlbl_PropertyName.Font = xui.CreateDefaultBoldFont(18)
-	xlbl_PropertyName.TextColor = xui.Color_White
-	xlbl_PropertyName.SetTextAlignment("CENTER","LEFT")
-	#If B4I
-	xlbl_PropertyName.As(Label).Multiline = True
-	#Else If B4J
-	xlbl_PropertyName.As(Label).WrapText = True
-	#Else B4A
-	xlbl_PropertyName.As(Label).SingleLine = False
-	#End If
-		
-	xpnl_Property.AddView(xlbl_PropertyName,m_Padding,0,xpnl_Property.Width/2 - Gap,xpnl_Background.Height)
-	
-	If Property.Description <> "" Then
-		Dim xlbl_Description As B4XView = CreateLabel("")
-		xlbl_Description.Text = Property.Description
-		xlbl_Description.Font = xui.CreateDefaultFont(15)
-		xlbl_Description.TextColor = xui.Color_ARGB(152,255,255,255)
-		xlbl_Description.SetTextAlignment("TOP","LEFT")
-	#If B4I
-		xlbl_Description.As(Label).Multiline = True
-	#Else If B4J
-		xlbl_Description.As(Label).WrapText = True
-	#Else B4A
-	xlbl_Description.As(Label).SingleLine = False
-	#End If
-		
-		xlbl_PropertyName.SetTextAlignment("TOP","LEFT")
-		xlbl_PropertyName.Height = MeasureTextHeight(xlbl_PropertyName.Text,xlbl_PropertyName.Font) + 5dip
-		
-		xpnl_Property.AddView(xlbl_Description,m_Padding,xlbl_PropertyName.Height,xpnl_Property.Width/2 - Gap,xpnl_Background.Height - xlbl_PropertyName.Height)
-		
-	End If
-		
-	Dim xpnl_PropertyBackground As B4XView = xui.CreatePanel("")
-	xpnl_PropertyBackground.Color = xui.Color_Transparent
-	xpnl_Property.AddView(xpnl_PropertyBackground,xpnl_Property.Width/2,0,xpnl_Property.Width/2,xpnl_Property.Height)
-		
-	Dim xiv_Icon As B4XView = CreateImageView("")
-	If Property.Icon.IsInitialized Then
-		
-		xpnl_Property.AddView(xiv_Icon,m_Padding,(xpnl_Background.Height)/2 - ((xpnl_Background.Height)/2)/2,(xpnl_Background.Height)/2,(xpnl_Background.Height)/2)
-		xlbl_PropertyName.Left = xiv_Icon.Left + xiv_Icon.Width + 5dip
-		xlbl_PropertyName.Width = xlbl_PropertyName.Width - xiv_Icon.Width - 5dip
-		xiv_Icon.SetBitmap(Property.Icon)
-	End If
-		
-	If m_PropertySeperator And Property.isLast = False Then
-		
-		Dim xpnl_PropertySeperator As B4XView = xui.CreatePanel("")
-		xpnl_PropertySeperator.Color = m_PropertySeperatorColor
-		xpnl_Property.AddView(xpnl_PropertySeperator,m_Padding,xpnl_Property.Height - 1dip,xpnl_Property.Width - m_Padding,1dip)
-		
-	End If
-		
-	Dim PropertySettingViews As ASSettings_PropertySettingViews
-	PropertySettingViews.Initialize
-		
-	If Property.ValueType <> getValueType_Boolean Then
-		If m_SaveMode = getSaveMode_Automatic Then
-			Dim Value As Object = AS_Properties.GetProperty(Property.PropertyName)
-			Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
-			Property.Value = IIf(Value = Null,Property.Value,Value)
-			Property.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
-		End If
-	End If
-		
-	Select Property.ValueType
-		Case getValueType_Boolean
-			
-			If m_SaveMode = getSaveMode_Automatic Then
-				Dim Value As Object = AS_Properties.GetProperty(Property.PropertyName)
-				'Property.Value = IIf(Value = Null,Property.Value,IIf(0 = Value,False,True))
-				Property.Value = IIf(Value = Null,Property.Value,Value)
-			End If
-			
-			Dim SwitchWidth As Float = 55dip
-			Dim SwitchHeight As Float = 31dip
-			
-			Dim Switch As B4XSwitch
-			Switch.Initialize(Me,"SwitchBoolean")
-			
-			Dim mSwitchProperties As Map
-			mSwitchProperties.Initialize
-			mSwitchProperties.Put("Value",Property.Value)
-			mSwitchProperties.Put("OnColor",m_SwitchTrueColor)
-			mSwitchProperties.Put("OffColor",m_SwitchFalseColor)
-			mSwitchProperties.Put("ThumbColor",m_SwitchThumbColor)
-			mSwitchProperties.Put("HapticFeedback",m_HapticFeedback)
-			
-			Dim xpnl_SwitchBase As B4XView = xui.CreatePanel("")
-			xpnl_PropertyBackground.AddView(xpnl_SwitchBase,xpnl_PropertyBackground.Width - SwitchWidth - 10dip,xpnl_PropertyBackground.Height/2 - SwitchHeight/2,SwitchWidth,SwitchHeight)
-			
-			Switch.DesignerCreateView(xpnl_SwitchBase,CreateLabel(""),mSwitchProperties)
-			
-		Case getValueType_Action, getValueType_ActionClean
-			
-			Dim xpnl_ActionClickPanel As B4XView = xui.CreatePanel("xpnl_ActionClickPanel")
-			xpnl_ActionClickPanel.Color = xui.Color_Transparent
-			xpnl_PropertyBackground.AddView(xpnl_ActionClickPanel,0,0,xpnl_Property.Width,xpnl_Property.Height)
-			
-			If Property.ValueType = getValueType_Action Then
-				Dim ActionIconWidth As Float = 30dip
-				Dim ActionIconHeight As Float = xpnl_PropertyBackground.Height/2
-				Dim xlbl_ActionIcon As B4XView = CreateLabel("")
-				xlbl_ActionIcon.Text = Chr(0xE315)
-				xlbl_ActionIcon.Font = xui.CreateMaterialIcons(24)
-				xlbl_ActionIcon.TextColor = xui.Color_ARGB(152,255,255,255)
-				xpnl_PropertyBackground.AddView(xlbl_ActionIcon,xpnl_Property.Width - ActionIconWidth/2-ActionIconWidth/2,xpnl_Property.Height/2 - ActionIconHeight/2,ActionIconWidth,ActionIconHeight)
-			
-				Dim xlbl_ActionValue As B4XView = CreateLabel("")
-				xlbl_ActionValue.Text = Property.Value
-				xlbl_ActionValue.Font = xui.CreateDefaultFont(15)
-				xlbl_ActionValue.TextColor = xui.Color_White
-				xlbl_ActionValue.SetTextAlignment("CENTER","RIGHT")
-			#If B4I
-				xlbl_ActionValue.As(Label).Multiline = True
-				#Else If B4J
-				xlbl_ActionValue.As(Label).WrapText = True
-			#End If
-				xpnl_PropertyBackground.AddView(xlbl_ActionValue,xpnl_Property.Width/2 + Gap,0,xlbl_ActionIcon.Left - xpnl_Property.Width/2 - Gap*2,xpnl_Property.Height)
-			
-			#If B4J
-				xlbl_ActionIcon.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
-				xlbl_ActionValue.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
-			#End If
-			
-			End If
-			xpnl_PropertyBackground.Left = 0
-			xpnl_PropertyBackground.Width = xpnl_Property.Width
-			
-			PropertySettingViews.ActionButtonArrowLabel = xlbl_ActionIcon
-			PropertySettingViews.ActionValueLabel = xlbl_ActionValue
-			
-		Case getValueType_Chooser
-			
-			Dim xlbl_TextField As B4XView = CreateLabel("xlbl_TextField")
-			xlbl_TextField.SetColorAndBorder(Property.ValueTypeTextProperties.Color,0,0,Property.ValueTypeTextProperties.CornerRadius)
-			xlbl_TextField.Font = Property.ValueTypeTextProperties.xFont
-			xlbl_TextField.SetTextAlignment("CENTER","CENTER")
-			If Property.DisplayValueText = "" Then
-				xlbl_TextField.Text = Property.Value
-			Else
-				xlbl_TextField.Text = Property.DisplayValueText
-			End If
-			xlbl_TextField.Tag = Property.ValueTypeTextProperties
-			xlbl_TextField.TextColor = Property.ValueTypeTextProperties.TextColor
-			
-			If Property.ValueTypeTextProperties.Width = 0 Then
-				Property.ValueTypeTextProperties.Width = xpnl_Property.Width/2 - m_Padding
-			End If
-			
-			xpnl_PropertyBackground.AddView(xlbl_TextField,xpnl_PropertyBackground.Width - Property.ValueTypeTextProperties.Width - m_Padding,xpnl_PropertyBackground.Height/2 - Property.ValueTypeTextProperties.Height/2,Property.ValueTypeTextProperties.Width,Property.ValueTypeTextProperties.Height)
-		
-		Case getValueType_Text
-			
-			Dim xtf_TextBox As B4XView = CreateEditText("xtf_TextBox",Property.ValueTypeTextProperties.InputType)
-			xtf_TextBox.TextColor = Property.ValueTypeTextProperties.TextColor
-			xtf_TextBox.SetColorAndBorder(Property.ValueTypeTextProperties.Color,0,0,Property.ValueTypeTextProperties.CornerRadius)
-			xtf_TextBox.Font = Property.ValueTypeTextProperties.xFont
-			xtf_TextBox.SetTextAlignment("CENTER","CENTER")
-			xtf_TextBox.Text = Property.Value
-			xtf_TextBox.Tag = Property.ValueTypeTextProperties
-			xpnl_PropertyBackground.AddView(xtf_TextBox,xpnl_PropertyBackground.Width - Property.ValueTypeTextProperties.Width - m_Padding,xpnl_PropertyBackground.Height/2 - Property.ValueTypeTextProperties.Height/2,Property.ValueTypeTextProperties.Width,Property.ValueTypeTextProperties.Height)
-		
-		#If SETTINGS_SegmentedTab
-		Case getValueType_SegmentedTab
-			
-			Dim ValueTypeSegmentedTabProperties As ASSettings_ValueTypeSegmentedTabProperties = Property.ValueTypeSegmentedTabProperties
-			
-			Dim xpnl_SegmentedTabBackground As B4XView = xui.CreatePanel("")
-			xpnl_PropertyBackground.AddView(xpnl_SegmentedTabBackground,IIf(ValueTypeSegmentedTabProperties.Width = 0,Gap,xpnl_PropertyBackground.Width-ValueTypeSegmentedTabProperties.Width - Gap),xpnl_PropertyBackground.Height/2 - (xpnl_PropertyBackground.Height/2)/2,IIf(ValueTypeSegmentedTabProperties.Width = 0,xpnl_PropertyBackground.Width - Gap*2,ValueTypeSegmentedTabProperties.Width),xpnl_PropertyBackground.Height/2)
-			
-			Dim SegmentedTab As ASSegmentedTab
-			SegmentedTab.Initialize(Me,"SegmentedTab")
-			
-			Dim mSegmentedTab As Map
-			mSegmentedTab.Initialize
-			mSegmentedTab.Put("CornerRadiusBackground",ValueTypeSegmentedTabProperties.CornerRadius)
-			mSegmentedTab.Put("CornerRadiusSelectionPanel",ValueTypeSegmentedTabProperties.CornerRadius)
-			mSegmentedTab.Put("PaddingSelectionPanel",0)
-			mSegmentedTab.Put("ShowSeperators",ValueTypeSegmentedTabProperties.ShowSeperators)
-			mSegmentedTab.Put("BackgroundColor",ValueTypeSegmentedTabProperties.BackgroundColor)
-			mSegmentedTab.Put("SelectionColor",ValueTypeSegmentedTabProperties.SelectionColor)
-			mSegmentedTab.Put("SeperatorColor",ValueTypeSegmentedTabProperties.SeperatorColor)
-			mSegmentedTab.Put("TextColor",ValueTypeSegmentedTabProperties.TextColor)
-			
-			SegmentedTab.DesignerCreateView(xpnl_SegmentedTabBackground,CreateLabel(""),mSegmentedTab)
-		
-			SegmentedTab.ItemTextProperties.TextFont = ValueTypeSegmentedTabProperties.xFont
-			
-			SegmentedTab.CornerRadiusBackground = ValueTypeSegmentedTabProperties.CornerRadius
-			SegmentedTab.CornerRadiusSelectionPanel = ValueTypeSegmentedTabProperties.CornerRadius
-			SegmentedTab.AutoDecreaseTextSize = True
-			
-			For Each k As String In Property.ItemMap.Keys
-				SegmentedTab.AddTab2(k,Null,Property.ItemMap.Get(k))
-			Next
-			
-			For i = 0 To SegmentedTab.Size -1
-				Dim SegTab As ASSegmentedTab_Tab = SegmentedTab.GetTab(i)
-				If SegTab.Value = Property.Value Then
-					SegmentedTab.Index = i
-					Exit
-				End If
-			Next
-			
-	
-			'SegmentedTab.RefreshTabs
-			
-		#End If
-		#If SETTINGS_PlusMinus
-
-		Case getValueType_PlusMinus
-			
-			Dim Width As Float = 110dip
-			
-			Dim ValueTypePlusMinusProperties As ASSettings_ValueTypePlusMinusProperties = Property.ValueTypePlusMinusProperties
-			
-			Dim xpnl_PlusMinusBackground As B4XView = xui.CreatePanel("")
-			xpnl_PropertyBackground.AddView(xpnl_PlusMinusBackground,IIf(Width = 0,Gap,xpnl_PropertyBackground.Width-Width - Gap),xpnl_PropertyBackground.Height/2-40dip/2,IIf(Width = 0,xpnl_PropertyBackground.Width - Gap*2,Width),40dip)
-			
-			Dim PlusMinus As AS_PlusMinus
-			PlusMinus.Initialize(Me,"PlusMinus")
-			
-			Dim mPlusMinus As Map
-			mPlusMinus.Initialize
-			mPlusMinus.Put("MinusText","-")
-			mPlusMinus.Put("PlusText","+")
-			mPlusMinus.Put("Round",False)
-			mPlusMinus.Put("CornerRadius",ValueTypePlusMinusProperties.CornerRadius)
-			mPlusMinus.Put("BackgroundColor",ValueTypePlusMinusProperties.BackgroundColor)
-			mPlusMinus.Put("MinusColor",ValueTypePlusMinusProperties.BackgroundColor)
-			mPlusMinus.Put("MinusTextColor",ValueTypePlusMinusProperties.TextColor)
-			mPlusMinus.Put("PlusColor",ValueTypePlusMinusProperties.BackgroundColor)
-			mPlusMinus.Put("PlusTextColor",ValueTypePlusMinusProperties.TextColor)
-			mPlusMinus.Put("Divider",ValueTypePlusMinusProperties.ShowDivider)
-			mPlusMinus.Put("DividerColor",ValueTypePlusMinusProperties.DividerColor)
-			mPlusMinus.Put("HaloEffect",ValueTypePlusMinusProperties.ShowHaloEffect)
-			mPlusMinus.Put("HaloColor",ValueTypePlusMinusProperties.HaloColor)
-			mPlusMinus.Put("HapticFeedback",m_HapticFeedback)
-			
-			PlusMinus.DesignerCreateView(xpnl_PlusMinusBackground,CreateLabel(""),mPlusMinus)
-			
-			PlusMinus.lblMinus.Font = ValueTypePlusMinusProperties.xFont
-			PlusMinus.lblPlus.Font = ValueTypePlusMinusProperties.xFont
-			
-			PlusMinus.Tag = ValueTypePlusMinusProperties
-			
-			Dim xlbl_Value As B4XView = CreateLabel("")
-			xlbl_Value.TextColor = xui.Color_White
-			xlbl_Value.Font = xui.CreateDefaultFont(15)
-			xlbl_Value.SetTextAlignment("CENTER","RIGHT")
-			xlbl_Value.Text = ValueTypePlusMinusProperties.Prefix &  Property.Value & ValueTypePlusMinusProperties.Suffix
-
-			
-			Dim ValueWidth As Float = MeasureTextWidth(xlbl_Value.Text,xlbl_Value.Font) +2dip
-
-			xpnl_PropertyBackground.AddView(xlbl_Value,xpnl_PlusMinusBackground.Left - ValueWidth - 10dip,0,ValueWidth,xpnl_PropertyBackground.Height)
-
-		#End If
-		Case getValueType_ComboBox
-				
-			Dim ActionIconWidth As Float = 30dip
-			Dim ActionIconHeight As Float = xpnl_PropertyBackground.Height/2
-			
-			Dim xlbl_ComboBoxIcon_Up As B4XView = CreateLabel("")
-			xlbl_ComboBoxIcon_Up.Text = Chr(0xE316)
-			xlbl_ComboBoxIcon_Up.Font = xui.CreateMaterialIcons(24)
-			xlbl_ComboBoxIcon_Up.TextColor = xui.Color_ARGB(152,255,255,255)
-			
-			Dim IconHeight As Float = 20dip'MeasureTextHeight("T",xui.CreateDefaultBoldFont(15))
-			
-			xpnl_PropertyBackground.AddView(xlbl_ComboBoxIcon_Up,xpnl_PropertyBackground.Width - ActionIconWidth/2-ActionIconWidth/2,xpnl_PropertyBackground.Height/2-IconHeight,ActionIconWidth,IconHeight)
-				
-			Dim xlbl_ComboBoxIcon_Down As B4XView = CreateLabel("")
-			xlbl_ComboBoxIcon_Down.Text = Chr(0xE313)
-			xlbl_ComboBoxIcon_Down.Font = xui.CreateMaterialIcons(24)
-			xlbl_ComboBoxIcon_Down.TextColor = xui.Color_ARGB(152,255,255,255)
-			xpnl_PropertyBackground.AddView(xlbl_ComboBoxIcon_Down,xpnl_PropertyBackground.Width - ActionIconWidth/2-ActionIconWidth/2,xpnl_PropertyBackground.Height/2,ActionIconWidth,IconHeight)
-				
-			Dim xpnl_ComboBoxBackground As B4XView = xui.CreatePanel("")
-			xpnl_PropertyBackground.AddView(xpnl_ComboBoxBackground,Gap,0,xpnl_PropertyBackground.Width - Gap*2 - xlbl_ComboBoxIcon_Up.Width,xpnl_PropertyBackground.Height)
-				
-			Dim xComboBox As B4XComboBox
-			xComboBox.Initialize(Me,"xComboBox")
-				
-			Dim mComboBox As Map
-			mComboBox.Initialize
-			
-			xComboBox.DesignerCreateView(xpnl_ComboBoxBackground,CreateLabel(""),mComboBox)
-			xComboBox.SetItems(Property.ItemList)
-				
-			Dim xlbl_ComboBox As B4XView = CreateLabel("")
-			xlbl_ComboBox.Color = m_PropertyColor
-			xlbl_ComboBox.Tag = Property
-			xlbl_ComboBox.Font = xui.CreateDefaultBoldFont(15)
-			xlbl_ComboBox.TextColor = xui.Color_White
-			xlbl_ComboBox.SetTextAlignment("CENTER","RIGHT")
-			xComboBox.Tag = xlbl_ComboBox
-			#If B4J
-			xlbl_ComboBox.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
-			#Else If B4I
-			xlbl_ComboBox.As(Label).UserInteractionEnabled = False
-			#End If
-			
-			xpnl_PropertyBackground.AddView(xlbl_ComboBox,Gap,0,xpnl_PropertyBackground.Width - Gap*2 - xlbl_ComboBoxIcon_Up.Width,xpnl_PropertyBackground.Height)
-		
-			Dim SelectedIndex As Int = 0
-			For i = 0 To Property.ItemList.Size -1
-				If Property.Value = Property.ItemList.Get(i) Then
-					SelectedIndex = i
-					Exit
-				End If
-			Next
-				
-			xComboBox.SelectedIndex = SelectedIndex
-			
-			xlbl_ComboBox.Text = Property.ItemList.Get(SelectedIndex)
-				
-		Case getValueType_Custom
-			
-
-			
-	End Select
-	
-	Dim PropertyViews As ASSettings_PropertyViews = CreateASSettings_PropertyViews(xpnl_Background,xpnl_Property,xpnl_PropertyBackground,xiv_Icon,xlbl_PropertyName)
-	PropertySettingViews.BackgroundPanel = xpnl_PropertyBackground
-	CustomDrawProperty(CreateASSettings_CustomDrawProperty(Property.Group,Property,PropertyViews,PropertySettingViews))
-	
-End Sub
-
-Private Sub AddGroupBorder2List(Top As Boolean)
-	
-	Dim xpnl_Background As B4XView = xui.CreatePanel("")
-	xpnl_Background.Color = m_BackgroundColor
-	xpnl_Background.SetLayoutAnimated(0,0,0,mBase.Width,m_CornerRadius)
-	
-	#if b4j
-	xpnl_Background.Width = xpnl_Background.Width - 20dip
-	#End If
-	
-	If Top Then
-		xclv_main.Add(xpnl_Background,"GroupBorderTop")
-	Else
-		xclv_main.Add(xpnl_Background,"GroupBorderBottom")
-	End If
-	
-End Sub
-
-Private Sub AddInternGroupBorder(xpnl_Background As B4XView,Top As Boolean)
-	
-	Dim BorderItem As B4XView = xui.CreatePanel("")
-	xpnl_Background.AddView(BorderItem,m_Padding,IIf(Top,0,-m_CornerRadius),xpnl_Background.Width - (m_Padding*2),m_CornerRadius*2)
-	BorderItem.SetColorAndBorder(m_PropertyColor,0,0,m_CornerRadius)
-	
-	Dim xpnl As B4XView = xui.CreatePanel("")
-	xpnl_Background.AddView(xpnl,m_Padding,IIf(Top,m_CornerRadius,-(m_CornerRadius*2)),xpnl_Background.Width - (m_Padding*2),m_CornerRadius)
-	xpnl.Color = m_PropertyColor
-	
-End Sub
-
-Public Sub Refresh
-	
-	For i = 0 To xclv_main.Size -1
-		xclv_main.GetPanel(i).RemoveAllViews
-	Next
-	xclv_main.Refresh
-	
-End Sub
-
-#Region CustomDrawProperty
-
-Public Sub CustomDrawProperty_Add(Parent As B4XView,View As B4XView,Width As Float,Height As Float) As B4XView
-	
-	Parent.AddView(View,0,Parent.Height/2 - Height/2,Width,Height)
-	
-	For i = Parent.NumberOfViews -1 To 0 Step -1
-		
-		Parent.GetView(i).Left = IIf(i = (Parent.NumberOfViews-1),Parent.Width - m_Padding - Parent.GetView(i).Width,Parent.GetView(i+1).Left - m_Padding - Parent.GetView(i).Width)
-		
-	Next
-
-	Return View
-	
-End Sub
-'Creates a label view int he style of the textfield
-'Event Example:
-'Private Sub EventName_Clicked(Property As ASSettings_Property,View As Object)
-'	Log("CustomDrawProperty Chooser Clicked")
-'End Sub
-Public Sub CustomDrawProperty_AddChooser(Callback As Object, EventName As String) As B4XView
-	
-	Dim xlbl_TextField As B4XView = CreateLabel("xlbl_CustomDrawTextField")
-	xlbl_TextField.SetColorAndBorder(getValueTypeTextProperties.Color,0,0,getValueTypeTextProperties.CornerRadius)
-	xlbl_TextField.Font = getValueTypeTextProperties.xFont
-	xlbl_TextField.SetTextAlignment("CENTER","CENTER")
-	xlbl_TextField.Text = ""
-'	If Property.DisplayValueText = "" Then
-'		xlbl_TextField.Text = Property.Value
-'	Else
-'		xlbl_TextField.Text = Property.DisplayValueText
-'	End If
-	'xlbl_TextField.Tag = getValueTypeTextProperties
-	xlbl_TextField.TextColor = getValueTypeTextProperties.TextColor
-	xlbl_TextField.Tag = CreateMap("Callback":Callback,"EventName":EventName)
-	Return xlbl_TextField
-	
-End Sub
-'Creates a normal text label without a style
-Public Sub CustomDrawProperty_AddText(Callback As Object, EventName As String, Text As String) As B4XView
-	
-	Dim xlbl_Separator As B4XView = CreateLabel("xlbl_CustomDrawText")
-	xlbl_Separator.TextColor = getValueTypeTextProperties.TextColor
-	xlbl_Separator.Text = Text
-	xlbl_Separator.Font = getValueTypeTextProperties.xFont
-	xlbl_Separator.SetTextAlignment("CENTER","CENTER")
-	xlbl_Separator.Tag = CreateMap("Callback":Callback,"EventName":EventName)
-	Return xlbl_Separator
-	
-End Sub
-#If B4J
-Private Sub xlbl_CustomDrawTextField_MouseClicked (EventData As MouseEvent)
-#Else
-Private Sub xlbl_CustomDrawTextField_Click
-#End If
-	Dim xlbl_TextField As B4XView = Sender
-	Dim m_Map As Map = xlbl_TextField.Tag
-	If xui.SubExists(m_Map.Get("Callback"), m_Map.Get("EventName") & "_Clicked",2) Then
-		CallSub3(m_Map.Get("Callback"), m_Map.Get("EventName") & "_Clicked",xclv_main.GetValue(xclv_main.GetItemFromView(xlbl_TextField)),xlbl_TextField)
-	End If
-End Sub
-
-#End Region
 
 #Region Properties
 
-Public Sub getBottomTextProperties As ASSettings_BottomTextProperty
+Public Sub setExitIconColor(Color As Int)
+	m_ExitIconColor = Color
+End Sub
+
+Public Sub getExitIconColor As Int
+	Return m_ExitIconColor
+End Sub
+
+Public Sub getSecondPageHeaderTextColor As Int
+	Return m_SecondPageHeaderTextColor
+End Sub
+
+Public Sub setSecondPageHeaderTextColor(Color As Int)
+	m_SecondPageHeaderTextColor = Color
+End Sub
+
+Public Sub getSecondPageShadowColor As Int
+	Return m_SecondPageShadowColor
+End Sub
+
+Public Sub setSecondPageShadowColor(Color As Int)
+	m_SecondPageShadowColor = Color
+End Sub
+
+Public Sub setDragIndicatorColor(Color As Int)
+	m_DragIndicatorColor = Color
+End Sub
+
+Public Sub getDragIndicatorColor As Int
+	Return m_DragIndicatorColor
+End Sub
+
+Public Sub setSelectionItemSelectionColor(Color As Int)
+	m_SelectionItemSelectionColor = Color
+End Sub
+
+Public Sub getSelectionItemSelectionColor As Int
+	Return m_SelectionItemSelectionColor
+End Sub
+
+Public Sub getHeaderHeight As Float
+	Return m_HeaderHeight
+End Sub
+
+Public Sub GetTopPage As AS_SettingsPage
+	Return lst_Pages.Get(lst_Pages.Size -1)
+End Sub
+
+Public Sub GetVisiblePages As List
+	Return lst_Pages
+End Sub
+
+Public Sub GetCreatedPages As List
+	Return lst_CreatedPages
+End Sub
+
+Public Sub setMadeWithLoveTextColor(Color As Int)
+	m_MadeWithLoveTextColor = Color
+End Sub
+
+Public Sub getMadeWithLoveTextColor As Int
+	Return m_MadeWithLoveTextColor
+End Sub
+
+Public Sub setShowMadeWithLove(Show As Boolean)
+	m_ShowMadeWithLove = Show
+End Sub
+
+Public Sub getShowMadeWithLove As Boolean
+	Return m_ShowMadeWithLove
+End Sub
+
+Public Sub getBottomTextProperties As AS_Settings_BottomTextProperty
 	Return g_BottomTextProperties
 End Sub
 
-Public Sub setBottomText(Text As String)
-	m_BottomText = Text
-End Sub
-
-Public Sub getBottomText As String
-	Return m_BottomText
-End Sub
-
-Public Sub getValueTypeTextProperties As ASSettings_ValueTypeTextProperties
-	Return g_ValueTypeTextProperties
+Public Sub getPropertyProperties As AS_Settings_Property_Properties
+	Return g_PropertyProperties
 End Sub
 
 #If SETTINGS_SegmentedTab
-Public Sub getValueTypeSegmentedTabProperties As ASSettings_ValueTypeSegmentedTabProperties
-	Return g_ValueTypeSegmentedTabProperties
+Public Sub getSegmentedTabProperties As AS_Settings_Property_SegmentedTab
+	Return g_SegmentedTabProperties
 End Sub
 #End If
 
 #If SETTINGS_PlusMinus
-Public Sub getValueTypePlusMinusProperties As ASSettings_ValueTypePlusMinusProperties
-	Return g_ValueTypePlusMinusProperties
+Public Sub getPlusMinusProperties As AS_Settings_Property_PlusMinus
+	Return g_PlusMinusProperties
 End Sub
 #End If
 
@@ -1167,6 +604,23 @@ End Sub
 Public Sub getGroupNameBackgroundColor As Int
 	Return m_GroupNameBackgroundColor
 End Sub
+
+Public Sub setGroupNameTextColor(Color As Int)
+	m_GroupNameTextColor = Color
+End Sub
+
+Public Sub getGroupNameTextColor As Int
+	Return m_GroupNameTextColor
+End Sub
+
+Public Sub getArrowColor As Int
+	Return m_ArrowColor
+End Sub
+
+Public Sub setArrowColor(Color As Int)
+	m_ArrowColor = Color
+End Sub
+
 'Height of a group name
 Public Sub setGroupHeight(Height As Float)
 	m_GroupHeight= Height
@@ -1200,28 +654,8 @@ Public Sub getPropertySeperator As Boolean
 	Return m_PropertySeperator
 End Sub
 
-Public Sub setSwitchFalseColor(Color As Int)
-	m_SwitchFalseColor = Color
-End Sub
-
-Public Sub getSwitchFalseColor As Int
-	Return m_SwitchFalseColor
-End Sub
-
-Public Sub setSwitchTrueColor(Color As Int)
-	m_SwitchTrueColor = Color
-End Sub
-
-Public Sub getSwitchTrueColor As Int
-	Return m_SwitchTrueColor
-End Sub
-
-Public Sub setSwitchThumbColor(Color As Int)
-	m_SwitchThumbColor = Color
-End Sub
-
-Public Sub getSwitchThumbColor As Int
-	Return m_SwitchThumbColor
+Public Sub getSwitchProperties As AS_Settings_SwitchProperties
+	Return g_SwitchProperties
 End Sub
 'The Padding Left and Right
 'Default value: 10dip
@@ -1232,14 +666,7 @@ End Sub
 Public Sub getPadding As Float
 	Return m_Padding
 End Sub
-'Background Color of a property
-Public Sub setPropertyColor(Color As Int)
-	m_PropertyColor = Color
-End Sub
 
-Public Sub getPropertyColor As Int
-	Return m_PropertyColor
-End Sub
 'Background Color of the view
 Public Sub setBackgroundColor(Color As Int)
 	m_BackgroundColor = Color
@@ -1258,61 +685,9 @@ Public Sub setSaveMode(Mode As String)
 	m_SaveMode = Mode
 End Sub
 
-Public Sub getPropertyHeight As Float
-	Return m_PropertyHeight
-End Sub
-
-'Public Sub setPropertyHeight(Height As Float)
-'	m_PropertyHeight = Height
-'End Sub
-
 #End Region
 
 #Region Enums
-
-'Switch or Checkbox
-Public Sub getValueType_Boolean As String
-	Return "Boolean"
-End Sub
-
-'Displays an arrow, the user can click on it and can be redirected to another page
-Public Sub getValueType_Action As String
-	Return "Action"
-End Sub
-'Same as Action, but without an arrow and description
-Public Sub getValueType_ActionClean As String
-	Return "ActionClean"
-End Sub
-
-Public Sub getValueType_Text As String
-	Return "Text"
-End Sub
-
-Public Sub getValueType_ComboBox As String
-	Return "ComboBox"
-End Sub
-
-Public Sub getValueType_Chooser As String
-	Return "Chooser"
-End Sub
-
-Public Sub getValueType_Custom As String
-	Return "Custom"
-End Sub
-
-#If SETTINGS_SegmentedTab
-
-Public Sub getValueType_SegmentedTab As String
-	Return "SegmentedTab"
-End Sub
-
-#End If
-
-#If SETTINGS_PlusMinus
-Public Sub getValueType_PlusMinus As String
-	Return "PlusMinus"
-End Sub
-#End If
 
 '**************************************************************
 
@@ -1350,284 +725,45 @@ End Sub
 
 #Region Events
 
-Private Sub ValueChanged(Property As ASSettings_Property, Value As Object)
-	
-'	If m_SaveMode = getSaveMode_Automatic Then
-'		AS_Properties.PutProperty(Property.PropertyName,Value)
-'	End If
-	
+Private Sub GroupHeaderClicked(Group As AS_Settings_Group)
+	If xui.SubExists(mCallBack, mEventName & "_GroupHeaderClicked",1) Then
+		CallSub2(mCallBack, mEventName & "_GroupHeaderClicked",Group)
+	End If
+End Sub
+
+Private Sub ValueChanged(Property As AS_Settings_Property, Value As Object)
 	If xui.SubExists(mCallBack, mEventName & "_ValueChanged",2) Then
 		CallSub3(mCallBack, mEventName & "_ValueChanged",Property,Value)
 	End If
 End Sub
 
-Private Sub ActionClicked(Property As ASSettings_Property)
+Private Sub ActionClicked(Property As AS_Settings_Property)
 	If xui.SubExists(mCallBack, mEventName & "_ActionClicked",1) Then
 		CallSub2(mCallBack, mEventName & "_ActionClicked",Property)
 	End If
 End Sub
 
-Private Sub ChooserTextFieldClicked(Property As ASSettings_Property)
+Private Sub ChooserTextFieldClicked(Property As AS_Settings_Property)
 	If xui.SubExists(mCallBack, mEventName & "_ChooserTextFieldClicked",1) Then
 		CallSub2(mCallBack, mEventName & "_ChooserTextFieldClicked",Property)
 	End If
 End Sub
 
-Private Sub CustomDrawProperty(Property As ASSettings_CustomDrawProperty)
+Private Sub CustomDrawProperty(Property As AS_Settings_CustomDrawProperty)
 	If xui.SubExists(mCallBack, mEventName & "_CustomDrawProperty",1) Then
 		CallSub2(mCallBack, mEventName & "_CustomDrawProperty",Property)
 	End If
 End Sub
 
-#End Region
-
-#Region ViewEvents
-
-Private Sub xclv_main_VisibleRangeChanged (FirstIndex As Int, LastIndex As Int)
-
-	Dim ExtraSize As Int = 10
-	For i = 0 To xclv_main.Size - 1
-		Dim p As B4XView = xclv_main.GetPanel(i)
-		If i > FirstIndex - ExtraSize And i < LastIndex + ExtraSize Then
-			'visible+
-			If p.NumberOfViews = 0 Then
-				
-				If xclv_main.GetValue(i) Is ASSettings_Group Then
-					AddInternGroup(p,xclv_main.GetValue(i))
-				else If xclv_main.GetValue(i) Is ASSettings_Property Then
-					AddInternProperty(p,xclv_main.GetValue(i))
-				Else If xclv_main.GetValue(i) = "GroupBorderTop" Then
-					AddInternGroupBorder(p,True)
-				Else If xclv_main.GetValue(i) = "GroupBorderBottom" Then
-					AddInternGroupBorder(p,False)
-				Else If xclv_main.GetValue(i) = "BottomText" Then
-					AddInternBottomText(p)
-				Else If xclv_main.GetValue(i) = "MadeWithLove" Then
-					AdInternMadeWithLove(p)
- 				End If
-				
-			End If
-		Else
-			'not visible
-			If p.NumberOfViews > 0 Then
-				p.RemoveAllViews '<--- remove the layout
-			End If
-		End If
-	Next
-
-End Sub
-
-#If B4J
-Private Sub xlbl_TextField_MouseClicked (EventData As MouseEvent)
-	Dim xlbl_TextField As B4XView = Sender 'Ignore
-	If m_HapticFeedback Then XUIViewsUtils.PerformHapticFeedback(xlbl_TextField)
-	ChooserTextFieldClicked(xclv_main.GetValue(xclv_main.GetItemFromView(xlbl_TextField)))
-End Sub
-#Else
-Private Sub xlbl_TextField_Click
-	Dim xlbl_TextField As B4XView = Sender 'Ignore
-	If m_HapticFeedback Then XUIViewsUtils.PerformHapticFeedback(xlbl_TextField)
-	ChooserTextFieldClicked(xclv_main.GetValue(xclv_main.GetItemFromView(xlbl_TextField)))
-End Sub
-#End If
-
-#If B4I
-
-Private Sub xtf_TextBox_BeginEdit
-	Dim xtf_TextBox As B4XView = Sender
-	xtf_TextBox.SelectAll
-End Sub
-
-#Else If B4A
-
-Private Sub xtf_TextBox_FocusChanged (HasFocus As Boolean)
-	Dim xtf_TextBox As B4XView = Sender
-	If HasFocus Then
-		xtf_TextBox.SelectAll
+Private Sub CustomDrawCustomProperty(Property As AS_Settings_CustomDrawCustomProperty)
+	If xui.SubExists(mCallBack, mEventName & "_CustomDrawCustomProperty",1) Then
+		CallSub2(mCallBack, mEventName & "_CustomDrawCustomProperty",Property)
 	End If
 End Sub
-
-#End If
-
-Private Sub xtf_TextBox_TextChanged (Old As String, New As String)
-	Dim xtf_TextBox As B4XView = Sender
-	If xtf_TextBox.IsInitialized = False Or xtf_TextBox.Tag = Null Then Return
-
-	'Dim ValueTypeTextProperties As ASSettings_ValueTypeTextProperties = xtf_TextBox.Tag
-	
-'	If ValueTypeTextProperties.InputType = getInputType_IPv4 Then
-'		
-'
-'		
-''		xtf_TextBox.Text = New
-''		xtf_TextBox.SelectionStart = xtf_TextBox.Text.Length
-'		
-'	else If ValueTypeTextProperties.InputType = getInputType_IPv6 Then
-'		
-'	End If
-
-	Dim Property As ASSettings_Property = xclv_main.GetValue(xclv_main.GetItemFromView(xtf_TextBox))
-	
-	If m_SaveMode = getSaveMode_Automatic Then
-		AS_Properties.PutProperty(Property.PropertyName,xtf_TextBox.Text)
-	End If
-
-	If isReady Then ValueChanged(Property,xtf_TextBox.Text)
-End Sub
-
-#If B4J
-Private Sub xpnl_ActionClickPanel_MouseClicked (EventData As MouseEvent)
-#Else
-Private Sub xpnl_ActionClickPanel_Click
-#End If
-	Dim xpnl_ActionClickPanel As B4XView = Sender 'Ignore
-	If m_HapticFeedback Then XUIViewsUtils.PerformHapticFeedback(xpnl_ActionClickPanel)
-	ActionClicked(xclv_main.GetValue(xclv_main.GetItemFromView(xpnl_ActionClickPanel)))
-End Sub
-
-Private Sub xComboBox_SelectedIndexChanged (Index As Int)
-	Dim xComboBox As B4XComboBox = Sender 'Ignore
-	Dim xlbl_ComboBox As B4XView = xComboBox.Tag
-	xlbl_ComboBox.Text = xComboBox.GetItem(Index)
-	
-	Dim Property As ASSettings_Property = xclv_main.GetValue(xclv_main.GetItemFromView(xComboBox.mBase))
-	
-	If m_SaveMode = getSaveMode_Automatic Then
-		AS_Properties.PutProperty(Property.PropertyName,xComboBox.GetItem(Index))
-	End If
-	
-	ValueChanged(Property,xComboBox.GetItem(Index))
-End Sub
-
-Private Sub SwitchBoolean_ValueChanged (Value As Boolean)
-	Dim SwitchBoolean As B4XSwitch = Sender 'Ignore
-	Dim Property As ASSettings_Property = xclv_main.GetValue(xclv_main.GetItemFromView(SwitchBoolean.mBase))
-	
-	If m_SaveMode = getSaveMode_Automatic Then
-		AS_Properties.PutProperty(Property.PropertyName,Value)
-	End If
-	
-	ValueChanged(Property,Value)
-End Sub
-
-#IF SETTINGS_SegmentedTab
-Private Sub SegmentedTab_TabChanged(index As Int)
-	Dim SegmentedTab As ASSegmentedTab = Sender 'Ignore
-		Dim Property As ASSettings_Property = xclv_main.GetValue(xclv_main.GetItemFromView(SegmentedTab.mBase))
-	
-		If m_SaveMode = getSaveMode_Automatic Then
-		AS_Properties.PutProperty(Property.PropertyName,SegmentedTab.GetValue(index))
-	End If
-	
-	ValueChanged(Property,SegmentedTab.GetValue(index))
-End Sub
-#End If
-
-#If SETTINGS_PlusMinus
-
-Private Sub PlusMinus_LeftClick
-	PlusMinusChangeValue(Sender,False)
-End Sub
-
-Private Sub PlusMinus_RightClick
-	PlusMinusChangeValue(Sender,True)
-End Sub
-
-Private Sub PlusMinusChangeValue(PlusMinus As AS_PlusMinus,isAdding As Boolean)
-	Dim ValueTypePlusMinusProperties As ASSettings_ValueTypePlusMinusProperties = PlusMinus.Tag
-	Dim Property As ASSettings_Property = xclv_main.GetValue(xclv_main.GetItemFromView(PlusMinus.mBase))
-	
-	Dim FinalValue As Int = 0
-	If isAdding Then
-		FinalValue = Property.Value + ValueTypePlusMinusProperties.Increment
-		Else
-		FinalValue = Property.Value - ValueTypePlusMinusProperties.Increment
-	End If
-	
-	If FinalValue <= ValueTypePlusMinusProperties.MaxValue And FinalValue >= ValueTypePlusMinusProperties.MinValue Then
-	
-		Property.Value = FinalValue
-
-		Dim xlbl As B4XView = PlusMinus.mBase.Parent.GetView(1)
-		xlbl.Text = ValueTypePlusMinusProperties.Prefix &  FinalValue & ValueTypePlusMinusProperties.Suffix
-	
-		Dim ValueWidth As Float = MeasureTextWidth(xlbl.Text,xlbl.Font) +2dip
-		
-		xlbl.Width = ValueWidth
-		xlbl.Left = PlusMinus.mBase.Left - ValueWidth - 10dip
-	
-	End If
-	
-		If m_SaveMode = getSaveMode_Automatic Then
-		AS_Properties.PutProperty(Property.PropertyName,Property.Value)
-	End If
-	
-	ValueChanged(Property,Property.Value)
-End Sub
-
-#End If
 
 #End Region
 
 #Region InternFunctions
-
-Private Sub GetGroup(Key As String) As ASSettings_Group
-	For Each Group As ASSettings_Group In lstGroups
-		If Group.Key = Key Then
-			Return Group
-		End If
-	Next
-	Return Null
-End Sub
-
-Private Sub CreateLabel(EventName As String) As B4XView
-	Dim lbl As Label
-	lbl.Initialize(EventName)
-	Return lbl
-End Sub
-
-Private Sub CreateImageView(EventName As String) As B4XView
-	Dim iv As ImageView
-	iv.Initialize(EventName)
-	Return iv
-End Sub
-
-Private Sub CreateEditText(EventName As String,InputType As String) As B4XView'Ignore
-	'Text|Numbers|Decimal
-#if B4J
-	Dim tf As TextField
-	tf.Initialize(EventName)
-	CSSUtils.SetStyleProperty(tf, "-fx-padding", "0 0 0 0")
-	tf.As(JavaObject).RunMethod("setFocusTraversable", Array As Object(True))
-	Return tf
-#else if B4A
-	Dim tf As EditText
-	tf.Initialize(EventName)
-	tf.SingleLine = True
-	tf.Padding = Array As Int (0, 0, 0, 0)
-		Select InputType
-			Case getInputType_Numeric
-				tf.InputType = tf.INPUT_TYPE_NUMBERS
-			Case getInputType_Decimal
-				tf.InputType = tf.INPUT_TYPE_DECIMAL_NUMBERS
-		End Select
-	Return tf
-
-#else if B4i
-	Dim tf As TextField
-	tf.Initialize(EventName)
-	tf.BorderStyle = tf.STYLE_NONE
-	tf.ShowClearButton = False
-	tf.Autocorrect = tf.AUTOCORRECT_NO
-	Select InputType
-		Case getInputType_Numeric
-			tf.KeyboardType = tf.TYPE_NUMBER_PAD
-		Case getInputType_Decimal
-			tf.KeyboardType = tf.TYPE_NUMBERS_AND_PUNCTUATIONS
-	End Select
-	Return tf
-#end if
-End Sub
 
 'https://www.b4x.com/android/forum/threads/fontawesome-to-bitmap.95155/post-603250
 Public Sub FontToBitmap (text As String, IsMaterialIcons As Boolean, FontSize As Float, color As Int) As B4XBitmap
@@ -1646,111 +782,29 @@ Public Sub FontToBitmap (text As String, IsMaterialIcons As Boolean, FontSize As
 	Return b
 End Sub
 
-Private Sub MeasureTextWidth(Text As String, Font1 As B4XFont) As Int 'Ignore
-#If B4A
-    Private bmp As Bitmap
-    bmp.InitializeMutable(2dip, 2dip)
-    Private cvs As Canvas
-    cvs.Initialize2(bmp)
-    Return cvs.MeasureStringWidth(Text, Font1.ToNativeFont, Font1.Size)
-#Else If B4i
-	Return Text.MeasureWidth(Font1.ToNativeFont)
-#Else If B4J
-    Dim jo As JavaObject
-    jo.InitializeNewInstance("javafx.scene.text.Text", Array(Text))
-    jo.RunMethod("setFont",Array(Font1.ToNativeFont))
-    jo.RunMethod("setLineSpacing",Array(0.0))
-    jo.RunMethod("setWrappingWidth",Array(0.0))
-    Dim Bounds As JavaObject = jo.RunMethod("getLayoutBounds",Null)
-    Return Bounds.RunMethod("getWidth",Null)
-#End If
+'<code>AS_Settings1.CreateList(Array("",""))</code>
+Public Sub CreateList(VarPar() As Object) As List
+	Dim L As List
+	L.Initialize
+	For Each O As Object In VarPar
+		L.Add(O)
+	Next
+	Return L
 End Sub
 
-Private Sub MeasureTextHeight(Text As String, Font1 As B4XFont) As Int 'ignore
-#If B4A    
-    Private bmp As Bitmap
-    bmp.InitializeMutable(2dip, 2dip)
-    Private cvs As Canvas
-    cvs.Initialize2(bmp)
-    Return cvs.MeasureStringHeight(Text, Font1.ToNativeFont, Font1.Size)
-#Else If B4i
-	Return Text.MeasureHeight(Font1.ToNativeFont)
-#Else If B4J
-    Dim jo As JavaObject
-    jo.InitializeNewInstance("javafx.scene.text.Text", Array(Text))
-    jo.RunMethod("setFont",Array(Font1.ToNativeFont))
-    jo.RunMethod("setLineSpacing",Array(0.0))
-    jo.RunMethod("setWrappingWidth",Array(0.0))
-    Dim Bounds As JavaObject = jo.RunMethod("getLayoutBounds",Null)
-    Return Bounds.RunMethod("getHeight",Null)
-#End If
+Private Sub CreateImageView(EventName As String) As B4XView
+	Dim iv As ImageView
+	iv.Initialize(EventName)
+	Return iv
 End Sub
-
-Private Sub MeasureMultilineTextHeight(xLabel As B4XView) As Double
-	#If B4J
-	'https://www.b4x.com/android/forum/threads/measure-multiline-text-height.84331/#content
-	Dim jo As JavaObject = Me
-	Return jo.RunMethod("MeasureMultilineTextHeight", Array(xLabel.Font, xLabel.Text, xLabel.Width))
-	#Else if B4A
-	Dim su As StringUtils
-	Return su.MeasureMultilineTextHeight(xLabel,xLabel.Text)
-	#Else if B4I
-	Dim tmpLabel As Label
-	tmpLabel.Initialize("")
-	tmpLabel.Font = xLabel.Font
-	tmpLabel.Width = xLabel.Width
-	tmpLabel.Text = xLabel.Text
-	tmpLabel.Multiline = True
-	tmpLabel.SizeToFit
-	Return tmpLabel.Height
-	#End IF
-End Sub
-
-#If B4J
-#if Java
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import javafx.scene.text.Font;
-import javafx.scene.text.TextBoundsType;
-public static double MeasureMultilineTextHeight(Font f, String text, double width) throws Exception {
-  Method m = Class.forName("com.sun.javafx.scene.control.skin.Utils").getDeclaredMethod("computeTextHeight",
-  Font.class, String.class, double.class, TextBoundsType.class);
-  m.setAccessible(true);
-  return (Double)m.invoke(null, f, text, width, TextBoundsType.LOGICAL_VERTICAL_CENTER);
-  }
-#End If
-#End If
 
 #End Region
 
 #Region Types
 
-Public Sub CreateASSettings_Group (Key As String, Name As String, Properties As List) As ASSettings_Group
-	Dim t1 As ASSettings_Group
-	t1.Initialize
-	t1.Key = Key
-	t1.Name = Name
-	t1.Properties = Properties
-	Return t1
-End Sub
-
-Public Sub CreateASSettings_ValueTypeTextProperties (Width As Float, Height As Float, xFont As B4XFont, TextColor As Int, Color As Int, InputType As String, Format As String, CornerRadius As Float) As ASSettings_ValueTypeTextProperties
-	Dim t1 As ASSettings_ValueTypeTextProperties
-	t1.Initialize
-	t1.Width = Width
-	t1.Height = Height
-	t1.xFont = xFont
-	t1.TextColor = TextColor
-	t1.Color = Color
-	t1.InputType = InputType
-	t1.Format = Format
-	t1.CornerRadius = CornerRadius
-	Return t1
-End Sub
-
 #If SETTINGS_SegmentedTab
-Public Sub CreateASSettings_ValueTypeSegmentedTabProperties (Width As Float, CornerRadius As Float, ShowSeperators As Boolean, BackgroundColor As Int, SelectionColor As Int, SeperatorColor As Int, TextColor As Int, xFont As B4XFont) As ASSettings_ValueTypeSegmentedTabProperties
-	Dim t1 As ASSettings_ValueTypeSegmentedTabProperties
+Public Sub CreateAS_Settings_SegmentedTabProperties (Width As Float, CornerRadius As Float, ShowSeperators As Boolean, BackgroundColor As Int, SelectionColor As Int, SeperatorColor As Int, TextColor As Int, xFont As B4XFont) As AS_Settings_Property_SegmentedTab
+	Dim t1 As AS_Settings_Property_SegmentedTab
 	t1.Initialize
 	t1.Width = Width
 	t1.CornerRadius = CornerRadius
@@ -1765,8 +819,8 @@ End Sub
 #End If
 
 #If SETTINGS_PlusMinus
-Public Sub CreateASSettings_ValueTypePlusMinusProperties (CornerRadius As Float, ShowDivider As Boolean, BackgroundColor As Int, DividerColor As Int, HaloColor As Int, TextColor As Int, xFont As B4XFont, ShowHaloEffect As Boolean) As ASSettings_ValueTypePlusMinusProperties
-	Dim t1 As ASSettings_ValueTypePlusMinusProperties
+Private Sub CreateAS_Settings_Property_PlusMinus (CornerRadius As Float, ShowDivider As Boolean, BackgroundColor As Int, DividerColor As Int, HaloColor As Int, TextColor As Int, xFont As B4XFont, ShowHaloEffect As Boolean) As AS_Settings_Property_PlusMinus
+	Dim t1 As AS_Settings_Property_PlusMinus
 	t1.Initialize
 	t1.CornerRadius = CornerRadius
 	t1.ShowDivider = ShowDivider
@@ -1780,33 +834,48 @@ Public Sub CreateASSettings_ValueTypePlusMinusProperties (CornerRadius As Float,
 End Sub
 #End If
 
-Public Sub CreateASSettings_BottomTextProperty (xFont As B4XFont, TextColor As Int) As ASSettings_BottomTextProperty
-	Dim t1 As ASSettings_BottomTextProperty
+Private Sub CreateAS_Settings_BottomTextProperty (xFont As B4XFont, TextColor As Int) As AS_Settings_BottomTextProperty
+	Dim t1 As AS_Settings_BottomTextProperty
 	t1.Initialize
 	t1.xFont = xFont
 	t1.TextColor = TextColor
 	Return t1
 End Sub
 
-#End Region
-
-Public Sub CreateASSettings_PropertyViews (RootBackgroundPanel As B4XView, LeftBackgroundPanel As B4XView, RightBackgroundPanel As B4XView, IconImageView As B4XView, NameLabel As B4XView) As ASSettings_PropertyViews
-	Dim t1 As ASSettings_PropertyViews
+Private Sub CreateAS_Settings_SwitchProperties (FalseColor As Int, TrueColor As Int, ThumbColor As Int) As AS_Settings_SwitchProperties
+	Dim t1 As AS_Settings_SwitchProperties
 	t1.Initialize
-	t1.RootBackgroundPanel = RootBackgroundPanel
-	t1.LeftBackgroundPanel = LeftBackgroundPanel
-	t1.RightBackgroundPanel = RightBackgroundPanel
-	t1.IconImageView = IconImageView
-	t1.NameLabel = NameLabel
+	t1.FalseColor = FalseColor
+	t1.TrueColor = TrueColor
+	t1.ThumbColor = ThumbColor
 	Return t1
 End Sub
 
-Public Sub CreateASSettings_CustomDrawProperty (Group As ASSettings_Group, Property As ASSettings_Property, PropertyViews As ASSettings_PropertyViews, PropertySettingViews As ASSettings_PropertySettingViews) As ASSettings_CustomDrawProperty
-	Dim t1 As ASSettings_CustomDrawProperty
+#End Region
+
+
+Public Sub CreateSelectionListItem (DisplayName As String, Icon As B4XBitmap,Value As Object) As AS_Settings_SelectionListItem
+	Dim t1 As AS_Settings_SelectionListItem
 	t1.Initialize
-	t1.Group = Group
-	t1.Property = Property
-	t1.PropertyViews = PropertyViews
-	t1.PropertySettingViews = PropertySettingViews
+	t1.DisplayName = DisplayName
+	t1.Icon = Icon
+	t1.Value = Value
+	Return t1
+End Sub
+
+Public Sub CreateAS_Settings_Property_Properties (Width As Float, Height As Float, xFont As B4XFont, TextColor As Int, BackgroundColor As Int, DescriptionTextColor As Int, FieldBackgroundColor As Int, FieldHeight As Float, InputType As String, Format As String, CornerRadius As Float) As AS_Settings_Property_Properties
+	Dim t1 As AS_Settings_Property_Properties
+	t1.Initialize
+	t1.Width = Width
+	t1.Height = Height
+	t1.xFont = xFont
+	t1.TextColor = TextColor
+	t1.BackgroundColor = BackgroundColor
+	t1.DescriptionTextColor = DescriptionTextColor
+	t1.FieldBackgroundColor = FieldBackgroundColor
+	t1.FieldHeight = FieldHeight
+	t1.InputType = InputType
+	t1.Format = Format
+	t1.CornerRadius = CornerRadius
 	Return t1
 End Sub

@@ -8,16 +8,15 @@ Library2=b4xpages
 Library3=jcore
 Library4=jfx
 Library5=jsql
-Library6=xcustomlistview
-Library7=xui views
-Library8=keyvaluestore
-Module1=|relative|..\..\AS_Properties
-Module2=|relative|..\..\AS_Settings
-Module3=|relative|..\B4XMainPage
+Library6=keyvaluestore
+Library7=xcustomlistview
+Library8=xui views
+Library9=as_settings
+Module1=|relative|..\B4XMainPage
 NumberOfFiles=1
-NumberOfLibraries=8
-NumberOfModules=3
-Version=9.8
+NumberOfLibraries=9
+NumberOfModules=1
+Version=10
 @EndOfDesignText@
 #Region Project Attributes 
 	#MainFormWidth: 600

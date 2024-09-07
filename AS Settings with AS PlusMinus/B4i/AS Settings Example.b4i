@@ -6,16 +6,17 @@ Library1=as_plusminus
 Library2=b4xpages
 Library3=icore
 Library4=isql
-Library5=xcustomlistview
-Library6=xui views
-Library7=keyvaluestore
+Library5=keyvaluestore
+Library6=xcustomlistview
+Library7=xui views
 Module1=|relative|..\..\AS_Properties
 Module2=|relative|..\..\AS_Settings
-Module3=|relative|..\B4XMainPage
+Module3=|relative|..\..\AS_SettingsPage
+Module4=|relative|..\B4XMainPage
 NumberOfFiles=1
 NumberOfLibraries=7
-NumberOfModules=3
-Version=8.3
+NumberOfModules=4
+Version=8.45
 @EndOfDesignText@
 'Code module
 #Region  Project Attributes 

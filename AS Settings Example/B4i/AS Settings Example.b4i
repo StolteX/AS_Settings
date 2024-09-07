@@ -5,16 +5,15 @@ Group=Default Group
 Library1=b4xpages
 Library2=icore
 Library3=isql
-Library4=xcustomlistview
-Library5=xui views
-Library6=keyvaluestore
-Module1=|relative|..\..\AS_Properties
-Module2=|relative|..\..\AS_Settings
-Module3=|relative|..\B4XMainPage
+Library4=keyvaluestore
+Library5=xcustomlistview
+Library6=xui views
+Library7=as_settings
+Module1=|relative|..\B4XMainPage
 NumberOfFiles=1
-NumberOfLibraries=6
-NumberOfModules=3
-Version=8.3
+NumberOfLibraries=7
+NumberOfModules=1
+Version=8.45
 @EndOfDesignText@
 'Code module
 #Region  Project Attributes 

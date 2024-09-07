@@ -29,14 +29,14 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	
 	B4XPages.SetTitle(Me,"AS Settings Example")
 	
-	AS_Settings1.AddGroup("Advanced","Advanced Settings")
+	AS_Settings1.MainPage.AddGroup("Advanced","Advanced Settings")
 	
-	AS_Settings1.ValueTypeTextProperties.xFont = xui.CreateDefaultFont(16)
+	AS_Settings1.PropertyProperties.xFont = xui.CreateDefaultFont(16)
 	
-	AS_Settings1.AddProperty_Chooser("Advanced","PropertyName_1","DatePicker Example","",Null,"",100dip)
-	AS_Settings1.AddProperty_Chooser("Advanced","PropertyName_2","Date Range Example","",Null,"",180dip)
+	AS_Settings1.MainPage.AddProperty_Chooser("Advanced","PropertyName_1","DatePicker Example","",Null,"",100dip)
+	AS_Settings1.MainPage.AddProperty_Chooser("Advanced","PropertyName_2","Date Range Example","",Null,"",180dip)
 	
-	AS_Settings1.Create
+	AS_Settings1.MainPage.Create
 	
 End Sub
 
@@ -46,12 +46,12 @@ Private Sub B4XPage_KeyboardStateChanged (Height As Float)
 	
 End Sub
 
-Private Sub AS_Settings1_ValueChanged(Property As ASSettings_Property, Value As Object)
+Private Sub AS_Settings1_ValueChanged(Property As AS_Settings_Property, Value As Object)
 	Log("ValueChanged " & Property.PropertyName & ": " & Value)
 End Sub
 
 
-Private Sub AS_Settings1_ChooserTextFieldClicked(Property As ASSettings_Property)
+Private Sub AS_Settings1_ChooserTextFieldClicked(Property As AS_Settings_Property)
 	Log("ChooserTextFieldClicked")
 	If Property.PropertyName = "PropertyName_1" Then
 		ShowDatePicker(Property,False)
@@ -62,7 +62,7 @@ Private Sub AS_Settings1_ChooserTextFieldClicked(Property As ASSettings_Property
 End Sub
 
 
-Private Sub ShowDatePicker(Property As ASSettings_Property,isRangeDate As Boolean)
+Private Sub ShowDatePicker(Property As AS_Settings_Property,isRangeDate As Boolean)
 	
 	BottomDatePicker.Initialize(Me,"BottomDatePicker",Root)
 	BottomDatePicker.Tag = Property
@@ -81,7 +81,7 @@ End Sub
 
 Private Sub BottomDatePicker_ConfirmButtonClicked
 	Dim BottomDatePicker As AS_BottomDatePicker = Sender
-	Dim Property As ASSettings_Property = BottomDatePicker.Tag
+	Dim Property As AS_Settings_Property = BottomDatePicker.Tag
 
 	
 	If Property.PropertyName = "PropertyName_1" Then
@@ -95,7 +95,7 @@ Private Sub BottomDatePicker_ConfirmButtonClicked
 	AS_Properties.PutProperty(Property.PropertyName,Property.Value)
 	AS_Properties.PutPropertyDisplayValueText(Property.PropertyName,Property.DisplayValueText)
 	
-	AS_Settings1.Refresh
+	AS_Settings1.GetTopPage.Refresh
 
 End Sub
 

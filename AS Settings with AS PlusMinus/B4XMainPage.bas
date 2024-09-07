@@ -28,12 +28,15 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	
 	B4XPages.SetTitle(Me,"AS Settings Example")
 	
-	AS_Settings1.AddGroup("Basic","Basic Settings")
+	AS_Settings1.MainPage.AddGroup("Basic","Basic Settings")
 	
-	AS_Settings1.AddProperty_PlusMinus("Basic","PropertyName_1","PlusMinus Example 1","",Null,19,0,100,1,"","kg")
-	AS_Settings1.AddProperty_PlusMinus("Basic","PropertyName_2","PlusMinus Example 2","",Null,20,0,100,5,"$","")
+	AS_Settings1.MainPage.AddProperty_PlusMinus("Basic","PropertyName_1","PlusMinus Example 1","",Null,19,0,100,1,"","kg")
+	AS_Settings1.MainPage.AddProperty_PlusMinus("Basic","PropertyName_2","PlusMinus Example 2","",Null,20,0,100,5,"$","")
 	
-	AS_Settings1.Create
+	AS_Settings1.MainPage.Create
+	
+	Sleep(4000)
+	AS_Settings1.Theme = AS_Settings1.Theme_Light
 	
 End Sub
 
@@ -43,6 +46,6 @@ Private Sub B4XPage_KeyboardStateChanged (Height As Float)
 	
 End Sub
 
-Private Sub AS_Settings1_ValueChanged(Property As ASSettings_Property, Value As Object)
+Private Sub AS_Settings1_ValueChanged(Property As AS_Settings_Property, Value As Object)
 	Log("ValueChanged " & Property.PropertyName & ": " & Value)
 End Sub

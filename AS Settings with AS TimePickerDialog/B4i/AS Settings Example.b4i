@@ -9,13 +9,12 @@ Library4=isql
 Library5=keyvaluestore
 Library6=xcustomlistview
 Library7=xui views
-Module1=|relative|..\..\AS_Properties
-Module2=|relative|..\..\AS_Settings
-Module3=|relative|..\B4XMainPage
+Library8=as_settings
+Module1=|relative|..\B4XMainPage
 NumberOfFiles=1
-NumberOfLibraries=7
-NumberOfModules=3
-Version=8.3
+NumberOfLibraries=8
+NumberOfModules=1
+Version=8.45
 @EndOfDesignText@
 'Code module
 #Region  Project Attributes 

@@ -9,17 +9,16 @@ Library3=jfx
 Library4=keyvaluestore
 Library5=xcustomlistview
 Library6=xui views
-Module1=|relative|..\..\AS_Properties
-Module2=|relative|..\..\AS_Settings
-Module3=|relative|..\B4XMainPage
+Library7=as_settings
+Module1=|relative|..\B4XMainPage
 NumberOfFiles=1
-NumberOfLibraries=6
-NumberOfModules=3
-Version=9.8
+NumberOfLibraries=7
+NumberOfModules=1
+Version=10
 @EndOfDesignText@
 #Region Project Attributes 
-	#MainFormWidth: 600
-	#MainFormHeight: 600 
+	#MainFormWidth: 800
+	#MainFormHeight: 800 
 #End Region
 
 #AdditionalJar: sqlite-jdbc-3.7.2

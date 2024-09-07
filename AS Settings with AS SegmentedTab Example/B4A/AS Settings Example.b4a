@@ -5,20 +5,19 @@ Group=Default Group
 Library1=assegmentedtab
 Library2=b4xpages
 Library3=core
-Library4=sql
-Library5=stringutils
-Library6=xcustomlistview
-Library7=xui views
-Library8=keyvaluestore
-ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="29"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~CreateResourceFromFile(Macro, Themes.DarkTheme)~\n~'End of default text.~\n~
-Module1=|relative|..\..\AS_Properties
-Module2=|relative|..\..\AS_Settings
-Module3=|relative|..\B4XMainPage
-Module4=Starter
+Library4=keyvaluestore
+Library5=sql
+Library6=stringutils
+Library7=xcustomlistview
+Library8=xui views
+Library9=as_settings
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~CreateResourceFromFile(Macro, Themes.DarkTheme)~\n~'End of default text.~\n~
+Module1=|relative|..\B4XMainPage
+Module2=Starter
 NumberOfFiles=1
-NumberOfLibraries=8
-NumberOfModules=4
-Version=12.5
+NumberOfLibraries=9
+NumberOfModules=2
+Version=12.8
 @EndOfDesignText@
 #Region  Project Attributes 
 	#ApplicationLabel: B4A Example

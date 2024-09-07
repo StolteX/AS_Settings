@@ -28,12 +28,12 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	
 	B4XPages.SetTitle(Me,"AS Settings SegmentedTab Example")
 	
-	AS_Settings1.AddGroup("Basic","Basic Settings")
+	AS_Settings1.MainPage.AddGroup("Basic","Basic Settings")
 	
-	AS_Settings1.AddProperty_SegmentedTab("Basic","PropertyName_1","Segmented Example 1","",Null,1,CreateMap("Option 1":"Value1","Option 2":"Value2"),200dip)
-	AS_Settings1.AddProperty_SegmentedTab("Basic","PropertyName_2","Segmented Example 2","",Null,1,CreateMap("Option 1":"Value1","Option 2":"Value2","Option 3":"Value3","Option 4":"Value4"),0)
+	AS_Settings1.MainPage.AddProperty_SegmentedTab("Basic","PropertyName_1","Segmented Example 1","",Null,1,CreateMap("Option 1":"Value1","Option 2":"Value2"),200dip)
+	AS_Settings1.MainPage.AddProperty_SegmentedTab("Basic","PropertyName_2","Segmented Example 2","",Null,1,CreateMap("Option 1":"Value1","Option 2":"Value2","Option 3":"Value3","Option 4":"Value4"),0)
 	
-	AS_Settings1.Create
+	AS_Settings1.MainPage.Create
 	
 End Sub
 
@@ -43,6 +43,6 @@ Private Sub B4XPage_KeyboardStateChanged (Height As Float)
 	
 End Sub
 
-Private Sub AS_Settings1_ValueChanged(Property As ASSettings_Property, Value As Object)
+Private Sub AS_Settings1_ValueChanged(Property As AS_Settings_Property, Value As Object)
 	Log("ValueChanged " & Property.PropertyName & ": " & Value)
 End Sub
