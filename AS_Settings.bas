@@ -114,6 +114,9 @@ V2.06
 V2.07
 	-AS_SettingsPage
 		-BugFix on Refresh
+V2.08
+	-AS_SettingsPage
+		-BugFix - The ComboBox display text can now be multiline
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"

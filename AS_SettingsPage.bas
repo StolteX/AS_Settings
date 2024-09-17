@@ -1360,8 +1360,12 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			xComboBox.Tag = xlbl_ComboBox
 			#If B4J
 			xlbl_ComboBox.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
+			xlbl_ComboBox.As(Label).WrapText = True
 			#Else If B4I
 			xlbl_ComboBox.As(Label).UserInteractionEnabled = False
+			xlbl_ComboBox.As(Label).Multiline = True
+			#Else If B4A
+			xlbl_ComboBox.As(Label).SingleLine = False
 			#End If
 			
 			xpnl_PropertyBackground.AddView(xlbl_ComboBox,Gap,0,xpnl_PropertyBackground.Width - Gap*2 - xlbl_ComboBoxIcon_Up.Width,xpnl_PropertyBackground.Height)

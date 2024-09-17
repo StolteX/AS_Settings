@@ -16,6 +16,6 @@ ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=1
 ModuleClosedNodes5=1
-NavigationStack=AS_SettingsPage,Initialize,140,4,AS_SettingsPage,AddProperty_Boolean,299,0,AS_SettingsPage,AddProperty_SelectionList,302,6,AS_SettingsPage,SelectionItem_Click,1502,6,B4XMainPage,B4XPage_Created,66,3
+NavigationStack=AS_SettingsPage,Initialize,140,4,AS_SettingsPage,AddProperty_Boolean,299,0,AS_SettingsPage,AddProperty_SelectionList,302,6,AS_SettingsPage,SelectionItem_Click,1502,6,B4XMainPage,B4XPage_Created,66,3,AS_SettingsPage,AddInternProperty,1360,2
 SelectedBuild=0
 VisibleModules=4,2,3,1
