@@ -14,7 +14,7 @@ Private Sub Process_Globals
 End Sub
 
 Public Sub Initialize
-	if DefaultValueMap.IsInitialized = False Then DefaultValueMap.Initialize
+	If DefaultValueMap.IsInitialized = False Then DefaultValueMap.Initialize
 	If IsInitialized Then Return
 		#If B4J
 	kvs.Initialize(File.DirApp,"as_settings.db")

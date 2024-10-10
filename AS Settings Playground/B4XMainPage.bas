@@ -113,7 +113,7 @@ End Sub
 
 Private Sub AS_Settings1_ValueChanged(Property As AS_Settings_Property, Value As Object)
 	'Log("ValueChanged " & Property.PropertyName & ": " & Value)
-	
+
 	Select Property.PropertyName
 		Case "PropertyName_1"
 			ChangeTheme(Value,200)

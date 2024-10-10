@@ -270,6 +270,9 @@ Public Sub AddProperty_Boolean(GroupKey As String,PropertyName As String,Display
 	Dim Property_Boolean As AS_Settings_Property_Boolean
 	Property_Boolean.Initialize
 	
+	If m_Settings.SaveMode = m_Settings.SaveMode_Manual Then
+		Property.Value = DefaultValue
+	End If
 	
 	Property.PropertyType = Property_Boolean
 	
@@ -337,6 +340,8 @@ Public Sub AddProperty_SelectionList(GroupKey As String,PropertyName As String,L
 			Value.Initialize
 		End If
 		Property.Value = Value
+	Else
+		Property.Value = DefaultValue
 	End If
 	
 	Return Property
@@ -373,6 +378,8 @@ Public Sub AddProperty_Text(GroupKey As String,PropertyName As String,DisplayNam
 		Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
 		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
 		Property.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
+	Else
+		Property.Value = DefaultValue
 	End If
 	
 	Property.PropertyType = Property_Text
@@ -406,6 +413,8 @@ Public Sub AddProperty_Action(GroupKey As String,PropertyName As String,DisplayN
 		Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
 		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
 		Property.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
+	Else
+		Property.Value = DefaultValue
 	End If
 	
 	Property.PropertyType = Property_Action
@@ -436,6 +445,8 @@ Public Sub AddProperty_ActionClean(GroupKey As String,PropertyName As String,Dis
 		Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
 		'Property_ActionClean.Value = IIf(Value = Null,Property_ActionClean.DefaultValue,Value)
 		Property.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
+	Else
+		'Todo: Manuellen Modus?
 	End If
 	
 	Property.PropertyType = Property_ActionClean
@@ -469,6 +480,8 @@ Public Sub AddProperty_ComboBox(GroupKey As String,PropertyName As String,Displa
 		Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
 		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
 		Property.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
+	Else
+		Property.Value = DefaultValue
 	End If
 	
 	Property.PropertyType = Property_ComboBox
@@ -506,6 +519,8 @@ Public Sub AddProperty_ComboBox2(GroupKey As String,PropertyName As String,Displ
 		Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
 		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
 		Property.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
+	Else
+		Property.Value = Property.DefaultValue
 	End If
 	
 	Property.PropertyType = Property_ComboBox
@@ -552,6 +567,8 @@ Public Sub AddProperty_Chooser(GroupKey As String,PropertyName As String,Display
 		Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
 		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
 		Property.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
+	Else
+		Property.Value = DefaultValue
 	End If
 	
 	lst_Properties.Add(Property)
@@ -628,6 +645,8 @@ Public Sub AddProperty_SegmentedTab(GroupKey As String,PropertyName As String,Di
 		'Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
 		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
 		'Property_SegmentedTab.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
+	Else
+		Property.Value = DefaultValue
 	End If
 	
 	Property.PropertyType = Property_SegmentedTab
@@ -682,6 +701,8 @@ Public Sub AddProperty_PlusMinus(GroupKey As String,PropertyName As String,Displ
 	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
 		Dim Value As Object = AS_Properties.GetProperty(Property.PropertyName)
 		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
+	Else
+		Property.Value = DefaultValue
 	End If
 	
 	lst_Properties.Add(Property)
@@ -1118,7 +1139,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			
 			Dim mSwitchProperties As Map
 			mSwitchProperties.Initialize
-			mSwitchProperties.Put("Value",Property.Value)
+			mSwitchProperties.Put("Value",IIf(Value = Null,Property.DefaultValue,Property.Value))
 			mSwitchProperties.Put("OnColor",m_Settings.SwitchProperties.TrueColor)
 			mSwitchProperties.Put("OffColor",m_Settings.SwitchProperties.FalseColor)
 			mSwitchProperties.Put("ThumbColor",m_Settings.SwitchProperties.ThumbColor)
