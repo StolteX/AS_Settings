@@ -33,67 +33,71 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	
 	AS_Settings1.MainPage.AddGroup("Basic","Basic Settings")
 		
-	AS_Settings1.MainPage.AddDescriptionItem("","Show sync help: when enabled, you'll see an explanation alert every time you tap 'Sync' on the Today tab.")
+'	AS_Settings1.MainPage.AddDescriptionItem("","Show sync help: when enabled, you'll see an explanation alert every time you tap 'Sync' on the Today tab.")
+'	
+'	'Boolean
+'	'AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_1","Overview in the morning","Your goals for today: Goal1, Goal2, Goal3",Null,True)
+'	AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_1","Light/Dark","",Null,True)
+'	AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_2","Boolean Property False","Description Long Long Long Long Long Long Long Long Long Long Long Long Long Long Test Text",Null,False)
+'
+'	AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_3","Boolean Property True with a long text","",Null,True)
+'	'Action Button
+'	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_4","Action Property","",Null,"English")
+'	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_5","Icon","",AS_Settings1.FontToBitmap(Chr(0xF179),False,30,xui.Color_White),"English, German, Italian, Spanish, Swedish")
+'	AS_Settings1.MainPage.AddProperty_ActionClean("Basic","PropertyName_6","Delete Account","",AS_Settings1.FontToBitmap(Chr(0xE92B),True,34,xui.Color_White))
+'	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_7","Pro Feature","",Null,"Pro")
+'	
+'	AS_Settings1.MainPage.AddGroup("Advanced","Advanced Settings")
+'	
+'	'Numeric Example
+'	AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_8","Text Example","",Null,"Test",100dip,AS_Settings1.InputType_Text)
+'	AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_9","Numeric Example","",Null,24,60dip,AS_Settings1.InputType_Numeric)
+'	AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_10","Decimal Example","",Null,24.24,100dip,AS_Settings1.InputType_Decimal)
+'	'AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_12","Decimal Example",Null,24.24,100dip,AS_Settings1.InputType_IPv4,"")
+'	'ComboBox
+'	AS_Properties.RemoveProperty("PropertyName_11")
+'	AS_Settings1.MainPage.AddProperty_ComboBox("Advanced","PropertyName_11","ComboBox Example","",Null,"Option 2",Array("Option 1","Option 2","Option 3","Option 4"))
+'	
+'	AS_Properties.SetDefaultValue("PropertyName_13","Key3")
+'	Dim ComboBox2 As B4XOrderedMap = B4XCollections.CreateOrderedMap2(Array("Key1","Key2","Key3","Key4"),Array("DisplayText 1","DisplayText 2","DisplayText 3","DisplayText 4"))
+'	AS_Settings1.MainPage.AddProperty_ComboBox2("Advanced","PropertyName_13","ComboBox Example2","",Null,AS_Properties.GetDefaultValue("PropertyName_13"),ComboBox2)
+'	
+'	AS_Settings1.MainPage.BottomText = "Alexander Stolte" & CRLF & "V1.0.2"
 	
-	'Boolean
-	'AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_1","Overview in the morning","Your goals for today: Goal1, Goal2, Goal3",Null,True)
-	AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_1","Light/Dark","",Null,True)
-	AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_2","Boolean Property False","Description Long Long Long Long Long Long Long Long Long Long Long Long Long Long Test Text",Null,False)
-
-	AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_3","Boolean Property True with a long text","",Null,True)
-	'Action Button
-	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_4","Action Property","",Null,"English")
-	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_5","Icon","",AS_Settings1.FontToBitmap(Chr(0xF179),False,30,xui.Color_White),"English, German, Italian, Spanish, Swedish")
-	AS_Settings1.MainPage.AddProperty_ActionClean("Basic","PropertyName_6","Delete Account","",AS_Settings1.FontToBitmap(Chr(0xE92B),True,34,xui.Color_White))
-	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_7","Pro Feature","",Null,"Pro")
-	
-	AS_Settings1.MainPage.AddGroup("Advanced","Advanced Settings")
-	
-	'Numeric Example
-	AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_8","Text Example","",Null,"Test",100dip,AS_Settings1.InputType_Text)
-	AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_9","Numeric Example","",Null,24,60dip,AS_Settings1.InputType_Numeric)
-	AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_10","Decimal Example","",Null,24.24,100dip,AS_Settings1.InputType_Decimal)
-	'AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_12","Decimal Example",Null,24.24,100dip,AS_Settings1.InputType_IPv4,"")
-	'ComboBox
-	AS_Properties.RemoveProperty("PropertyName_11")
-	AS_Settings1.MainPage.AddProperty_ComboBox("Advanced","PropertyName_11","ComboBox Example","",Null,"Option 2",Array("Option 1","Option 2","Option 3","Option 4"))
-	
-	AS_Properties.SetDefaultValue("PropertyName_13","Key3")
-	Dim ComboBox2 As B4XOrderedMap = B4XCollections.CreateOrderedMap2(Array("Key1","Key2","Key3","Key4"),Array("DisplayText 1","DisplayText 2","DisplayText 3","DisplayText 4"))
-	AS_Settings1.MainPage.AddProperty_ComboBox2("Advanced","PropertyName_13","ComboBox Example2","",Null,AS_Properties.GetDefaultValue("PropertyName_13"),ComboBox2)
-	
-	AS_Settings1.MainPage.BottomText = "Alexander Stolte" & CRLF & "V1.0.2"
+	AS_Settings1.MainPage.AddProperty_Custom("Basic","Test",300dip)
 	
 	AS_Settings1.MainPage.Create
+	Sleep(3000)
+	AS_Settings1.MainPage.Refresh
 	
-	'Second Page
-	SettingPage2.Initialize(AS_Settings1,"Theme")
-	
-	SettingPage2.AddProperty_Custom("","CustomButton1",80dip)
-	
-	SettingPage2.AddGroup("Basic","Accent Color")
-	
-	SettingPage2.AddProperty_Boolean("Basic","PropertyName_1","Light/Dark","",Null,True)
-	
-	SettingPage2.AddGroup("MultiOptionExample","Accent Color")
-	
-	Dim lst_Items As List
-	lst_Items.Initialize
-	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Green Green Green Green Green Green Green Green Green",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_RGB(45, 136, 121)),1))
-	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Blue",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_RGB(73, 98, 164)),2))
-	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Red",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_RGB(221, 95, 96)),3))
-	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Purple",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_RGB(141, 68, 173)),4))
-	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Magenta",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_Magenta),5))
-	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Cyan",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_Cyan),6))
-	AS_Properties.RemoveProperty("OptionsExample1")
-	SettingPage2.AddProperty_SelectionList("MultiOptionExample","OptionsExample1",lst_Items,Array(1),False,False)
+'	'Second Page
+'	SettingPage2.Initialize(AS_Settings1,"Theme")
+'	
+'	SettingPage2.AddProperty_Custom("","CustomButton1",80dip)
+'	
+'	SettingPage2.AddGroup("Basic","Accent Color")
+'	
+'	SettingPage2.AddProperty_Boolean("Basic","PropertyName_1","Light/Dark","",Null,True)
+'	
+'	SettingPage2.AddGroup("MultiOptionExample","Accent Color")
+'	
+'	Dim lst_Items As List
+'	lst_Items.Initialize
+'	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Green Green Green Green Green Green Green Green Green",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_RGB(45, 136, 121)),1))
+'	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Blue",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_RGB(73, 98, 164)),2))
+'	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Red",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_RGB(221, 95, 96)),3))
+'	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Purple",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_RGB(141, 68, 173)),4))
+'	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Magenta",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_Magenta),5))
+'	lst_Items.Add(AS_Settings1.CreateSelectionListItem("Cyan",AS_Settings1.FontToBitmap(Chr(0xF111),False,30,xui.Color_Cyan),6))
+'	AS_Properties.RemoveProperty("OptionsExample1")
+'	SettingPage2.AddProperty_SelectionList("MultiOptionExample","OptionsExample1",lst_Items,Array(1),False,False)
 
 	'AS_Properties.RemoveProperty("OptionsExample1")
 
-	Sleep(4000)
-	Log("jetzt")
-	AS_Settings1.MainPage.GetProperty("PropertyName_1").Description = "Last Backup Backup Backup: Now"
-	AS_Settings1.MainPage.Refresh
+'	Sleep(4000)
+'	Log("jetzt")
+'	AS_Settings1.MainPage.GetProperty("PropertyName_1").Description = "Last Backup Backup Backup: Now"
+'	AS_Settings1.MainPage.Refresh
 End Sub
 
 Private Sub B4XPage_KeyboardStateChanged (Height As Float)

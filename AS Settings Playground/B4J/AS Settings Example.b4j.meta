@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=1
-NavigationStack=B4XMainPage,AS_Settings1_CustomDrawProperty,167,0,AS_SettingsPage,AddProperty_Boolean,267,4,AS_SettingsPage,AddProperty_SelectionList,336,1,AS_SettingsPage,AddProperty_Text,374,1,AS_SettingsPage,AddProperty_Action,409,1,AS_SettingsPage,AddProperty_ActionClean,442,5,AS_SettingsPage,AddProperty_ComboBox2,515,2,AS_SettingsPage,AddProperty_ComboBox,476,1,AS_SettingsPage,AddProperty_Chooser,558,1,B4XMainPage,B4XPage_Created,43,6,AS_SettingsPage,AddProperty_Custom,697,0
+NavigationStack=AS_SettingsPage,Create,1552,0,AS_SettingsPage,GetProperty,1634,0,AS_SettingsPage,AddInternSelectionItem,985,0,AS_SettingsPage,AddProperty2List,915,6,AS_SettingsPage,xclv_Main_VisibleRangeChanged,1799,0,AS_SettingsPage,AddCustomItem2List,848,0,B4XMainPage,B4XPage_Created,63,6,B4XMainPage,AS_Settings1_CustomDrawCustomProperty,196,0,AS_Settings,setPadding,664,0,AS_SettingsPage,AddInternProperty,1430,4
 SelectedBuild=0
 VisibleModules=4,2,3,1

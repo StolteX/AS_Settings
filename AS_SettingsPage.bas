@@ -897,55 +897,74 @@ Private Sub AddProperty2List(Property As AS_Settings_Property)
 			
 		Next
 			
+'	else If Property.PropertyType Is AS_Settings_Property_Custom Then
+'		
+'		Dim xpnl_Background As B4XView = xui.CreatePanel("")
+'		xpnl_Background.SetLayoutAnimated(0,0,0,xpnl_Page.Width,m_Settings.PropertyProperties.Height)
+'		xpnl_Background.Color = m_Settings.BackgroundColor
+'		
+'		Dim xpnl_Property As B4XView = xui.CreatePanel("SelectionItem")
+'		xpnl_Background.AddView(xpnl_Property,m_Settings.Padding,0,xpnl_Page.Width - (m_Settings.Padding*2),xpnl_Background.Height)
+'		#if b4j
+'		xpnl_Property.Width = xpnl_Property.Width - IIf(isMainPage,20dip,m_Settings.Padding/2)
+'	    #End If
+'		xpnl_Property.Color = m_Settings.PropertyProperties.BackgroundColor
+'		
+'		AddCustomItem2List(xpnl_Background,Property.PropertyType,False)
+			
 	Else
 			
 		Dim xpnl_Background As B4XView = xui.CreatePanel("")
 		xpnl_Background.SetLayoutAnimated(0,0,0,xpnl_Page.Width,m_Settings.PropertyProperties.Height)
 		xpnl_Background.Color = m_Settings.BackgroundColor
+		
+		If Property.PropertyType Is AS_Settings_Property_Custom Then
+			xpnl_Background.Height = Property.PropertyType.As(AS_Settings_Property_Custom).Height
+		Else
+			Dim PropertyBackgroundWidth As Float = xpnl_Page.Width - (m_Settings.Padding*2)
 	
-		Dim PropertyBackgroundWidth As Float = xpnl_Page.Width - (m_Settings.Padding*2)
-	
-		If Property.Description <> "" Then
+			If Property.Description <> "" Then
 
-			Dim Gap As Float = 5dip
+				Dim Gap As Float = 5dip
 
-			Dim xlbl_Name As B4XView = CreateLabel("")
-			xlbl_Name.Font = xui.CreateDefaultBoldFont(18)
-			xlbl_Name.Text = Property.DisplayName
-			xlbl_Name.Width = PropertyBackgroundWidth/2' - Gap
+				Dim xlbl_Name As B4XView = CreateLabel("")
+				xlbl_Name.Font = xui.CreateDefaultBoldFont(18)
+				xlbl_Name.Text = Property.DisplayName
+				xlbl_Name.Width = PropertyBackgroundWidth/2' - Gap
 			#If B4I
 			xlbl_Name.As(Label).Multiline = True
 	#Else If B4J
-	xlbl_Name.As(Label).WrapText = True
+				xlbl_Name.As(Label).WrapText = True
 	#Else B4A
 	xlbl_Name.As(Label).SingleLine = False
 	#End If
 		
-			Dim xlbl_Description As B4XView = CreateLabel("")
-			xlbl_Description.Text = Property.Description
-			xlbl_Description.Font = xui.CreateDefaultFont(15)
-			xlbl_Description.TextColor = m_Settings.PropertyProperties.DescriptionTextColor
-			xlbl_Description.SetTextAlignment("TOP","LEFT")
+				Dim xlbl_Description As B4XView = CreateLabel("")
+				xlbl_Description.Text = Property.Description
+				xlbl_Description.Font = xui.CreateDefaultFont(15)
+				xlbl_Description.TextColor = m_Settings.PropertyProperties.DescriptionTextColor
+				xlbl_Description.SetTextAlignment("TOP","LEFT")
 	#If B4I
 			xlbl_Description.As(Label).Multiline = True
 	#Else If B4J
-		xlbl_Description.As(Label).WrapText = True
+				xlbl_Description.As(Label).WrapText = True
 	#Else B4A
 	xlbl_Description.As(Label).SingleLine = False
 	#End If
 		
-			xlbl_Description.Width = PropertyBackgroundWidth/2 - Gap
-			xlbl_Description.Height = 10dip
+				xlbl_Description.Width = PropertyBackgroundWidth/2 - Gap
+				xlbl_Description.Height = 10dip
 
-			Dim NameHeight As Float = MeasureMultilineTextHeight(xlbl_Name)
-			Dim DescriptionHeight As Float = MeasureMultilineTextHeight(xlbl_Description) + 5dip
+				Dim NameHeight As Float = MeasureMultilineTextHeight(xlbl_Name)
+				Dim DescriptionHeight As Float = MeasureMultilineTextHeight(xlbl_Description) + 5dip
 		
-			If NameHeight + DescriptionHeight >= m_Settings.PropertyProperties.Height Then
-				xpnl_Background.Height = NameHeight + DescriptionHeight + 10dip
+				If NameHeight + DescriptionHeight >= m_Settings.PropertyProperties.Height Then
+					xpnl_Background.Height = NameHeight + DescriptionHeight + 10dip
+				End If
+		
 			End If
-		
 		End If
-			
+		
 		xclv_Main.Add(xpnl_Background,Property)
 			
 	End If
@@ -1074,7 +1093,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	#If B4I
 	xlbl_Description.As(Label).Multiline = True
 	#Else If B4J
-		xlbl_Description.As(Label).WrapText = True
+	xlbl_Description.As(Label).WrapText = True
 	#Else B4A
 	xlbl_Description.As(Label).SingleLine = False
 	#End If
@@ -1399,7 +1418,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 						SelectedIndex = i
 						Exit
 					End If
-				Next			
+				Next
 			Else
 				For i = 0 To Property_ComboBox.ItemList.Size -1
 					If Property.Value = Property_ComboBox.ItemList.Get(i) Then
@@ -1413,6 +1432,10 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			
 			xlbl_ComboBox.Text = Property_ComboBox.ItemList.Get(SelectedIndex)
 			Property.View = xComboBox
+		
+		Case Property.PropertyType Is AS_Settings_Property_Custom
+		
+			AddCustomItem2List(xpnl_Background,Property.PropertyType,True)
 		
 	End Select
 	
