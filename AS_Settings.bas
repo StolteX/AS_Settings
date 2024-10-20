@@ -123,6 +123,10 @@ V2.09
 		-BugFixes for AddProperty_Custom 
 			-The specified height is now used
 			-The CustomDrawCustomProperty Event is now triggered
+V2.10
+	-AS_Settings
+		-Add AS_Settings_GroupProperties
+			-Removed GroupNameTextColor
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
@@ -210,6 +214,7 @@ Sub Class_Globals
 	Type AS_Settings_BottomTextProperty(xFont As B4XFont,TextColor As Int)
 	
 	Type AS_Settings_Property_Properties(Width As Float,Height As Float,xFont As B4XFont,TextColor As Int,BackgroundColor As Int,DescriptionTextColor As Int,FieldBackgroundColor As Int,FieldHeight As Float,InputType As String,Format As String,CornerRadius As Float)
+	Type AS_Settings_GroupProperties(xFont As B4XFont,TextColor As Int,HorizontalTextAlignment As String)
 	#IF SETTINGS_SegmentedTab
 	Type AS_Settings_Property_SegmentedTab(Property As AS_Settings_Property,Width As Float,CornerRadius As Float,ShowSeperators As Boolean,BackgroundColor As Int,SelectionColor As Int,SeperatorColor As Int,TextColor As Int,xFont As B4XFont,ItemMap As Map)
 	#End If
@@ -217,6 +222,7 @@ Sub Class_Globals
 	Type AS_Settings_Property_PlusMinus(Property As AS_Settings_Property,CornerRadius As Float,ShowDivider As Boolean,BackgroundColor As Int,DividerColor As Int,HaloColor As Int,TextColor As Int,xFont As B4XFont,ShowHaloEffect As Boolean,MinValue As Int,MaxValue As Int,Increment As Int,Prefix As String,Suffix As String,PropertyProperties As AS_Settings_Property_Properties)
 	#End If
 		
+	Private g_GroupProperties As AS_Settings_GroupProperties
 	Private g_PropertyProperties As AS_Settings_Property_Properties
 	Private g_BottomTextProperties As AS_Settings_BottomTextProperty
 	Private g_SwitchProperties As AS_Settings_SwitchProperties
@@ -245,7 +251,6 @@ Sub Class_Globals
 	Private m_GroupNameBackgroundColor As Int
 	Private m_ArrowColor As Int
 	Private m_DragIndicatorColor As Int
-	Private m_GroupNameTextColor As Int
 	Private m_SecondPageShadowColor As Int
 	Private m_SecondPageHeaderTextColor As Int
 	Private m_ExitIconColor As Int
@@ -365,7 +370,7 @@ Public Sub setTheme(Theme As AS_Settings_Theme)
 	m_BackgroundColor = Theme.BackgroundColor
 	m_PropertySeperatorColor = Theme.PropertySeperatorColor
 	m_GroupNameBackgroundColor = Theme.GroupNameBackgroundColor
-	m_GroupNameTextColor = Theme.GroupNameTextColor
+	g_GroupProperties.TextColor = Theme.GroupNameTextColor
 	m_MadeWithLoveTextColor = Theme.MadeWithLoveTextColor
 	m_SelectionItemSelectionColor = Theme.SelectionItemSelectionColor
 	g_PropertyProperties.BackgroundColor = Theme.PropertyColor
@@ -476,7 +481,6 @@ Private Sub IniProps(Props As Map)
 	m_PropertySeperatorColor = xui.PaintOrColorToColor(Props.Get("PropertySeperatorColor"))
 	m_CornerRadius = Props.Get("CornerRadius")
 	m_GroupNameBackgroundColor = xui.PaintOrColorToColor(Props.Get("GroupNameBackgroundColor"))
-	m_GroupNameTextColor = xui.Color_White
 	m_GroupHeight = DipToCurrent(Props.Get("GroupHeight"))
 	m_HapticFeedback = Props.Get("HapticFeedback")
 	m_SaveMode = Props.GetDefault("SaveMode","Automatic")
@@ -491,6 +495,7 @@ Private Sub IniProps(Props As Map)
 	m_ThemeChangeTransition = Props.GetDefault("ThemeChangeTransition","Fade")
 	
 	g_PropertyProperties = CreateAS_Settings_Property_Properties(mBase.Width/4,DipToCurrent(Props.Get("PropertyHeight")),xui.CreateDefaultFont(18),xui.PaintOrColorToColor(Props.GetDefault("PropertyTextColor",0xFFFFFFFF)),xui.PaintOrColorToColor(Props.Get("PropertyColor")),xui.Color_ARGB(152,255,255,255),xui.Color_ARGB(255,60, 64, 67),DipToCurrent(Props.Get("PropertyHeight"))/2,getInputType_Text,"",5dip)
+	g_GroupProperties = CreateAS_Settings_GroupProperties(xui.CreateDefaultBoldFont(20),xui.Color_White,"LEFT")
 	#IF SETTINGS_SegmentedTab
 	g_SegmentedTabProperties = CreateAS_Settings_SegmentedTabProperties(0,DipToCurrent(Props.GetDefault("SegmentedTabCornerRadius",5dip)),Props.GetDefault("SegmentedTabShowSeperators",False),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabBackgroundColor",0xFF3D3C40)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSelectionColor",0xFF737278)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSeperatorsColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabTextColor",0xFFFFFFFF)),xui.CreateDefaultBoldFont(15))
 	#End If
@@ -585,6 +590,11 @@ Public Sub getPropertyProperties As AS_Settings_Property_Properties
 	Return g_PropertyProperties
 End Sub
 
+'HorizontalTextAlignment - LEFT, CENTER, RIGHT
+Public Sub getGroupProperties As AS_Settings_GroupProperties
+	Return g_GroupProperties
+End Sub
+
 #If SETTINGS_SegmentedTab
 Public Sub getSegmentedTabProperties As AS_Settings_Property_SegmentedTab
 	Return g_SegmentedTabProperties
@@ -612,14 +622,6 @@ End Sub
 
 Public Sub getGroupNameBackgroundColor As Int
 	Return m_GroupNameBackgroundColor
-End Sub
-
-Public Sub setGroupNameTextColor(Color As Int)
-	m_GroupNameTextColor = Color
-End Sub
-
-Public Sub getGroupNameTextColor As Int
-	Return m_GroupNameTextColor
 End Sub
 
 Public Sub getArrowColor As Int
@@ -886,5 +888,14 @@ Public Sub CreateAS_Settings_Property_Properties (Width As Float, Height As Floa
 	t1.InputType = InputType
 	t1.Format = Format
 	t1.CornerRadius = CornerRadius
+	Return t1
+End Sub
+
+Private Sub CreateAS_Settings_GroupProperties (xFont As B4XFont, TextColor As Int, HorizontalTextAlignment As String) As AS_Settings_GroupProperties
+	Dim t1 As AS_Settings_GroupProperties
+	t1.Initialize
+	t1.xFont = xFont
+	t1.TextColor = TextColor
+	t1.HorizontalTextAlignment = HorizontalTextAlignment
 	Return t1
 End Sub

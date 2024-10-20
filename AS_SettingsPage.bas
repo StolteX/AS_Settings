@@ -977,9 +977,9 @@ Private Sub AddInternGroup(xpnl_Group As B4XView,Group As AS_Settings_Group)
 	
 	Dim xlbl_GroupName As B4XView = CreateLabel("xlbl_GroupName")
 	xlbl_GroupName.Text = Group.Name
-	xlbl_GroupName.Font = xui.CreateDefaultBoldFont(20)
-	xlbl_GroupName.TextColor = m_Settings.GroupNameTextColor
-	xlbl_GroupName.SetTextAlignment("CENTER","LEFT")
+	xlbl_GroupName.Font = m_Settings.GroupProperties.xFont
+	xlbl_GroupName.TextColor = m_Settings.GroupProperties.TextColor
+	xlbl_GroupName.SetTextAlignment("CENTER",m_Settings.GroupProperties.HorizontalTextAlignment)
 	xlbl_GroupName.Tag = Group
 	xpnl_Group.Color = m_Settings.GroupNameBackgroundColor
 		
