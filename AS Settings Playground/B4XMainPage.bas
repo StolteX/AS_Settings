@@ -106,7 +106,7 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	lst_Colors.Add(xui.Color_Magenta)
 	lst_Colors.Add(xui.Color_Cyan)
 
-	SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,xui.Color_Magenta,50dip,Null)
+	SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,Null,50dip,Null)
 	
 	'SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,xui.Color_Magenta,50dip,AS_Settings1.FontToBitmap(Chr(0xE897),True,30,xui.Color_LightGray))
 

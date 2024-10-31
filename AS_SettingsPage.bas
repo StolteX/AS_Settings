@@ -982,7 +982,7 @@ Private Sub AddColor2List(xpnl_Background As B4XView,ColorItem As AS_Settings_Pr
 			
 			Dim xlbl_Color As B4XView = CreateLabel("ColorChooser")
 			xlbl_Color.SetTextAlignment("CENTER","CENTER")
-			If ColorItem.Property.Value.As(Int) = clrItem.Color Then
+			If ColorItem.Property.Value <> Null And ColorItem.Property.Value.As(Int) = clrItem.Color Then
 				xlbl_Color.Font = xui.CreateMaterialIcons(IIf(xui.IsB4A,ColorItem.WidthHeight/3.5, ColorItem.WidthHeight/1.5))
 				xlbl_Color.TextColor = GetContrastColor(clrItem.Color)
 			Else
