@@ -203,7 +203,6 @@ Public Sub AddSpaceItem(PageKey As String,GroupKey As String,Height As Float) As
 	SpaceItem.Initialize
 	SpaceItem.GroupKey = GroupKey
 	SpaceItem.Height = Height
-	SpaceItem.BackgroundColor = m_Settings.BackgroundColor
 	
 	If GroupKey = "" Then
 		
@@ -269,6 +268,7 @@ Public Sub AddProperty_Boolean(GroupKey As String,PropertyName As String,Display
 	
 	Dim Property_Boolean As AS_Settings_Property_Boolean
 	Property_Boolean.Initialize
+	Property_Boolean.Property = Property
 	
 	If m_Settings.SaveMode = m_Settings.SaveMode_Manual Then
 		Property.Value = DefaultValue
@@ -278,6 +278,47 @@ Public Sub AddProperty_Boolean(GroupKey As String,PropertyName As String,Display
 	
 	If GroupKey <> "" Then
 		lst_Properties.Add(Property)
+	End If
+	
+	Return Property
+	
+End Sub
+
+Public Sub AddProperty_ColorChooser(GroupKey As String,PropertyName As String,ColorList As List,DefaultValue As Object,WidthHeight As Float,Icon As B4XBitmap) As AS_Settings_Property
+	
+	Dim Group As AS_Settings_Group = GetGroup(GroupKey)
+	
+	Dim Property As AS_Settings_Property
+	Property.Initialize
+	Property.PropertyName = PropertyName
+	Property.DisplayName = ""
+	Property.Description = ""
+	Property.Icon = Icon
+	Property.DefaultValue = DefaultValue
+	
+	Dim Property_ColorChooser As AS_Settings_Property_ColorChooser
+	Property_ColorChooser.Initialize
+	Property_ColorChooser.ColorList = ColorList
+	Property_ColorChooser.WidthHeight = WidthHeight
+	Property_ColorChooser.Property = Property
+	
+	Property.PropertyType = Property_ColorChooser
+	
+	If GroupKey = "" Then	
+		lst_Items.Add(Property_ColorChooser)
+	Else
+			
+		Dim Group As AS_Settings_Group = GetGroup(GroupKey)
+		Dim lst_Properties As List = Group.Properties
+		lst_Properties.Add(Property)
+		
+	End If
+	
+	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
+		Dim Value As Object = AS_Properties.GetProperty(Property.PropertyName)
+		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
+	Else
+		Property.Value = DefaultValue
 	End If
 	
 	Return Property
@@ -372,6 +413,7 @@ Public Sub AddProperty_Text(GroupKey As String,PropertyName As String,DisplayNam
 	Property_Text.Initialize
 	Property_Text.Width = Width
 	Property_Text.InputType = InputType
+	Property_Text.Property = Property
 
 	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
 		Dim Value As Object = AS_Properties.GetProperty(Property.PropertyName)
@@ -406,6 +448,7 @@ Public Sub AddProperty_Action(GroupKey As String,PropertyName As String,DisplayN
 	
 	Dim Property_Action As AS_Settings_Property_Action
 	Property_Action.Initialize
+	Property_Action.Property = Property
 	
 	
 	If m_Settings.saveMode = m_Settings.SaveMode_Automatic Then
@@ -439,6 +482,7 @@ Public Sub AddProperty_ActionClean(GroupKey As String,PropertyName As String,Dis
 	
 	Dim Property_ActionClean As AS_Settings_Property_ActionClean
 	Property_ActionClean.Initialize
+	Property_ActionClean.Property = Property
 	
 	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
 		'Dim Value As Object = AS_Properties.GetProperty(Property.PropertyName)
@@ -473,6 +517,7 @@ Public Sub AddProperty_ComboBox(GroupKey As String,PropertyName As String,Displa
 	Dim Property_ComboBox As AS_Settings_Property_ComboBox
 	Property_ComboBox.Initialize
 	Property_ComboBox.ItemList = ItemList
+	Property_ComboBox.Property = Property
 	
 	
 	If m_Settings.SaveMode = m_Settings.saveMode_Automatic Then
@@ -512,6 +557,7 @@ Public Sub AddProperty_ComboBox2(GroupKey As String,PropertyName As String,Displ
 	Dim Property_ComboBox As AS_Settings_Property_ComboBox
 	Property_ComboBox.Initialize
 	Property_ComboBox.KeyValue = KeyValue
+	Property_ComboBox.Property = Property
 	
 	
 	If m_Settings.SaveMode = m_Settings.saveMode_Automatic Then
@@ -545,7 +591,7 @@ Public Sub AddProperty_Chooser(GroupKey As String,PropertyName As String,Display
 
 	Dim Property_Chooser As AS_Settings_Property_Chooser
 	Property_Chooser.Initialize
-	
+	Property_Chooser.Property = Property
 	Property_Chooser.Width = Width
 	
 	Dim PropertyProperties As AS_Settings_Property_Properties
@@ -638,6 +684,7 @@ Public Sub AddProperty_SegmentedTab(GroupKey As String,PropertyName As String,Di
 	Property_SegmentedTab.ShowSeperators = m_Settings.SegmentedTabProperties.ShowSeperators
 	Property_SegmentedTab.TextColor = m_Settings.SegmentedTabProperties.TextColor
 	Property_SegmentedTab.xFont = m_Settings.SegmentedTabProperties.xFont
+	Property_SegmentedTab.Property = Property
 	
 	
 	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
@@ -688,6 +735,7 @@ Public Sub AddProperty_PlusMinus(GroupKey As String,PropertyName As String,Displ
 	
 	Dim PlusMinusProperties As AS_Settings_Property_PlusMinus
 	PlusMinusProperties.Initialize
+	PlusMinusProperties.Property = Property
 	
 	PlusMinusProperties.PropertyProperties = PropertyProperties
 	PlusMinusProperties.MinValue = MinValue
@@ -801,7 +849,7 @@ Private Sub AddGroup2List(Group As AS_Settings_Group)
 	
 	Dim Properties As List = Group.Properties
 	
-	AddGroupBorder2List(True)
+	If Properties.Size > 0 Then AddGroupBorder2List(True)
 	For i = 0 To Properties.Size -1
 		If Properties.Get(i) Is AS_Settings_Property Then
 			Dim Property As AS_Settings_Property = Properties.Get(i)
@@ -815,7 +863,7 @@ Private Sub AddGroup2List(Group As AS_Settings_Group)
 			AddDescriptionItem2List(xui.CreatePanel(""),Properties.Get(i),False)
 		End If
 	Next
-	AddGroupBorder2List(False)
+	If Properties.Size > 0 Then AddGroupBorder2List(False)
 	
 End Sub
 
@@ -871,10 +919,115 @@ Private Sub AddCustomItem2List(xpnl_Background As B4XView,CustomItem As AS_Setti
 	End If
 End Sub
 
+Private Sub AddColor2List(xpnl_Background As B4XView,ColorItem As AS_Settings_Property_ColorChooser,FromLazyLoading As Boolean)
+	
+	If ColorItem.Property.Group.IsInitialized Then
+		xpnl_Background.Color = m_Settings.PropertyProperties.BackgroundColor
+	End If
+
+	If FromLazyLoading Then
+		
+		Dim xpnl_ColorItemsBackground As B4XView = xui.CreatePanel("")
+		xpnl_Background.AddView(xpnl_ColorItemsBackground,10dip,0,xpnl_Background.Width - 10dip*2,xpnl_Background.Height)
+		xpnl_ColorItemsBackground.Color = xui.Color_Transparent
+		'xpnl_ColorItemsBackground.Color = xui.Color_Red
+		
+		Dim xiv_Icon As B4XView = CreateImageView("")
+		If ColorItem.Property.Icon.IsInitialized Then
+			xpnl_ColorItemsBackground.Width = xpnl_ColorItemsBackground.Width - 30dip
+		End If
+		xpnl_Background.AddView(xiv_Icon,0,0,25dip,25dip)
+		
+		Dim Counter As Int = 0
+		Dim TopLevel As Int = 0
+		Dim PaddingBetween As Float = 10dip
+		Dim JustOneLine As Boolean = False
+		
+		Dim ItemsPerRow As Int = 0
+		For Each Item As Object In ColorItem.ColorList
+			Dim ThisItemLeft As Float = ColorItem.WidthHeight*ItemsPerRow + PaddingBetween*ItemsPerRow
+			If ThisItemLeft + ColorItem.WidthHeight > xpnl_ColorItemsBackground.Width Then
+				JustOneLine = False
+				Exit
+			End If
+			JustOneLine = True
+			ItemsPerRow = ItemsPerRow +1
+		Next
+		
+		
+		For Each Item As Object In ColorItem.ColorList
+			
+			Dim clrItem As AS_Settings_ColorItem
+			clrItem.Initialize
+			If Item Is AS_Settings_ColorItem Then
+				clrItem = Item
+			Else
+				clrItem.Color = Item
+				clrItem.Enabled = True
+			End If
+			
+			If Counter = ItemsPerRow Then
+				TopLevel = TopLevel +1
+				Counter = 0
+			Else
+					
+			End If
+			
+			Dim Spacing As Float = (xpnl_ColorItemsBackground.Width - (ItemsPerRow * ColorItem.WidthHeight)) / (ItemsPerRow + 1)
+			Dim ThisItemLeft As Float = Spacing + (Counter * (ColorItem.WidthHeight + Spacing))
+			
+			If JustOneLine Then
+				ThisItemLeft = (ColorItem.WidthHeight + PaddingBetween)*Counter
+			End If
+			
+			Dim xlbl_Color As B4XView = CreateLabel("ColorChooser")
+			xlbl_Color.SetTextAlignment("CENTER","CENTER")
+			If ColorItem.Property.Value.As(Int) = clrItem.Color Then
+				xlbl_Color.Font = xui.CreateMaterialIcons(IIf(xui.IsB4A,ColorItem.WidthHeight/3.5, ColorItem.WidthHeight/1.5))
+				xlbl_Color.TextColor = GetContrastColor(clrItem.Color)
+			Else
+				xlbl_Color.Font = xui.CreateMaterialIcons(0)
+				xlbl_Color.TextColor = xui.Color_Transparent
+			End If
+			xlbl_Color.Text = Chr(0xE5CA)
+			xpnl_ColorItemsBackground.AddView(xlbl_Color,ThisItemLeft,ColorItem.WidthHeight*TopLevel + PaddingBetween*TopLevel,ColorItem.WidthHeight,ColorItem.WidthHeight)
+			xlbl_Color.SetColorAndBorder(clrItem.Color,0,0,ColorItem.WidthHeight/2)
+			
+			xlbl_Color.Tag = clrItem
+			
+			Counter = Counter +1
+		Next
+
+		xpnl_ColorItemsBackground.Height = (ColorItem.WidthHeight + PaddingBetween)*(TopLevel+1) - PaddingBetween
+		xpnl_ColorItemsBackground.Parent.Height = xpnl_ColorItemsBackground.Height
+		xiv_Icon.SetLayoutAnimated(0,xpnl_ColorItemsBackground.Left + xpnl_ColorItemsBackground.Width + 5dip,xpnl_ColorItemsBackground.Height/2 - 25dip/2,25dip,25dip)
+		#If B4A
+		If ColorItem.Property.Group.IsInitialized Then
+			xpnl_ColorItemsBackground.Height = xpnl_ColorItemsBackground.Height + 20dip
+			xpnl_ColorItemsBackground.Top = xpnl_ColorItemsBackground.Top + 20dip/2
+			xpnl_Background.Height = xpnl_Background.Height + 20dip
+		end if
+		#End If
+		xclv_Main.ResizeItem(xclv_Main.GetItemFromView(xpnl_Background),xpnl_ColorItemsBackground.Height)
+
+		If ColorItem.Property.Icon.IsInitialized Then
+			xiv_Icon.SetBitmap(ColorItem.Property.Icon.Resize(xiv_Icon.Width,xiv_Icon.Height,True))
+		End If
+
+	Else
+		xclv_Main.Add(xpnl_Background,ColorItem)
+	End If
+End Sub
+
 Private Sub AddSpaceItem2List(xpnl_Background As B4XView,SpaceItem As AS_Settings_SpaceItem,FromLazyLoading As Boolean)
 	
 	xpnl_Background.SetLayoutAnimated(0,0,0,xpnl_Page.Width,SpaceItem.Height)
-	xpnl_Background.Color = SpaceItem.BackgroundColor
+	If SpaceItem.GroupKey = "" Then
+		xpnl_Background.Color = m_Settings.BackgroundColor
+		Else
+		xpnl_Background.Color = m_Settings.PropertyProperties.BackgroundColor
+	End If
+	
 	If FromLazyLoading = False Then xclv_Main.Add(xpnl_Background,SpaceItem)
 	
 End Sub
@@ -1082,7 +1235,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	#Else B4A
 	xlbl_PropertyName.As(Label).SingleLine = False
 	#End If
-
+	
 	xpnl_Property.AddView(xlbl_PropertyName,m_Settings.Padding,0,xpnl_Property.Width/2 - Gap,xpnl_Background.Height)
 	
 	Dim xlbl_Description As B4XView = CreateLabel("")
@@ -1379,12 +1532,12 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			mComboBox.Initialize
 			
 			xComboBox.DesignerCreateView(xpnl_ComboBoxBackground,CreateLabel(""),mComboBox)
-			
+		
 			If Property_ComboBox.KeyValue.IsInitialized And Property_ComboBox.KeyValue.Size > 0 Then
 				Property_ComboBox.ItemList.Initialize
 				
-				For Each k As Object In Property_ComboBox.KeyValue.Keys
-					Property_ComboBox.ItemList.Add(Property_ComboBox.KeyValue.Get(k))
+				For Each key As Object In Property_ComboBox.KeyValue.Keys
+					Property_ComboBox.ItemList.Add(Property_ComboBox.KeyValue.Get(key))
 				Next
 				
 			End If
@@ -1433,6 +1586,16 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			xlbl_ComboBox.Text = Property_ComboBox.ItemList.Get(SelectedIndex)
 			Property.View = xComboBox
 		
+		Case Property.PropertyType Is AS_Settings_Property_ColorChooser
+			xiv_Icon.Visible = False
+			AddColor2List(xpnl_Property,Property.PropertyType,True)
+			
+			If m_Settings.PropertySeperator And Property.isLast = False Then
+				xpnl_Property.Height = xpnl_Property.Height + 20dip
+				xclv_Main.ResizeItem(xclv_Main.GetItemFromView(xpnl_Background),xpnl_Property.Height)
+				xpnl_PropertySeperator.Top = xpnl_Property.Height - xpnl_PropertySeperator.Height - 20dip/2
+			End If
+			
 		Case Property.PropertyType Is AS_Settings_Property_Custom
 		
 			AddCustomItem2List(xpnl_Background,Property.PropertyType,True)
@@ -1442,7 +1605,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	Dim PropertyViews As AS_Settings_PropertyViews = CreateAS_Settings_PropertyViews(xpnl_Background,xpnl_Property,xpnl_PropertyBackground,xiv_Icon,xlbl_PropertyName,xlbl_Description)
 	PropertySettingViews.BackgroundPanel = xpnl_PropertyBackground
 	CallSubDelayed2(m_Settings,"CustomDrawProperty",CreateAS_Settings_CustomDrawProperty(Property.Group,Property,PropertyViews,PropertySettingViews))
-	
+
 End Sub
 
 Private Sub AddGroupBorder2List(Top As Boolean)
@@ -1572,6 +1735,8 @@ Public Sub Create
 				AddGroup2List(Item)
 			Case Item Is AS_Settings_SpaceItem
 				AddSpaceItem2List(xui.CreatePanel(""),Item,False)
+			Case Item Is AS_Settings_Property_ColorChooser
+				AddColor2List(xui.CreatePanel(""),Item,False)
 			Case Item Is AS_Settings_DescriptionItem
 				AddDescriptionItem2List(xui.CreatePanel(""),Item,False)
 			Case Item Is AS_Settings_Property And Item.As(AS_Settings_Property).PropertyType Is AS_Settings_Property_Custom
@@ -1802,6 +1967,8 @@ Private Sub xclv_Main_VisibleRangeChanged (FirstIndex As Int, LastIndex As Int)
 				
 				If xclv_Main.GetValue(i) Is AS_Settings_Group Then
 					AddInternGroup(p,xclv_Main.GetValue(i))
+				else If xclv_Main.GetValue(i) Is AS_Settings_Property_ColorChooser Then
+					AddColor2List(p,xclv_Main.GetValue(i),True)
 				else If xclv_Main.GetValue(i) Is AS_Settings_Property_Custom Then
 					AddCustomItem2List(p,xclv_Main.GetValue(i),True)
 				else If xclv_Main.GetValue(i) Is AS_Settings_Property Then
@@ -1925,6 +2092,49 @@ Private Sub xComboBox_SelectedIndexChanged (Index As Int)
 		End If
 	End If
 	
+End Sub
+
+#If B4J
+Private Sub ColorChooser_MouseClicked (EventData As MouseEvent)
+#Else
+Private Sub ColorChooser_Click
+#End If
+
+	Dim xlbl_Color As B4XView = Sender
+	
+	Dim clrItem As AS_Settings_ColorItem = xlbl_Color.Tag
+	
+	Dim Property As AS_Settings_Property = IIf(xclv_Main.GetValue(xclv_Main.GetItemFromView(xlbl_Color.Parent)) Is AS_Settings_Property_ColorChooser,xclv_Main.GetValue(xclv_Main.GetItemFromView(xlbl_Color.Parent)).As(AS_Settings_Property_ColorChooser).Property,xclv_Main.GetValue(xclv_Main.GetItemFromView(xlbl_Color.Parent)))
+	
+	If clrItem.Enabled Then
+	
+		Dim xpnl_ColorItemsBackground As B4XView = xlbl_Color.Parent
+
+		xlbl_Color.TextColor = GetContrastColor(xlbl_Color.Color)
+
+		For i = 0 To xpnl_ColorItemsBackground.NumberOfViews -1
+			If xpnl_ColorItemsBackground.GetView(i) = xlbl_Color Then
+				xlbl_Color.Font = xui.CreateMaterialIcons(1)
+				xlbl_Color.SetTextSizeAnimated(250,IIf(xui.IsB4A,xlbl_Color.Height/3.5, xlbl_Color.Height/1.5))
+			Else
+				xpnl_ColorItemsBackground.GetView(i).SetTextSizeAnimated(250,0)
+			End If
+		Next
+	
+		If m_Settings.HapticFeedback Then XUIViewsUtils.PerformHapticFeedback(xlbl_Color)
+	
+		If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
+			AS_Properties.PutProperty(Property.PropertyName,clrItem.Color)
+		End If
+	
+		CallSubDelayed3(m_Settings,"ValueChanged",Property,clrItem.Color)
+
+	Else
+
+		CallSubDelayed3(m_Settings,"DisabledItemClicked",Property,clrItem.Color)
+
+	End If
+
 End Sub
 
 Private Sub SwitchBoolean_ValueChanged (Value As Boolean)
@@ -2319,6 +2529,24 @@ Private Sub SetCircleClip (pnl As B4XView,radius As Int)'ignore
 	Dim BorderUIColor As Int = nome.UIColorToColor (nome.RunMethod ("borderColor:", Array (pnl)))
 	pnl.SetColorAndBorder(pnl.Color,BorderWidth,BorderUIColor,radius)
 #end if
+End Sub
+
+'returns white for a dark color or returns black for a light color for a good contrast between background and text colors
+Private Sub GetContrastColor(Color As Int) As Int
+	Private a, r, g, b, yiq As Int    'ignore
+    
+	a = Bit.UnsignedShiftRight(Bit.And(Color, 0xff000000), 24)
+	r = Bit.UnsignedShiftRight(Bit.And(Color, 0xff0000), 16)
+	g = Bit.UnsignedShiftRight(Bit.And(Color, 0xff00), 8)
+	b = Bit.And(Color, 0xff)
+    
+	yiq = r * 0.299 + g * 0.587 + b * 0.114
+    
+	If yiq > 128 Then
+		Return xui.Color_Black
+	Else
+		Return xui.Color_White
+	End If
 End Sub
 
 #End Region

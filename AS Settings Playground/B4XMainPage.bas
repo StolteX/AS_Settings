@@ -30,7 +30,7 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	B4XPages.SetTitle(Me,"AS Settings Example")
 	
 	ChangeTheme(AS_Properties.GetPropertyDefault("PropertyName_1",True),0) 'Dark or Light mode
-	
+
 	AS_Settings1.MainPage.AddGroup("Basic","Basic Settings")
 		
 	AS_Settings1.MainPage.AddDescriptionItem("","Show sync help: when enabled, you'll see an explanation alert every time you tap 'Sync' on the Today tab.")
@@ -90,6 +90,26 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	AS_Properties.RemoveProperty("OptionsExample1")
 	SettingPage2.AddProperty_SelectionList("MultiOptionExample","OptionsExample1",lst_Items,Array(1),False,False)
 
+	SettingPage2.AddGroup("ColorChooser","Choose Color")
+
+	Dim lst_Colors As List
+	lst_Colors.Initialize
+	lst_Colors.Add(xui.Color_ARGB(255, 49, 208, 89))
+	lst_Colors.Add(xui.Color_ARGB(255, 25, 29, 31))
+	lst_Colors.Add(xui.Color_ARGB(255, 9, 131, 254))
+	lst_Colors.Add(xui.Color_ARGB(255, 255, 159, 10))
+	
+	lst_Colors.Add(xui.Color_ARGB(255, 45, 136, 121))
+	lst_Colors.Add(AS_Settings1.CreateColorItem(xui.Color_ARGB(255, 73, 98, 164),False))
+	lst_Colors.Add(AS_Settings1.CreateColorItem(xui.Color_ARGB(255, 221, 95, 96),False))
+	lst_Colors.Add(AS_Settings1.CreateColorItem(xui.Color_ARGB(255, 141, 68, 173),False))
+	lst_Colors.Add(xui.Color_Magenta)
+	lst_Colors.Add(xui.Color_Cyan)
+
+	SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,xui.Color_Magenta,50dip,Null)
+	
+	'SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,xui.Color_Magenta,50dip,AS_Settings1.FontToBitmap(Chr(0xE897),True,30,xui.Color_LightGray))
+
 	'AS_Properties.RemoveProperty("OptionsExample1")
 
 '	Sleep(4000)
@@ -117,6 +137,10 @@ Private Sub AS_Settings1_ValueChanged(Property As AS_Settings_Property, Value As
 	'Log("ValueChanged " & Property.PropertyName & ": " & Value)
 
 	Select Property.PropertyName
+		
+		Case "AppColor"
+			LogColor("Lul",Value)
+		
 		Case "PropertyName_1"
 			ChangeTheme(Value,200)
 		Case "PropertyName_2"
@@ -228,4 +252,8 @@ Private Sub CreateLabel(EventName As String) As B4XView
 	Dim lbl As Label
 	lbl.Initialize(EventName)
 	Return lbl
+End Sub
+
+Private Sub AS_Settings1_DisabledItemClicked(Property As AS_Settings_Property, Value As Object)
+	LogColor("DisabledItemClicked",Value)
 End Sub

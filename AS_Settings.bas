@@ -127,6 +127,13 @@ V2.10
 	-AS_Settings
 		-Add AS_Settings_GroupProperties
 			-Removed GroupNameTextColor
+V2.11
+	-AS_SettingsPage
+		-BugFixes and Improvements
+		-Add AddProperty_ColorChooser
+		-Add Type AS_Settings_ColorItem
+		-Add Event DisabledItemClicked
+		
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
@@ -180,11 +187,11 @@ V2.10
 
 #Event: ActionClicked(Property As AS_Settings_Property)
 #Event: ChooserTextFieldClicked(Property As AS_Settings_Property)
-#Event: ValueChanged(Property As AS_Settings_Property, Value As Object)
-
-#Event: CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
 #Event: CustomDrawCustomProperty(CustomProperty AS AS_Settings_CustomDrawCustomProperty)
+#Event: CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
+#Event: DisabledItemClicked(Property As AS_Settings_Property, Value As Object)
 #Event: GroupHeaderClicked(Group As AS_Settings_Group)
+#Event: ValueChanged(Property As AS_Settings_Property, Value As Object)
 
 Sub Class_Globals
 	
@@ -197,10 +204,11 @@ Sub Class_Globals
 	Type AS_Settings_Property_Chooser(Property As AS_Settings_Property,Width As Float)
 	Type AS_Settings_Property_Custom(Property As AS_Settings_Property,Height As Float)
 	Type AS_Settings_Property_SelectionList(Property As AS_Settings_Property,ListItems As List,MultiSelect As Boolean,CanDeselectAll As Boolean)
+	Type AS_Settings_Property_ColorChooser(Property As AS_Settings_Property,ColorList As List,WidthHeight As Float)
 	
 	Type AS_Settings_SelectionListItem(DisplayName As String,Icon As B4XBitmap,Value As Object)
 	
-	Type AS_Settings_SpaceItem(GroupKey As String,Height As Float,BackgroundColor As Int)
+	Type AS_Settings_SpaceItem(GroupKey As String,Height As Float)
 	Type AS_Settings_DescriptionItem(GroupKey As String,Text As String,SidePadding As Float,TopPadding As Float,xFont As B4XFont,HorizontalAlignment As String)
 	
 	'Normal Types
@@ -212,6 +220,7 @@ Sub Class_Globals
 	Type AS_Settings_PropertySettingViews(BackgroundPanel As B4XView,ActionButtonArrowLabel As B4XView,ActionValueLabel As B4XView)
 	Type AS_Settings_SwitchProperties(FalseColor As Int,TrueColor As Int,ThumbColor As Int)
 	Type AS_Settings_BottomTextProperty(xFont As B4XFont,TextColor As Int)
+	Type AS_Settings_ColorItem(Color As Int,Enabled As Boolean)
 	
 	Type AS_Settings_Property_Properties(Width As Float,Height As Float,xFont As B4XFont,TextColor As Int,BackgroundColor As Int,DescriptionTextColor As Int,FieldBackgroundColor As Int,FieldHeight As Float,InputType As String,Format As String,CornerRadius As Float)
 	Type AS_Settings_GroupProperties(xFont As B4XFont,TextColor As Int,HorizontalTextAlignment As String)
@@ -365,8 +374,6 @@ Public Sub setTheme(Theme As AS_Settings_Theme)
 	xiv_RefreshImage.SetBitmap(mBase.Snapshot)
 	xiv_RefreshImage.SetVisibleAnimated(0,True)
 	
-	Sleep(0)
-	
 	m_BackgroundColor = Theme.BackgroundColor
 	m_PropertySeperatorColor = Theme.PropertySeperatorColor
 	m_GroupNameBackgroundColor = Theme.GroupNameBackgroundColor
@@ -401,6 +408,8 @@ Public Sub setTheme(Theme As AS_Settings_Theme)
 	g_SwitchProperties.FalseColor = Theme.SwitchFalseColor
 	g_SwitchProperties.TrueColor = Theme.SwitchTrueColor
 	g_SwitchProperties.ThumbColor = Theme.SwitchThumbColor
+	
+	Sleep(0)
 	
 	For Each Page As AS_SettingsPage In lst_CreatedPages
 		Page.Refresh
@@ -494,7 +503,7 @@ Private Sub IniProps(Props As Map)
 	m_ExitIconColor = xui.Color_ARGB(80,255,255,255)
 	m_ThemeChangeTransition = Props.GetDefault("ThemeChangeTransition","Fade")
 	
-	g_PropertyProperties = CreateAS_Settings_Property_Properties(mBase.Width/4,DipToCurrent(Props.Get("PropertyHeight")),xui.CreateDefaultFont(18),xui.PaintOrColorToColor(Props.GetDefault("PropertyTextColor",0xFFFFFFFF)),xui.PaintOrColorToColor(Props.Get("PropertyColor")),xui.Color_ARGB(152,255,255,255),xui.Color_ARGB(255,60, 64, 67),DipToCurrent(Props.Get("PropertyHeight"))/2,getInputType_Text,"",5dip)
+	g_PropertyProperties = CreateProperties(mBase.Width/4,DipToCurrent(Props.Get("PropertyHeight")),xui.CreateDefaultFont(18),xui.PaintOrColorToColor(Props.GetDefault("PropertyTextColor",0xFFFFFFFF)),xui.PaintOrColorToColor(Props.Get("PropertyColor")),xui.Color_ARGB(152,255,255,255),xui.Color_ARGB(255,60, 64, 67),DipToCurrent(Props.Get("PropertyHeight"))/2,getInputType_Text,"",5dip)
 	g_GroupProperties = CreateAS_Settings_GroupProperties(xui.CreateDefaultBoldFont(20),xui.Color_White,"LEFT")
 	#IF SETTINGS_SegmentedTab
 	g_SegmentedTabProperties = CreateAS_Settings_SegmentedTabProperties(0,DipToCurrent(Props.GetDefault("SegmentedTabCornerRadius",5dip)),Props.GetDefault("SegmentedTabShowSeperators",False),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabBackgroundColor",0xFF3D3C40)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSelectionColor",0xFF737278)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSeperatorsColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabTextColor",0xFFFFFFFF)),xui.CreateDefaultBoldFont(15))
@@ -772,6 +781,15 @@ Private Sub CustomDrawCustomProperty(Property As AS_Settings_CustomDrawCustomPro
 	End If
 End Sub
 
+Private Sub DisabledItemClicked(Property As AS_Settings_Property, Value As Object)
+	If xui.SubExists(mCallBack, mEventName & "_DisabledItemClicked",2) Then
+		CallSub3(mCallBack, mEventName & "_DisabledItemClicked",Property,Value)
+	Else
+		LogColor("AS_Settings: The clicked item is disabled, please use the DisabledItemClicked Event to handle it",xui.Color_Red)
+	End If
+End Sub
+
+
 #End Region
 
 #Region InternFunctions
@@ -874,7 +892,7 @@ Public Sub CreateSelectionListItem (DisplayName As String, Icon As B4XBitmap,Val
 	Return t1
 End Sub
 
-Public Sub CreateAS_Settings_Property_Properties (Width As Float, Height As Float, xFont As B4XFont, TextColor As Int, BackgroundColor As Int, DescriptionTextColor As Int, FieldBackgroundColor As Int, FieldHeight As Float, InputType As String, Format As String, CornerRadius As Float) As AS_Settings_Property_Properties
+Public Sub CreateProperties (Width As Float, Height As Float, xFont As B4XFont, TextColor As Int, BackgroundColor As Int, DescriptionTextColor As Int, FieldBackgroundColor As Int, FieldHeight As Float, InputType As String, Format As String, CornerRadius As Float) As AS_Settings_Property_Properties
 	Dim t1 As AS_Settings_Property_Properties
 	t1.Initialize
 	t1.Width = Width
@@ -897,5 +915,14 @@ Private Sub CreateAS_Settings_GroupProperties (xFont As B4XFont, TextColor As In
 	t1.xFont = xFont
 	t1.TextColor = TextColor
 	t1.HorizontalTextAlignment = HorizontalTextAlignment
+	Return t1
+End Sub
+
+
+Public Sub CreateColorItem (Color As Int, Enabled As Boolean) As AS_Settings_ColorItem
+	Dim t1 As AS_Settings_ColorItem
+	t1.Initialize
+	t1.Color = Color
+	t1.Enabled = Enabled
 	Return t1
 End Sub
