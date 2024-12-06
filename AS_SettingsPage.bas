@@ -1076,14 +1076,21 @@ Private Sub AddProperty2List(Property As AS_Settings_Property)
 		Else
 			Dim PropertyBackgroundWidth As Float = xpnl_Page.Width - (m_Settings.Padding*2)
 	
+			Dim Gap As Float = 5dip
+	
+			Dim LabelWidth As Float = PropertyBackgroundWidth/2 - Gap
+	
+			If Property.PropertyType Is AS_Settings_Property_Boolean Then
+				Dim SwitchWidth As Float = 55dip
+				LabelWidth = PropertyBackgroundWidth - m_Settings.Padding - SwitchWidth - Gap*2 - 10dip
+			End If
+	
 			If Property.Description <> "" Then
-
-				Dim Gap As Float = 5dip
 
 				Dim xlbl_Name As B4XView = CreateLabel("")
 				xlbl_Name.Font = xui.CreateDefaultBoldFont(18)
 				xlbl_Name.Text = Property.DisplayName
-				xlbl_Name.Width = PropertyBackgroundWidth/2' - Gap
+				xlbl_Name.Width = LabelWidth
 			#If B4I
 			xlbl_Name.As(Label).Multiline = True
 	#Else If B4J
@@ -1105,7 +1112,7 @@ Private Sub AddProperty2List(Property As AS_Settings_Property)
 	xlbl_Description.As(Label).SingleLine = False
 	#End If
 		
-				xlbl_Description.Width = PropertyBackgroundWidth/2 - Gap
+				xlbl_Description.Width = LabelWidth - Gap
 				xlbl_Description.Height = 10dip
 
 				Dim NameHeight As Float = MeasureMultilineTextHeight(xlbl_Name)
@@ -1136,7 +1143,7 @@ Private Sub AddInternGroup(xpnl_Group As B4XView,Group As AS_Settings_Group)
 	xlbl_GroupName.Tag = Group
 	xpnl_Group.Color = m_Settings.GroupNameBackgroundColor
 		
-	xpnl_Group.AddView(xlbl_GroupName,m_Settings.Padding,0,xpnl_Page.Width - (m_Settings.Padding*2),Height)
+	xpnl_Group.AddView(xlbl_GroupName,5dip + m_Settings.Padding,0,xpnl_Page.Width - (m_Settings.Padding*2),Height)
 		
 End Sub
 
@@ -1236,7 +1243,14 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	xlbl_PropertyName.As(Label).SingleLine = False
 	#End If
 	
-	xpnl_Property.AddView(xlbl_PropertyName,m_Settings.Padding,0,xpnl_Property.Width/2 - Gap,xpnl_Background.Height)
+	Dim LabelWidth As Float = xpnl_Property.Width/2 - Gap
+	
+	If Property.PropertyType Is AS_Settings_Property_Boolean Then
+		Dim SwitchWidth As Float = 55dip
+		LabelWidth = xpnl_Property.Width - m_Settings.Padding - SwitchWidth - Gap*2 - 10dip
+	End If
+	
+	xpnl_Property.AddView(xlbl_PropertyName,m_Settings.Padding,0,LabelWidth,xpnl_Background.Height)
 	
 	Dim xlbl_Description As B4XView = CreateLabel("")
 	xlbl_Description.Text = Property.Description
@@ -1254,12 +1268,12 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	If Property.Description <> "" Then
 		
 		xlbl_PropertyName.SetTextAlignment("TOP","LEFT")
-		xlbl_PropertyName.Width = xlbl_PropertyName.Width + 5dip
+		xlbl_PropertyName.Width = LabelWidth
 		xlbl_PropertyName.Height = MeasureMultilineTextHeight(xlbl_PropertyName)
 		
-		xlbl_Description.Width = xpnl_Property.Width/2 - Gap
+		xlbl_Description.Width = LabelWidth
 		xlbl_Description.Height = 10dip
-		xpnl_Property.AddView(xlbl_Description,m_Settings.Padding,xlbl_PropertyName.Height,xpnl_Property.Width/2 - Gap,MeasureMultilineTextHeight(xlbl_Description) + 5dip)
+		xpnl_Property.AddView(xlbl_Description,m_Settings.Padding,xlbl_PropertyName.Height,LabelWidth,MeasureMultilineTextHeight(xlbl_Description) + 5dip)
 
 	End If
 		
@@ -1272,7 +1286,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 		
 		xpnl_Property.AddView(xiv_Icon,m_Settings.Padding,(xpnl_Background.Height)/2 - ((xpnl_Background.Height)/2)/2,(xpnl_Background.Height)/2,(xpnl_Background.Height)/2)
 		xlbl_PropertyName.Left = xiv_Icon.Left + xiv_Icon.Width + 5dip
-		xlbl_PropertyName.Width = xlbl_PropertyName.Width - xiv_Icon.Width - 5dip
+		xlbl_PropertyName.Width = LabelWidth - xiv_Icon.Width - 5dip
 		xiv_Icon.SetBitmap(Property.Icon)
 	End If
 		
@@ -1303,7 +1317,6 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 				Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
 			End If
 			
-			Dim SwitchWidth As Float = 55dip
 			Dim SwitchHeight As Float = 31dip
 			
 			Dim Switch As B4XSwitch
@@ -1322,6 +1335,9 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			
 			Switch.DesignerCreateView(xpnl_SwitchBase,CreateLabel(""),mSwitchProperties)
 			Property.View = Switch
+			
+'			xlbl_Description.Color = xui.Color_Red
+'			xlbl_PropertyName.Color = xui.Color_Red
 			
 		Case Property.PropertyType Is AS_Settings_Property_Action, Property.PropertyType Is AS_Settings_Property_ActionClean
 			
@@ -1668,6 +1684,11 @@ Public Sub getBottomText As String
 	Return m_BottomText
 End Sub
 
+'Indicates whether the page has already been filled with your properties
+Public Sub getisPagePopulated As Boolean
+	Return isReady
+End Sub
+
 #End Region
 
 #Region Methods
@@ -1823,14 +1844,36 @@ End Sub
 
 'Gets the Property object
 Public Sub GetProperty(PropertyName As String) As AS_Settings_Property
-	For i = 0 To xclv_Main.Size -1
-		If xclv_Main.GetValue(i) Is AS_Settings_Property Then
-			Dim Property As AS_Settings_Property = xclv_Main.GetValue(i)
-			If Property.PropertyName = PropertyName Then
-				Return Property
+	If xclv_Main.Size = 0 Then
+		For Each Item As Object In lst_Items	
+			Select True
+				Case Item Is AS_Settings_Group
+					For Each Property As AS_Settings_Property In Item.As(AS_Settings_Group).Properties
+						If Property.PropertyName = PropertyName Then
+							Return Property
+						End If
+					Next
+				Case Item Is AS_Settings_Property_ColorChooser
+					If Item.As(AS_Settings_Property_ColorChooser).Property.PropertyName = PropertyName Then
+						Return Property
+					End If
+				Case Item Is AS_Settings_Property
+					If Item.As(AS_Settings_Property).PropertyName = PropertyName Then
+						Return Property
+					End If
+			End Select
+		
+		Next
+	Else
+		For i = 0 To xclv_Main.Size -1
+			If xclv_Main.GetValue(i) Is AS_Settings_Property Then
+				Dim Property As AS_Settings_Property = xclv_Main.GetValue(i)
+				If Property.PropertyName = PropertyName Then
+					Return Property
+				End If
 			End If
-		End If
-	Next
+		Next
+	End If
 	Return Null
 End Sub
 

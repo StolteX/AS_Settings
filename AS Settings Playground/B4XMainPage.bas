@@ -42,7 +42,7 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 
 	AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_3","Boolean Property True with a long text","",Null,True)
 	'Action Button
-	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_4","Action Property","",Null,"English")
+	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_4","Action Property","Description Long Long Long Long Long Long Long Long Long Long Long Long Long Long Test Text",Null,"English")
 	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_5","Icon","",AS_Settings1.FontToBitmap(Chr(0xF179),False,30,xui.Color_White),"English, German, Italian, Spanish, Swedish")
 	AS_Settings1.MainPage.AddProperty_ActionClean("Basic","PropertyName_6","Delete Account","",AS_Settings1.FontToBitmap(Chr(0xE92B),True,34,xui.Color_White))
 	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_7","Pro Feature","",Null,"Pro")
@@ -106,9 +106,9 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	lst_Colors.Add(xui.Color_Magenta)
 	lst_Colors.Add(xui.Color_Cyan)
 
-	SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,Null,50dip,Null)
+	'SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,Null,50dip,Null)
 	
-	'SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,xui.Color_Magenta,50dip,AS_Settings1.FontToBitmap(Chr(0xE897),True,30,xui.Color_LightGray))
+	SettingPage2.AddProperty_ColorChooser("ColorChooser","AppColor",lst_Colors,xui.Color_Magenta,50dip,AS_Settings1.FontToBitmap(Chr(0xE897),True,30,xui.Color_LightGray))
 
 	'AS_Properties.RemoveProperty("OptionsExample1")
 
@@ -256,4 +256,15 @@ End Sub
 
 Private Sub AS_Settings1_DisabledItemClicked(Property As AS_Settings_Property, Value As Object)
 	LogColor("DisabledItemClicked",Value)
+	EnableAllItems(SettingPage2.GetProperty("AppColor").PropertyType)
+End Sub
+
+Private Sub EnableAllItems(ColorChooserProperty As AS_Settings_Property_ColorChooser)
+	ColorChooserProperty.Property.Icon = Null 'Resets the icon e.g. the premium icon
+	For i = 0 To ColorChooserProperty.ColorList.Size -1
+		If ColorChooserProperty.ColorList.Get(i) Is AS_Settings_ColorItem Then
+			ColorChooserProperty.ColorList.Get(i).As(AS_Settings_ColorItem).Enabled = True 'Enables this item
+		End If
+	Next
+	SettingPage2.Refresh
 End Sub

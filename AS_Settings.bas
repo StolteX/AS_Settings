@@ -133,7 +133,13 @@ V2.11
 		-Add AddProperty_ColorChooser
 		-Add Type AS_Settings_ColorItem
 		-Add Event DisabledItemClicked
-		
+V2.12
+	-AS_SettingsPage
+		-BugFix - GetProperty now also works if the page has not yet been populated
+		-Add get isPagePopulated - Indicates whether the page has already been filled with your properties
+V2.13
+	-AS_SettingsPage
+		-The Boolean property now uses more space for the title and the description
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"

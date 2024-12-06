@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=1
-NavigationStack=AS_SettingsPage,Refresh,1577,6,B4XMainPage,ShowInputBox,177,0,AS_SettingsPage,Class_Globals,7,1,AS_SettingsPage,AddProperty_ComboBox,458,0,AS_SettingsPage,AddInternProperty,1360,4,AS_Settings,Class_Globals,198,3,AS_Settings,CreateAS_Settings_GroupProperties,901,0,AS_SettingsPage,AddProperty_ColorChooser,293,0,AS_SettingsPage,AddColor2List,962,1,AS_SettingsPage,ColorChooser_Click,2064,6,B4XMainPage,B4XPage_Created,102,1
+NavigationStack=AS_Settings,Class_Globals,198,3,AS_Settings,CreateAS_Settings_GroupProperties,901,0,AS_SettingsPage,AddProperty_ColorChooser,293,0,AS_SettingsPage,AddColor2List,962,1,AS_SettingsPage,ColorChooser_Click,2064,6,AS_SettingsPage,Class_Globals,19,1,AS_SettingsPage,AddProperty_Boolean,260,0,B4XMainPage,B4XPage_Created,38,1,AS_SettingsPage,AddInternProperty,1274,6,AS_SettingsPage,AddProperty2List,1106,1
 SelectedBuild=0
 VisibleModules=4,2,3,1
