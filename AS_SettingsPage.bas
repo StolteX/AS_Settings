@@ -1668,6 +1668,7 @@ End Sub
 Public Sub setHeight(Height As Float)
 	m_Height = Height
 	xpnl_Page.Height = m_Height
+	xiv_RefreshImage.SetLayoutAnimated(0,0,0,xpnl_Page.Width,xpnl_Page.Height)
 	xclv_Main.AsView.Height = xpnl_Page.Height - IIf(isMainPage,0,IIf(m_DisplayName <> "", m_Settings.HeaderHeight,0))
 	xclv_Main.Base_Resize(xclv_Main.AsView.Width,xclv_Main.AsView.Height)
 End Sub

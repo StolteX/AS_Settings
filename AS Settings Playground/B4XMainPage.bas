@@ -70,6 +70,7 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	
 	'Second Page
 	SettingPage2.Initialize(AS_Settings1,"Theme")
+	SettingPage2.Height = 600dip
 	
 	SettingPage2.AddProperty_Custom("","CustomButton1",80dip)
 	
@@ -156,7 +157,7 @@ Private Sub AS_Settings1_ValueChanged(Property As AS_Settings_Property, Value As
 			Else If Property.Value.As(List).Get(0).As(Int) = 2 Then
 				AS_Settings1.Theme = AS_Settings1.Theme_Dark
 			End If
-			
+			SettingPage2.Refresh
 		Case Else
 			Log("PropertyName: " & Property.PropertyName & " Value: " & Value)
 	End Select

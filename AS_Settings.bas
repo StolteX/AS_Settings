@@ -140,6 +140,9 @@ V2.12
 V2.13
 	-AS_SettingsPage
 		-The Boolean property now uses more space for the title and the description
+V2.14
+	-AS_SettingsPage
+		-BugFix - if you have set “set Height” for a page and then made a ".Refresh", then it came to an ugly behavior 
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
