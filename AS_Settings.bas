@@ -143,6 +143,17 @@ V2.13
 V2.14
 	-AS_SettingsPage
 		-BugFix - if you have set “set Height” for a page and then made a ".Refresh", then it came to an ugly behavior 
+V2.15
+	-AS_SettingsPage
+		-New 	- AddProperty_Link - Identical to AddProperty_Action only with a different icon
+		-New    - PageScrollChanged Event
+		-New    - CustomDrawGroup Event
+		-Update - The round corners of a group are no longer created with 2 separate items in the list, but directly on the 1st and last item of a group
+			-https://www.b4x.com/android/forum/threads/b4x-setpanelcornerradius-only-for-certain-corners.164567/
+		-Update - AS_Settings_PropertyViews the LeftBackgroundPanel is renamed to BackgroundPanel
+		-BugFix - In the Property SelectionList if SelectionMode Single was set and you used the SaveMode Manual, you could select multiple items
+		-BugFix - In the Property Action more space is now released for the description if no value text is displayed
+		-BugFix - In the Property ComboBox the complete item can be clicked to open the combobox
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
@@ -198,8 +209,10 @@ V2.14
 #Event: ChooserTextFieldClicked(Property As AS_Settings_Property)
 #Event: CustomDrawCustomProperty(CustomProperty AS AS_Settings_CustomDrawCustomProperty)
 #Event: CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
+#Event: CustomDrawGroup(CustomDrawGroup As AS_Settings_CustomDrawGroup)
 #Event: DisabledItemClicked(Property As AS_Settings_Property, Value As Object)
 #Event: GroupHeaderClicked(Group As AS_Settings_Group)
+#Event: PageScrollChanged(Offset As Int, Page As AS_SettingsPage)
 #Event: ValueChanged(Property As AS_Settings_Property, Value As Object)
 
 Sub Class_Globals
@@ -207,6 +220,7 @@ Sub Class_Globals
 	'Property Types
 	Type AS_Settings_Property_Boolean(Property As AS_Settings_Property)
 	Type AS_Settings_Property_Action(Property As AS_Settings_Property)
+	Type AS_Settings_Property_Link(Property As AS_Settings_Property)
 	Type AS_Settings_Property_ActionClean(Property As AS_Settings_Property)
 	Type AS_Settings_Property_Text(Property As AS_Settings_Property,Width As Float,InputType As String)
 	Type AS_Settings_Property_ComboBox(Property As AS_Settings_Property,ItemList As List,KeyValue As B4XOrderedMap)
@@ -222,10 +236,12 @@ Sub Class_Globals
 	
 	'Normal Types
 	Type AS_Settings_Group(Key As String,Name As String,Properties As List)
-	Type AS_Settings_Property(PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,PropertyType As Object,isLast As Boolean,Group As AS_Settings_Group,Value As Object,DefaultValue As Object,DisplayValueText As String,View As Object)
+	Type AS_Settings_Property(PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,PropertyType As Object,isLast As Boolean,isFirst As Boolean,Group As AS_Settings_Group,Value As Object,DefaultValue As Object,DisplayValueText As String,View As Object)
 	Type AS_Settings_CustomDrawProperty(Group As AS_Settings_Group,Property As AS_Settings_Property,PropertyViews As AS_Settings_PropertyViews,PropertySettingViews As AS_Settings_PropertySettingViews)
+	Type AS_Settings_CustomDrawGroup(Group As AS_Settings_Group,GroupViews As AS_Settings_GroupViews)
 	Type AS_Settings_CustomDrawCustomProperty(Group As AS_Settings_Group,Property As AS_Settings_Property,BackgroundPanel As B4XView,Height As Float)
-	Type AS_Settings_PropertyViews(RootBackgroundPanel As B4XView,LeftBackgroundPanel As B4XView,RightBackgroundPanel As B4XView,IconImageView As B4XView,NameLabel As B4XView,DescriptionLabel As B4XView)
+	Type AS_Settings_GroupViews(BackgroundPanel As B4XView,NameLabel As B4XView)
+	Type AS_Settings_PropertyViews(RootBackgroundPanel As B4XView,BackgroundPanel As B4XView,RightBackgroundPanel As B4XView,IconImageView As B4XView,NameLabel As B4XView,DescriptionLabel As B4XView)
 	Type AS_Settings_PropertySettingViews(BackgroundPanel As B4XView,ActionButtonArrowLabel As B4XView,ActionValueLabel As B4XView)
 	Type AS_Settings_SwitchProperties(FalseColor As Int,TrueColor As Int,ThumbColor As Int)
 	Type AS_Settings_BottomTextProperty(xFont As B4XFont,TextColor As Int)
@@ -760,6 +776,12 @@ Private Sub GroupHeaderClicked(Group As AS_Settings_Group)
 	End If
 End Sub
 
+Private Sub PageScrollChanged(Offset As Int,Page As AS_SettingsPage)
+	If xui.SubExists(mCallBack, mEventName & "_PageScrollChanged",2) Then
+		CallSub3(mCallBack, mEventName & "_PageScrollChanged",Offset,Page)
+	End If
+End Sub
+
 Private Sub ValueChanged(Property As AS_Settings_Property, Value As Object)
 	If xui.SubExists(mCallBack, mEventName & "_ValueChanged",2) Then
 		CallSub3(mCallBack, mEventName & "_ValueChanged",Property,Value)
@@ -781,6 +803,12 @@ End Sub
 Private Sub CustomDrawProperty(Property As AS_Settings_CustomDrawProperty)
 	If xui.SubExists(mCallBack, mEventName & "_CustomDrawProperty",1) Then
 		CallSub2(mCallBack, mEventName & "_CustomDrawProperty",Property)
+	End If
+End Sub
+
+Private Sub CustomDrawGroup(Group As AS_Settings_CustomDrawGroup)
+	If xui.SubExists(mCallBack, mEventName & "_CustomDrawGroup",1) Then
+		CallSub2(mCallBack, mEventName & "_CustomDrawGroup",Group)
 	End If
 End Sub
 

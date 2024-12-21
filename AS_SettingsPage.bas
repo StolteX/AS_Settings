@@ -24,6 +24,7 @@ Sub Class_Globals
 	Private xpnl_SecondPageBackground As B4XView
 	Private xpnl_Header As B4XView
 	
+	Private isDisableTextChangeEvent as Boolean = False
 	Private xiv_ExitIcon As B4XView
 	Private xpnl_ExitIcon As B4XView
 	Private xlbl_HeaderText As B4XView
@@ -372,8 +373,6 @@ Public Sub AddProperty_SelectionList(GroupKey As String,PropertyName As String,L
 	
 	Property.PropertyType = Property_SelectionList
 	
-	lst_Properties.Add(Property)
-	
 	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
 		Dim Value As List = AS_Properties.GetProperty(Property.PropertyName)
 		Value = IIf(Value.IsInitialized = False,IIf(Property.DefaultValue = Null,CreateList,Property.DefaultValue),Value)
@@ -382,8 +381,15 @@ Public Sub AddProperty_SelectionList(GroupKey As String,PropertyName As String,L
 		End If
 		Property.Value = Value
 	Else
-		Property.Value = DefaultValue
+		Dim Value As List = Property.DefaultValue
+		Value = IIf(Value.IsInitialized = False,IIf(Property.DefaultValue = Null,CreateList,Property.DefaultValue),Value)
+		If Value.IsInitialized = False Then
+			Value.Initialize
+		End If
+		Property.Value = Value
 	End If
+	
+	lst_Properties.Add(Property)
 	
 	Return Property
 	
@@ -461,6 +467,40 @@ Public Sub AddProperty_Action(GroupKey As String,PropertyName As String,DisplayN
 	End If
 	
 	Property.PropertyType = Property_Action
+	lst_Properties.Add(Property)
+	
+	Return Property
+	
+End Sub
+
+Public Sub AddProperty_Link(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As Object) As AS_Settings_Property
+	
+	Dim Group As AS_Settings_Group = GetGroup(GroupKey)
+	Dim lst_Properties As List = Group.Properties
+	
+	Dim Property As AS_Settings_Property
+	Property.Initialize
+	Property.PropertyName = PropertyName
+	Property.DisplayName = DisplayName
+	Property.Description = Description
+	Property.Icon = Icon
+	Property.DefaultValue = DefaultValue
+	
+	Dim Property_Link As AS_Settings_Property_Link
+	Property_Link.Initialize
+	Property_Link.Property = Property
+	
+	
+	If m_Settings.saveMode = m_Settings.SaveMode_Automatic Then
+		Dim Value As Object = AS_Properties.GetProperty(Property.PropertyName)
+		Dim DisplayValueText As Object = AS_Properties.GetPropertyDisplayValueText(Property.PropertyName)
+		Property.Value = IIf(Value = Null,Property.DefaultValue,Value)
+		Property.DisplayValueText = IIf(DisplayValueText = Null,"",DisplayValueText)
+	Else
+		Property.Value = DefaultValue
+	End If
+	
+	Property.PropertyType = Property_Link
 	lst_Properties.Add(Property)
 	
 	Return Property
@@ -849,12 +889,12 @@ Private Sub AddGroup2List(Group As AS_Settings_Group)
 	
 	Dim Properties As List = Group.Properties
 	
-	If Properties.Size > 0 Then AddGroupBorder2List(True)
 	For i = 0 To Properties.Size -1
 		If Properties.Get(i) Is AS_Settings_Property Then
 			Dim Property As AS_Settings_Property = Properties.Get(i)
 			Property.Group = Group
 			Property.isLast = IIf(i = Properties.Size -1,True,False)
+			Property.isFirst = IIf(i = 0,True,False)
 			'AddInternProperty(Group,Property,IIf(i = Properties.Size -1,True,False))
 			AddProperty2List(Property)
 		else If Properties.Get(i) Is AS_Settings_SpaceItem Then
@@ -863,7 +903,6 @@ Private Sub AddGroup2List(Group As AS_Settings_Group)
 			AddDescriptionItem2List(xui.CreatePanel(""),Properties.Get(i),False)
 		End If
 	Next
-	If Properties.Size > 0 Then AddGroupBorder2List(False)
 	
 End Sub
 
@@ -1144,6 +1183,19 @@ Private Sub AddInternGroup(xpnl_Group As B4XView,Group As AS_Settings_Group)
 	xpnl_Group.Color = m_Settings.GroupNameBackgroundColor
 		
 	xpnl_Group.AddView(xlbl_GroupName,5dip + m_Settings.Padding,0,xpnl_Page.Width - (m_Settings.Padding*2),Height)
+	
+	Dim CustomDrawGroup As AS_Settings_CustomDrawGroup
+	CustomDrawGroup.Initialize
+	CustomDrawGroup.Group = Group
+	
+	Dim GroupViews As AS_Settings_GroupViews
+	GroupViews.Initialize
+	GroupViews.BackgroundPanel = xpnl_Group
+	GroupViews.NameLabel = xlbl_GroupName
+	
+	CustomDrawGroup.GroupViews = GroupViews
+	
+	CallSubDelayed2(m_Settings,"CustomDrawGroup",CustomDrawGroup)
 		
 End Sub
 
@@ -1252,6 +1304,12 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	
 	xpnl_Property.AddView(xlbl_PropertyName,m_Settings.Padding,0,LabelWidth,xpnl_Background.Height)
 	
+	If Property.isFirst Then
+		SetPanelCornerRadius(xpnl_Property,m_Settings.CornerRadius,True,True,False,False)
+	Else If Property.isLast Then
+		SetPanelCornerRadius(xpnl_Property,m_Settings.CornerRadius,False,False,True,True)
+	End If
+	
 	Dim xlbl_Description As B4XView = CreateLabel("")
 	xlbl_Description.Text = Property.Description
 	xlbl_Description.Font = xui.CreateDefaultFont(15)
@@ -1339,21 +1397,28 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 '			xlbl_Description.Color = xui.Color_Red
 '			xlbl_PropertyName.Color = xui.Color_Red
 			
-		Case Property.PropertyType Is AS_Settings_Property_Action, Property.PropertyType Is AS_Settings_Property_ActionClean
-			
+		Case Property.PropertyType Is AS_Settings_Property_Action, Property.PropertyType Is AS_Settings_Property_ActionClean, Property.PropertyType Is AS_Settings_Property_Link
 			Dim xpnl_ActionClickPanel As B4XView = xui.CreatePanel("xpnl_ActionClickPanel")
 			xpnl_ActionClickPanel.Color = xui.Color_Transparent
 			xpnl_PropertyBackground.AddView(xpnl_ActionClickPanel,0,0,xpnl_Property.Width,xpnl_Property.Height)
 			
-			If Property.PropertyType Is AS_Settings_Property_Action Then
-				'Dim Property_Action As AS_Settings_Property_Action = Property.PropertyType
+			If Property.PropertyType Is AS_Settings_Property_Action Or Property.PropertyType Is AS_Settings_Property_Link Then
 				Dim ActionIconWidth As Float = 30dip
 				Dim ActionIconHeight As Float = xpnl_PropertyBackground.Height/2
 				Dim xlbl_ActionIcon As B4XView = CreateLabel("")
-				xlbl_ActionIcon.Text = Chr(0xE315)
-				xlbl_ActionIcon.Font = xui.CreateMaterialIcons(24)
+
 				xlbl_ActionIcon.TextColor = m_Settings.ArrowColor
 				xpnl_PropertyBackground.AddView(xlbl_ActionIcon,xpnl_Property.Width - ActionIconWidth/2-ActionIconWidth/2,xpnl_Property.Height/2 - ActionIconHeight/2,ActionIconWidth,ActionIconHeight)
+			
+				If Property.PropertyType Is AS_Settings_Property_Action Then
+					xlbl_ActionIcon.Text = Chr(0xE315)
+					xlbl_ActionIcon.Font = xui.CreateMaterialIcons(24)
+				else if Property.PropertyType Is AS_Settings_Property_Link Then
+					xlbl_ActionIcon.Text = Chr(0xE5C8)
+					xlbl_ActionIcon.Font = xui.CreateMaterialIcons(18)
+					xlbl_ActionIcon.Rotation = -40
+					xlbl_ActionIcon.Top = xlbl_ActionIcon.Top - 2dip
+				End If
 			
 				Dim xlbl_ActionValue As B4XView = CreateLabel("")
 				xlbl_ActionValue.Text = Property.Value
@@ -1372,12 +1437,24 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 				xlbl_ActionValue.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
 			#End If
 			
+				If Property.Description <> "" And xlbl_ActionValue.Text.Trim = "" Then
+					xlbl_Description.Width = xpnl_Property.Width - m_Settings.Padding - ActionIconWidth - Gap*2
+					xlbl_Description.Height = MeasureMultilineTextHeight(xlbl_Description) + 5dip
+					'xlbl_Description.Color = xui.Color_Blue
+					
+					xpnl_Property.Height = Max(m_Settings.PropertyProperties.Height, xlbl_Description.Top + xlbl_Description.Height + 5dip)
+					xclv_Main.ResizeItem(xclv_Main.GetItemFromView(xlbl_Description),xpnl_Property.Height)
+					xpnl_PropertySeperator.Top = xpnl_Property.Height - xpnl_PropertySeperator.Height*2
+					xlbl_ActionIcon.Top = xpnl_Property.Height/2 - xlbl_ActionIcon.Height/2
+					
+				End If
+			
+				PropertySettingViews.ActionButtonArrowLabel = xlbl_ActionIcon
+				PropertySettingViews.ActionValueLabel = xlbl_ActionValue
+			
 			End If
 			xpnl_PropertyBackground.Left = 0
 			xpnl_PropertyBackground.Width = xpnl_Property.Width
-			
-			PropertySettingViews.ActionButtonArrowLabel = xlbl_ActionIcon
-			PropertySettingViews.ActionValueLabel = xlbl_ActionValue
 			
 		Case Property.PropertyType Is AS_Settings_Property_Chooser
 			
@@ -1407,8 +1484,6 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			xtf_TextBox.SetColorAndBorder(m_Settings.PropertyProperties.FieldBackgroundColor,0,0,m_Settings.PropertyProperties.CornerRadius)
 			xtf_TextBox.Font = m_Settings.PropertyProperties.xFont
 			xtf_TextBox.SetTextAlignment("CENTER","CENTER")
-			xtf_TextBox.Text = Property.Value
-			xtf_TextBox.Tag = m_Settings.PropertyProperties
 	
 			If Property_Text.Width > xpnl_PropertyBackground.Width Then
 				xpnl_PropertyBackground.Left = xpnl_PropertyBackground.Left -(Property_Text.Width - xpnl_PropertyBackground.Width) - m_Settings.Padding*2
@@ -1417,7 +1492,10 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			Else
 				xpnl_PropertyBackground.AddView(xtf_TextBox,xpnl_PropertyBackground.Width - m_Settings.PropertyProperties.Width - m_Settings.Padding,xpnl_PropertyBackground.Height/2 - m_Settings.PropertyProperties.FieldHeight/2, m_Settings.PropertyProperties.Width,m_Settings.PropertyProperties.FieldHeight)
 			End If
-	
+			
+			isDisableTextChangeEvent = True
+			xtf_TextBox.Text = Property.Value
+			isDisableTextChangeEvent = False
 			Property.View = xtf_TextBox
 		
 		#If SETTINGS_SegmentedTab
@@ -1561,19 +1639,22 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			xComboBox.SetItems(Property_ComboBox.ItemList)
 				
 			Dim xlbl_ComboBox As B4XView = CreateLabel("")
-			xlbl_ComboBox.Color = m_Settings.PropertyProperties.BackgroundColor
+			xlbl_ComboBox.Color = xui.Color_Transparent'm_Settings.PropertyProperties.BackgroundColor
 			xlbl_ComboBox.Tag = Property
 			xlbl_ComboBox.Font = xui.CreateDefaultBoldFont(15)
 			xlbl_ComboBox.TextColor = m_Settings.PropertyProperties.TextColor
 			xlbl_ComboBox.SetTextAlignment("CENTER","RIGHT")
 			xComboBox.Tag = xlbl_ComboBox
 			#If B4J
+			xComboBox.cmbBox.Visible = False
 			xlbl_ComboBox.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
 			xlbl_ComboBox.As(Label).WrapText = True
 			#Else If B4I
+			xComboBox.mBtn.Visible = False
 			xlbl_ComboBox.As(Label).UserInteractionEnabled = False
 			xlbl_ComboBox.As(Label).Multiline = True
 			#Else If B4A
+			xComboBox.cmbBox.Visible = False
 			xlbl_ComboBox.As(Label).SingleLine = False
 			#End If
 			
@@ -1622,42 +1703,6 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	PropertySettingViews.BackgroundPanel = xpnl_PropertyBackground
 	CallSubDelayed2(m_Settings,"CustomDrawProperty",CreateAS_Settings_CustomDrawProperty(Property.Group,Property,PropertyViews,PropertySettingViews))
 
-End Sub
-
-Private Sub AddGroupBorder2List(Top As Boolean)
-	
-	Dim xpnl_Background As B4XView = xui.CreatePanel("")
-	xpnl_Background.Color = m_Settings.BackgroundColor
-	xpnl_Background.SetLayoutAnimated(0,0,0,xpnl_Page.Width,m_Settings.CornerRadius)
-	
-	#if b4j
-	xpnl_Background.Width = xpnl_Background.Width - IIf(isMainPage,20dip,0)
-	#End If
-	
-	If Top Then
-		xclv_Main.Add(xpnl_Background,"GroupBorderTop")
-	Else
-		xclv_Main.Add(xpnl_Background,"GroupBorderBottom")
-	End If
-	
-End Sub
-
-Private Sub AddInternGroupBorder(xpnl_Background As B4XView,Top As Boolean)
-	
-	xpnl_Background.Color = m_Settings.BackgroundColor
-	
-	Dim BorderItem As B4XView = xui.CreatePanel("")
-	xpnl_Background.AddView(BorderItem,m_Settings.Padding,IIf(Top,0,-m_Settings.CornerRadius),xpnl_Background.Width - (m_Settings.Padding*2),m_Settings.CornerRadius*2)
-	BorderItem.SetColorAndBorder(m_Settings.PropertyProperties.BackgroundColor,0,0,m_Settings.CornerRadius)
-	
-	Dim xpnl As B4XView = xui.CreatePanel("")
-	xpnl_Background.AddView(xpnl,m_Settings.Padding,IIf(Top,m_Settings.CornerRadius,-(m_Settings.CornerRadius*2)),xpnl_Background.Width - (m_Settings.Padding*2),m_Settings.CornerRadius)
-	xpnl.Color = m_Settings.PropertyProperties.BackgroundColor
-	
-	#if b4j 
-	If isMainPage = False Then BorderItem.Width = BorderItem.Width - m_Settings.Padding/2
-	#End If
-	
 End Sub
 
 #End Region
@@ -1916,25 +1961,21 @@ Private Sub SelectionItem_Click
 		
 		xlbl_CheckItem.Text = ""
 	End If
-	
-	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
 		
-		If lstSelectionItem.IndexOf(SelectionListItem.Value) >= 0 Then
-			lstSelectionItem.RemoveAt(lstSelectionItem.IndexOf(SelectionListItem.Value))
-		Else
+	If lstSelectionItem.IndexOf(SelectionListItem.Value) >= 0 Then
+		lstSelectionItem.RemoveAt(lstSelectionItem.IndexOf(SelectionListItem.Value))
+	Else
 			
-			If SelectionList.MultiSelect = False Then
-				lstSelectionItem.Clear
-			End If
-			
-			'lstSelectionItem.Put(SelectionListItem.Value,"Placeholder")
-			lstSelectionItem.Add(SelectionListItem.Value)
+		If SelectionList.MultiSelect = False Then
+			lstSelectionItem.Clear
 		End If
-		
-		AS_Properties.PutProperty(Property.PropertyName,lstSelectionItem)
-		If SelectionList.MultiSelect = False Then RefreshSelectionListItems(Property,SelectionListItem)
-		
+			
+		'lstSelectionItem.Put(SelectionListItem.Value,"Placeholder")
+		lstSelectionItem.Add(SelectionListItem.Value)
 	End If
+		
+	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then AS_Properties.PutProperty(Property.PropertyName,lstSelectionItem)
+	If SelectionList.MultiSelect = False Then RefreshSelectionListItems(Property,SelectionListItem)
 	
 	CallSubDelayed3(m_Settings,"ValueChanged",Property,lstSelectionItem)
 	If m_Settings.HapticFeedback Then XUIViewsUtils.PerformHapticFeedback(xpnl_SelectionItem)
@@ -2023,10 +2064,6 @@ Private Sub xclv_Main_VisibleRangeChanged (FirstIndex As Int, LastIndex As Int)
 					AddSpaceItem2List(p,xclv_Main.GetValue(i),True)
 				else If xclv_Main.GetValue(i) Is AS_Settings_DescriptionItem Then
 					AddDescriptionItem2List(p,xclv_Main.GetValue(i),True)
-				Else If xclv_Main.GetValue(i) = "GroupBorderTop" Then
-					AddInternGroupBorder(p,True)
-				Else If xclv_Main.GetValue(i) = "GroupBorderBottom" Then
-					AddInternGroupBorder(p,False)
 				Else If xclv_Main.GetValue(i) = "BottomText" Then
 					AddInternBottomText(p)
 				Else If xclv_Main.GetValue(i) = "Placeholder" Then
@@ -2080,32 +2117,44 @@ End Sub
 
 Private Sub xtf_TextBox_TextChanged (Old As String, New As String)
 	Dim xtf_TextBox As B4XView = Sender
-	If xtf_TextBox.IsInitialized = False Or xtf_TextBox.Tag = Null Then Return
+	if isDisableTextChangeEvent then Return 
+	
+	Try
+	
+		If xtf_TextBox.IsInitialized = False Then Return
 
-	'Dim ValueTypeTextProperties As AS_Settings_ValueTypeTextProperties = xtf_TextBox.Tag
+		'Dim ValueTypeTextProperties As AS_Settings_ValueTypeTextProperties = xtf_TextBox.Tag
 	
 '	If ValueTypeTextProperties.InputType = getInputType_IPv4 Then
 '		
-	'
+		'
 '		
-	''		xtf_TextBox.Text = New
-	''		xtf_TextBox.SelectionStart = xtf_TextBox.Text.Length
+		''		xtf_TextBox.Text = New
+		''		xtf_TextBox.SelectionStart = xtf_TextBox.Text.Length
 '		
 '	else If ValueTypeTextProperties.InputType = getInputType_IPv6 Then
 '		
 '	End If
-
-	Dim Property As AS_Settings_Property = xclv_Main.GetValue(xclv_Main.GetItemFromView(xtf_TextBox))
+		Dim Index As Int = xclv_Main.GetItemFromView(xtf_TextBox)
+		Dim Property As AS_Settings_Property = xclv_Main.GetValue(Index)
 	
-	If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
-		AS_Properties.PutProperty(Property.PropertyName,xtf_TextBox.Text)
-	End If
+		If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
+			AS_Properties.PutProperty(Property.PropertyName,xtf_TextBox.Text)
+		End If
 
-	If isReady Then CallSubDelayed3(m_Settings,"ValueChanged",Property,xtf_TextBox.Text)
+		If isReady Then CallSubDelayed3(m_Settings,"ValueChanged",Property,xtf_TextBox.Text)
+	
+	Catch
+		Log(LastException)
+	End Try
 End Sub
 
 Private Sub GroupHeaderClicked(Group As AS_Settings_Group)
 	CallSubDelayed2(m_Settings,"GroupHeaderClicked",Group)
+End Sub
+
+Private Sub PageScrollChanged(Offset As Int)
+	CallSubDelayed3(m_Settings,"PageScrollChanged",Offset,Me)
 End Sub
 
 #If B4J
@@ -2314,6 +2363,23 @@ Private Sub xclv_Main_ScrollChanged (Offset As Int)
 
 		#End If
 	End If
+	PageScrollChanged(Offset)
+End Sub
+
+Private Sub xclv_Main_ItemClick (Index As Int, Value As Object)
+	
+	If Value Is AS_Settings_Property And Value.As(AS_Settings_Property).PropertyType Is AS_Settings_Property_ComboBox Then
+		
+		Dim xpnl_Background As B4XView = xclv_Main.GetPanel(Index)
+		For Each v As B4XView In xpnl_Background.GetAllViewsRecursive
+			If v.Tag Is B4XComboBox Then
+				OpenComboBox(v.Tag)
+				Exit
+			End If
+		Next
+
+	End If
+
 End Sub
 
 #Region CustomDrawProperty
@@ -2593,6 +2659,44 @@ Private Sub GetContrastColor(Color As Int) As Int
 	End If
 End Sub
 
+'https://www.b4x.com/android/forum/threads/b4x-programmatically-open-b4xcombobox.158539/#content
+Private Sub OpenComboBox(x As B4XComboBox)
+    #if B4A
+    x.cmbBox.As(JavaObject).RunMethod("performClick", Null)
+    #else if B4J
+    x.cmbBox.As(JavaObject).RunMethod("show", Null)
+    #else if B4i
+	CallSub(x, "btn_click")
+    #end if
+End Sub
+
+'https://www.b4x.com/android/forum/threads/b4x-setpanelcornerradius-only-for-certain-corners.164567/
+Private Sub SetPanelCornerRadius(View As B4XView, CornerRadius As Float,TopLeft As Boolean,TopRight As Boolean,BottomLeft As Boolean,BottomRight As Boolean)
+    #If B4I
+	'https://www.b4x.com/android/forum/threads/individually-change-corner-radius-of-a-view.127751/post-800352
+    View.SetColorAndBorder(View.Color,0,0,CornerRadius)
+    Dim CornerSum As Int = IIf(TopLeft,1,0) + IIf(TopRight,2,0) + IIf(BottomLeft,4,0) + IIf(BottomRight,8,0)
+    View.As(NativeObject).GetField ("layer").SetField ("maskedCorners", CornerSum)
+    #Else If B4A
+	'https://www.b4x.com/android/forum/threads/gradientdrawable-with-different-corner-radius.51475/post-322392
+    Dim cdw As ColorDrawable
+    cdw.Initialize(View.Color, 0)
+    View.As(View).Background = cdw
+    Dim jo As JavaObject = View.As(View).Background
+    If View.As(View).Background Is ColorDrawable Or View.As(View).Background Is GradientDrawable Then
+        jo.RunMethod("setCornerRadii", Array As Object(Array As Float(IIf(TopLeft,CornerRadius,0), IIf(TopLeft,CornerRadius,0), IIf(TopRight,CornerRadius,0), IIf(TopRight,CornerRadius,0), IIf(BottomRight,CornerRadius,0), IIf(BottomRight,CornerRadius,0), IIf(BottomLeft,CornerRadius,0), IIf(BottomLeft,CornerRadius,0))))
+    End If
+    #Else If B4J
+	'https://www.b4x.com/android/forum/threads/b4x-setpanelcornerradius-only-for-certain-corners.164567/post-1008965
+	Dim Corners As String = ""
+	Corners = Corners & IIf(TopLeft, CornerRadius, 0) & " "
+	Corners = Corners & IIf(TopRight, CornerRadius, 0) & " "
+	Corners = Corners & IIf(BottomLeft, CornerRadius, 0) & " "
+	Corners = Corners & IIf(BottomRight, CornerRadius, 0)
+	CSSUtils.SetStyleProperty(View, "-fx-background-radius", Corners)
+    #End If
+End Sub
+
 #End Region
 
 #Region Types
@@ -2606,11 +2710,11 @@ Private Sub CreateAS_Settings_Group (Key As String, Name As String, Properties A
 	Return t1
 End Sub
 
-Private Sub CreateAS_Settings_PropertyViews (RootBackgroundPanel As B4XView, LeftBackgroundPanel As B4XView, RightBackgroundPanel As B4XView, IconImageView As B4XView, NameLabel As B4XView,DescriptionLabel As B4XView) As AS_Settings_PropertyViews
+Private Sub CreateAS_Settings_PropertyViews (RootBackgroundPanel As B4XView, BackgroundPanel As B4XView, RightBackgroundPanel As B4XView, IconImageView As B4XView, NameLabel As B4XView,DescriptionLabel As B4XView) As AS_Settings_PropertyViews
 	Dim t1 As AS_Settings_PropertyViews
 	t1.Initialize
 	t1.RootBackgroundPanel = RootBackgroundPanel
-	t1.LeftBackgroundPanel = LeftBackgroundPanel
+	t1.BackgroundPanel = BackgroundPanel
 	t1.RightBackgroundPanel = RightBackgroundPanel
 	t1.IconImageView = IconImageView
 	t1.NameLabel = NameLabel

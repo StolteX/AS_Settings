@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=1
-NavigationStack=B4XMainPage,AS_Settings1_DisabledItemClicked,252,6,AS_SettingsPage,AddSpaceItem,202,0,AS_SettingsPage,GetGroup,2390,0,AS_SettingsPage,Create,1730,0,AS_SettingsPage,AddProperty_ColorChooser,282,0,B4XMainPage,EnableAllItems,259,0,B4XMainPage,B4XPage_Created,104,6,AS_SettingsPage,GetProperty,1824,6,AS_SettingsPage,getBottomText,1664,0,AS_SettingsPage,AddInternGroup,1131,0,AS_SettingsPage,AddInternProperty,1324,1
+NavigationStack=AS_SettingsPage,AddInternProperty,1608,6,AS_SettingsPage,RefreshColors,1832,0,Visual Designer,frm_main.bjl,-100,3,B4XMainPage,B4XPage_Created,25,4,B4XMainPage,ChangeTheme,122,0,B4XMainPage,AS_Settings1_DisabledItemClicked,254,0,B4XMainPage,AS_Settings1_PageScrollChanged,270,0,B4XMainPage,AS_Settings1_CustomDrawProperty,182,4,B4XMainPage,AS_Settings1_ActionClicked,176,0
 SelectedBuild=0
 VisibleModules=4,2,3,1

@@ -16,6 +16,6 @@ ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=1
 ModuleClosedNodes5=1
-NavigationStack=AS_SettingsPage,Initialize,140,4,AS_SettingsPage,AddProperty_Boolean,299,0,AS_SettingsPage,AddProperty_SelectionList,302,6,AS_SettingsPage,SelectionItem_Click,1502,6,B4XMainPage,B4XPage_Created,66,3,AS_SettingsPage,AddInternProperty,1317,2
+NavigationStack=AS_SettingsPage,SelectionItem_Click,1935,6,AS_SettingsPage,CreateEditText,2510,0,AS_SettingsPage,xtf_TextBox_FocusChanged,2106,0,AS_SettingsPage,Class_Globals,20,6,AS_SettingsPage,AddInternProperty,1491,6,AS_SettingsPage,xtf_TextBox_TextChanged,2113,6,AS_Settings,getInputType_Numeric,736,0,B4XMainPage,B4XPage_Created,66,3,B4XMainPage,AS_Settings1_CustomDrawProperty,275,0,B4XMainPage,AS_Settings1_CustomDrawGroup,271,0,B4XMainPage,EnableAllItems,266,0
 SelectedBuild=0
 VisibleModules=4,2,3,1

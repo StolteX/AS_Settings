@@ -43,6 +43,7 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	AS_Settings1.MainPage.AddProperty_Boolean("Basic","PropertyName_3","Boolean Property True with a long text","",Null,True)
 	'Action Button
 	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_4","Action Property","Description Long Long Long Long Long Long Long Long Long Long Long Long Long Long Test Text",Null,"English")
+	AS_Settings1.MainPage.AddProperty_Link("Basic","PropertyName_44","Link Property","example.mail@gmail.com",Null,"")
 	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_5","Icon","",AS_Settings1.FontToBitmap(Chr(0xF179),False,30,xui.Color_White),"English, German, Italian, Spanish, Swedish")
 	AS_Settings1.MainPage.AddProperty_ActionClean("Basic","PropertyName_6","Delete Account","",AS_Settings1.FontToBitmap(Chr(0xE92B),True,34,xui.Color_White))
 	AS_Settings1.MainPage.AddProperty_Action("Basic","PropertyName_7","Pro Feature","",Null,"Pro")
@@ -268,4 +269,8 @@ Private Sub EnableAllItems(ColorChooserProperty As AS_Settings_Property_ColorCho
 		End If
 	Next
 	SettingPage2.Refresh
+End Sub
+
+Private Sub AS_Settings1_PageScrollChanged(Offset As Int, Page As AS_SettingsPage)
+	Log("PageScrollChanged: " & Offset)
 End Sub

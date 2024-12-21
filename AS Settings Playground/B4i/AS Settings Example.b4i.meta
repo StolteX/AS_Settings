@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=1
-NavigationStack=AS_SettingsPage,AddProperty_Boolean,260,0,AS_SettingsPage,AddInternProperty,1274,6,AS_SettingsPage,AddProperty2List,1106,1,AS_SettingsPage,Refresh,1812,0,B4XMainPage,AS_Settings1_ValueChanged,153,2,AS_SettingsPage,getHeight,1668,0,AS_SettingsPage,Base_Resize,155,0,AS_SettingsPage,AddInternGroupBorder,1646,0,AS_SettingsPage,setHeight,1661,6,B4XMainPage,B4XPage_Created,66,2
+NavigationStack=AS_SettingsPage,Initialize,74,0,AS_SettingsPage,xclv_Main_ScrollChanged,2320,0,AS_SettingsPage,xclv_Main_VisibleRangeChanged,2025,0,AS_SettingsPage,xpnl_ActionClickPanel_Click,2126,0,AS_SettingsPage,xclv_Main_ItemClick,2332,6,AS_SettingsPage,AddProperty_Action,455,0,AS_SettingsPage,AddProperty_Link,480,1,B4XMainPage,B4XPage_Created,39,6,AS_Settings,Class_Globals,209,0,AS_SettingsPage,AddInternProperty,1648,6
 SelectedBuild=0
 VisibleModules=4,2,3,1
