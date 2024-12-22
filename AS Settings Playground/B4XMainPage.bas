@@ -16,6 +16,7 @@ Sub Class_Globals
 	Private xui As XUI
 	Private AS_Settings1 As AS_Settings
 	Private SettingPage2 As AS_SettingsPage
+	Private ScrollPane1 As B4XView
 End Sub
 
 Public Sub Initialize
@@ -185,28 +186,28 @@ Private Sub AS_Settings1_ActionClicked(Property As AS_Settings_Property)
 	End If
 
 End Sub
-
-Private Sub AS_Settings1_CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
-	
-	If CustomDrawProperty.Property.PropertyName = "PropertyName_6" Then
-		CustomDrawProperty.PropertyViews.NameLabel.TextColor = xui.Color_ARGB(255,221, 95, 96)
-		CustomDrawProperty.PropertyViews.IconImageView.SetBitmap(AS_Settings1.FontToBitmap(Chr(0xE92B),True,34,xui.Color_ARGB(255,221, 95, 96)))
-	else If CustomDrawProperty.Property.PropertyName = "PropertyName_7" Then
-		
-		Dim ChipWidth As Float = 45dip
-		Dim ChipHeight As Float = 20dip
-		
-		Dim xlbl_ProVersionChip As B4XView = CustomDrawProperty.PropertySettingViews.ActionValueLabel
-		Dim xlbl_ActionButtonArrowLabel As B4XView = CustomDrawProperty.PropertySettingViews.ActionButtonArrowLabel
-		xlbl_ProVersionChip.SetTextAlignment("CENTER","CENTER")
-		xlbl_ProVersionChip.Font = xui.CreateDefaultBoldFont(15)
-		xlbl_ProVersionChip.SetColorAndBorder(xui.Color_ARGB(255,81,190,97),0,0,ChipHeight/2)
-		'Resize the Chip Label
-		xlbl_ProVersionChip.SetLayoutAnimated(0,xlbl_ActionButtonArrowLabel.Left - ChipWidth - 5dip,CustomDrawProperty.PropertySettingViews.BackgroundPanel.Height/2 - ChipHeight/2,ChipWidth,ChipHeight)
-	
-	End If
-	
-End Sub
+'
+'Private Sub AS_Settings1_CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
+'	
+'	If CustomDrawProperty.Property.PropertyName = "PropertyName_6" Then
+'		CustomDrawProperty.PropertyViews.NameLabel.TextColor = xui.Color_ARGB(255,221, 95, 96)
+'		CustomDrawProperty.PropertyViews.IconImageView.SetBitmap(AS_Settings1.FontToBitmap(Chr(0xE92B),True,34,xui.Color_ARGB(255,221, 95, 96)))
+'	else If CustomDrawProperty.Property.PropertyName = "PropertyName_7" Then
+'		
+'		Dim ChipWidth As Float = 45dip
+'		Dim ChipHeight As Float = 20dip
+'		
+'		Dim xlbl_ProVersionChip As B4XView = CustomDrawProperty.PropertySettingViews.ActionValueLabel
+'		Dim xlbl_ActionButtonArrowLabel As B4XView = CustomDrawProperty.PropertySettingViews.ActionButtonArrowLabel
+'		xlbl_ProVersionChip.SetTextAlignment("CENTER","CENTER")
+'		xlbl_ProVersionChip.Font = xui.CreateDefaultBoldFont(15)
+'		xlbl_ProVersionChip.SetColorAndBorder(xui.Color_ARGB(255,81,190,97),0,0,ChipHeight/2)
+'		'Resize the Chip Label
+'		xlbl_ProVersionChip.SetLayoutAnimated(0,xlbl_ActionButtonArrowLabel.Left - ChipWidth - 5dip,CustomDrawProperty.PropertySettingViews.BackgroundPanel.Height/2 - ChipHeight/2,ChipWidth,ChipHeight)
+'	
+'	End If
+'	
+'End Sub
 
 
 Private Sub ShowInputBox(DefaultText As String,PropertyName As String)
@@ -271,6 +272,20 @@ Private Sub EnableAllItems(ColorChooserProperty As AS_Settings_Property_ColorCho
 	SettingPage2.Refresh
 End Sub
 
-Private Sub AS_Settings1_PageScrollChanged(Offset As Int, Page As AS_SettingsPage)
-	Log("PageScrollChanged: " & Offset)
+Private Sub AS_Settings1_CustomDrawGroup(CustomDrawGroup As AS_Settings_CustomDrawGroup)
+	CustomGroupColor(CustomDrawGroup.GroupViews.BackgroundPanel,CustomDrawGroup.group.Key)
+End Sub
+
+Private Sub AS_Settings1_CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
+    CustomGroupColor(CustomDrawProperty.PropertyViews.RootBackgroundPanel,CustomDrawProperty.Property.Group.Key)
+    CustomGroupColor(CustomDrawProperty.PropertyViews.BackgroundPanel,CustomDrawProperty.Property.Group.Key)
+End Sub
+
+Private Sub CustomGroupColor(BackgroundPanel As B4XView,GroupKey As String)
+    Select Case GroupKey
+        Case "Basic"
+            BackgroundPanel.Color = xui.Color_ARGB(255,73, 98, 164)
+        Case "Advanced"
+            BackgroundPanel.Color = xui.Color_ARGB(255,141, 68, 173)
+    End Select
 End Sub

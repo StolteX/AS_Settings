@@ -24,7 +24,7 @@ Sub Class_Globals
 	Private xpnl_SecondPageBackground As B4XView
 	Private xpnl_Header As B4XView
 	
-	Private isDisableTextChangeEvent as Boolean = False
+	Private isDisableTextChangeEvent As Boolean = False
 	Private xiv_ExitIcon As B4XView
 	Private xpnl_ExitIcon As B4XView
 	Private xlbl_HeaderText As B4XView
@@ -967,6 +967,7 @@ Private Sub AddColor2List(xpnl_Background As B4XView,ColorItem As AS_Settings_Pr
 	If FromLazyLoading Then
 		
 		Dim xpnl_ColorItemsBackground As B4XView = xui.CreatePanel("")
+		xpnl_ColorItemsBackground.Tag = "xpnl_ColorItemsBackground"
 		xpnl_Background.AddView(xpnl_ColorItemsBackground,10dip,0,xpnl_Background.Width - 10dip*2,xpnl_Background.Height)
 		xpnl_ColorItemsBackground.Color = xui.Color_Transparent
 		'xpnl_ColorItemsBackground.Color = xui.Color_Red
@@ -1254,6 +1255,10 @@ Private Sub AddInternSelectionItem(xpnl_Background As B4XView,SelectionListItem 
 	xpnl_Seperator.Visible = Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) > 0
 	xpnl_Property.AddView(xpnl_Seperator,xlbl_PropertyName.Left,0,xpnl_Property.Width,1dip)
 	
+	If Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) = 0 Or Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) = Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.Size -1 Then
+		SetPanelCornerRadius(xpnl_Property,m_Settings.CornerRadius,Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) = 0,Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) = 0,Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) = Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.Size -1,Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) = Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.Size -1)
+	End If
+	
 End Sub
 
 Private Sub ListGetDefault(lst As List,Value As Object,DefaultValue As Object) As Object
@@ -1304,11 +1309,10 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	
 	xpnl_Property.AddView(xlbl_PropertyName,m_Settings.Padding,0,LabelWidth,xpnl_Background.Height)
 	
-	If Property.isFirst Then
-		SetPanelCornerRadius(xpnl_Property,m_Settings.CornerRadius,True,True,False,False)
-	Else If Property.isLast Then
-		SetPanelCornerRadius(xpnl_Property,m_Settings.CornerRadius,False,False,True,True)
+	If Property.isFirst Or Property.isLast Then
+		SetPanelCornerRadius(xpnl_Property,m_Settings.CornerRadius,Property.isFirst,Property.isFirst,Property.isLast,Property.isLast)
 	End If
+	
 	
 	Dim xlbl_Description As B4XView = CreateLabel("")
 	xlbl_Description.Text = Property.Description
@@ -1687,11 +1691,21 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			xiv_Icon.Visible = False
 			AddColor2List(xpnl_Property,Property.PropertyType,True)
 			
-			If m_Settings.PropertySeperator And Property.isLast = False Then
+			Dim xpnl_ColorItemsBackground As B4XView
+			For Each v As B4XView In xpnl_Property.GetAllViewsRecursive
+				If v.Tag Is String And v.Tag = "xpnl_ColorItemsBackground" Then
+					xpnl_ColorItemsBackground = v
+					Exit
+				End If
+			Next
+			
+			If m_Settings.PropertySeperator And Property.isLast = True Then
 				xpnl_Property.Height = xpnl_Property.Height + 20dip
-				xclv_Main.ResizeItem(xclv_Main.GetItemFromView(xpnl_Background),xpnl_Property.Height)
-				xpnl_PropertySeperator.Top = xpnl_Property.Height - xpnl_PropertySeperator.Height - 20dip/2
+				xclv_Main.ResizeItem(xclv_Main.GetItemFromView(xpnl_Property),xpnl_Property.Height)
+				'xpnl_PropertySeperator.Top = xpnl_Property.Height - xpnl_PropertySeperator.Height - 20dip/2
 			End If
+			
+			xpnl_ColorItemsBackground.Top = xpnl_Property.Height/2 - xpnl_ColorItemsBackground.Height/2
 			
 		Case Property.PropertyType Is AS_Settings_Property_Custom
 		
@@ -1837,7 +1851,7 @@ End Sub
 Private Sub RefreshColors
 	xpnl_Page.Color = m_Settings.BackgroundColor
 	xclv_Main.AsView.Color = m_Settings.BackgroundColor
-	xclv_Main.sv.ScrollViewInnerPanel.Color = m_Settings.BackgroundColor
+	xclv_Main.sv.ScrollViewInnerPanel.Color = xui.Color_Transparent'm_Settings.BackgroundColor
 	xclv_Main.GetBase.Color = m_Settings.BackgroundColor
 	If xpnl_ExitIcon.IsInitialized Then xpnl_ExitIcon.SetColorAndBorder(m_Settings.ExitIconColor,0,0,xpnl_ExitIcon.Height/2)
 	#IF B4A or B4I
@@ -2472,7 +2486,7 @@ Private Sub ini_xclv(EventName As String,Parent As B4XView,ShowScrollBar As Bool
 	Dim sv As ScrollView = clv.sv
 	sv.Color = xui.Color_Transparent
 	#Else IF B4J
-	clv.sv.As(ScrollPane).Style = "-fx-background:transparent;-fx-background-color:transparent;"
+	clv.sv.As(ScrollPane).Style = "-fx-background:transparent;-fx-background-color:transparent;-fx-border-color :transparent;"
 	#End If
 	
 	Return clv

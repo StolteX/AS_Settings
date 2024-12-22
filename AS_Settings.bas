@@ -154,6 +154,9 @@ V2.15
 		-BugFix - In the Property SelectionList if SelectionMode Single was set and you used the SaveMode Manual, you could select multiple items
 		-BugFix - In the Property Action more space is now released for the description if no value text is displayed
 		-BugFix - In the Property ComboBox the complete item can be clicked to open the combobox
+V2.16
+	-AS_SettingsPage
+		-BugFix - Round corner fix for SelectionItems + ColorChooser
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
