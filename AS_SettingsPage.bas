@@ -1128,7 +1128,7 @@ Private Sub AddProperty2List(Property As AS_Settings_Property)
 			If Property.Description <> "" Then
 
 				Dim xlbl_Name As B4XView = CreateLabel("")
-				xlbl_Name.Font = xui.CreateDefaultBoldFont(18)
+				xlbl_Name.Font = m_Settings.PropertyProperties.NameFont
 				xlbl_Name.Text = Property.DisplayName
 				xlbl_Name.Width = LabelWidth
 			#If B4I
@@ -1141,7 +1141,7 @@ Private Sub AddProperty2List(Property As AS_Settings_Property)
 		
 				Dim xlbl_Description As B4XView = CreateLabel("")
 				xlbl_Description.Text = Property.Description
-				xlbl_Description.Font = xui.CreateDefaultFont(15)
+				xlbl_Description.Font = m_Settings.PropertyProperties.DescriptionFont
 				xlbl_Description.TextColor = m_Settings.PropertyProperties.DescriptionTextColor
 				xlbl_Description.SetTextAlignment("TOP","LEFT")
 	#If B4I
@@ -1183,7 +1183,7 @@ Private Sub AddInternGroup(xpnl_Group As B4XView,Group As AS_Settings_Group)
 	xlbl_GroupName.Tag = Group
 	xpnl_Group.Color = m_Settings.GroupNameBackgroundColor
 		
-	xpnl_Group.AddView(xlbl_GroupName,5dip + m_Settings.Padding,0,xpnl_Page.Width - (m_Settings.Padding*2),Height)
+	xpnl_Group.AddView(xlbl_GroupName,m_Settings.GroupProperties.LeftGap + m_Settings.Padding,0,xpnl_Page.Width - (m_Settings.Padding*2) - m_Settings.GroupProperties.LeftGap*2,Height)
 	
 	Dim CustomDrawGroup As AS_Settings_CustomDrawGroup
 	CustomDrawGroup.Initialize
@@ -1214,7 +1214,7 @@ Private Sub AddInternSelectionItem(xpnl_Background As B4XView,SelectionListItem 
 	xpnl_Property.Color = m_Settings.PropertyProperties.BackgroundColor
 	Dim xlbl_PropertyName As B4XView = CreateLabel("")
 	xlbl_PropertyName.Text = SelectionListItem.DisplayName
-	xlbl_PropertyName.Font = xui.CreateDefaultBoldFont(18)
+	xlbl_PropertyName.Font = m_Settings.PropertyProperties.NameFont
 	xlbl_PropertyName.TextColor = m_Settings.PropertyProperties.TextColor
 	xlbl_PropertyName.SetTextAlignment("CENTER","LEFT")
 	#If B4I
@@ -1289,7 +1289,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	xpnl_Property.Color = m_Settings.PropertyProperties.BackgroundColor
 	Dim xlbl_PropertyName As B4XView = CreateLabel("")
 	xlbl_PropertyName.Text = Property.DisplayName
-	xlbl_PropertyName.Font = xui.CreateDefaultBoldFont(18)
+	xlbl_PropertyName.Font = m_Settings.PropertyProperties.NameFont
 	xlbl_PropertyName.TextColor = m_Settings.PropertyProperties.TextColor
 	xlbl_PropertyName.SetTextAlignment("CENTER","LEFT")
 	#If B4I
@@ -1316,7 +1316,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 	
 	Dim xlbl_Description As B4XView = CreateLabel("")
 	xlbl_Description.Text = Property.Description
-	xlbl_Description.Font = xui.CreateDefaultFont(15)
+	xlbl_Description.Font = m_Settings.PropertyProperties.DescriptionFont
 	xlbl_Description.TextColor = m_Settings.PropertyProperties.DescriptionTextColor
 	xlbl_Description.SetTextAlignment("TOP","LEFT")
 	#If B4I
@@ -2131,7 +2131,7 @@ End Sub
 
 Private Sub xtf_TextBox_TextChanged (Old As String, New As String)
 	Dim xtf_TextBox As B4XView = Sender
-	if isDisableTextChangeEvent then Return 
+	If isDisableTextChangeEvent Then Return 
 	
 	Try
 	

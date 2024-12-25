@@ -157,6 +157,13 @@ V2.15
 V2.16
 	-AS_SettingsPage
 		-BugFix - Round corner fix for SelectionItems + ColorChooser
+V2.17
+	-AS_Settings
+		-Update AS_Settings_GroupProperties added LeftGap
+			-Default: 5dip
+		-Update AS_Settings_Property_Properties added NameFont and DescriptionFont
+			-NameFont Default: Bold 18
+			-DescriptionFont Default: Normal 15
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
@@ -250,8 +257,8 @@ Sub Class_Globals
 	Type AS_Settings_BottomTextProperty(xFont As B4XFont,TextColor As Int)
 	Type AS_Settings_ColorItem(Color As Int,Enabled As Boolean)
 	
-	Type AS_Settings_Property_Properties(Width As Float,Height As Float,xFont As B4XFont,TextColor As Int,BackgroundColor As Int,DescriptionTextColor As Int,FieldBackgroundColor As Int,FieldHeight As Float,InputType As String,Format As String,CornerRadius As Float)
-	Type AS_Settings_GroupProperties(xFont As B4XFont,TextColor As Int,HorizontalTextAlignment As String)
+	Type AS_Settings_Property_Properties(Width As Float,Height As Float,xFont As B4XFont,TextColor As Int,BackgroundColor As Int,DescriptionTextColor As Int,FieldBackgroundColor As Int,FieldHeight As Float,InputType As String,Format As String,CornerRadius As Float,NameFont As B4XFont,DescriptionFont As B4XFont)
+	Type AS_Settings_GroupProperties(xFont As B4XFont,TextColor As Int,HorizontalTextAlignment As String,LeftGap As Float)
 	#IF SETTINGS_SegmentedTab
 	Type AS_Settings_Property_SegmentedTab(Property As AS_Settings_Property,Width As Float,CornerRadius As Float,ShowSeperators As Boolean,BackgroundColor As Int,SelectionColor As Int,SeperatorColor As Int,TextColor As Int,xFont As B4XFont,ItemMap As Map)
 	#End If
@@ -532,7 +539,12 @@ Private Sub IniProps(Props As Map)
 	m_ThemeChangeTransition = Props.GetDefault("ThemeChangeTransition","Fade")
 	
 	g_PropertyProperties = CreateProperties(mBase.Width/4,DipToCurrent(Props.Get("PropertyHeight")),xui.CreateDefaultFont(18),xui.PaintOrColorToColor(Props.GetDefault("PropertyTextColor",0xFFFFFFFF)),xui.PaintOrColorToColor(Props.Get("PropertyColor")),xui.Color_ARGB(152,255,255,255),xui.Color_ARGB(255,60, 64, 67),DipToCurrent(Props.Get("PropertyHeight"))/2,getInputType_Text,"",5dip)
+	g_PropertyProperties.NameFont = xui.CreateDefaultBoldFont(18)
+	g_PropertyProperties.DescriptionFont = xui.CreateDefaultFont(15)
+	
 	g_GroupProperties = CreateAS_Settings_GroupProperties(xui.CreateDefaultBoldFont(20),xui.Color_White,"LEFT")
+	g_GroupProperties.LeftGap = 5dip
+	
 	#IF SETTINGS_SegmentedTab
 	g_SegmentedTabProperties = CreateAS_Settings_SegmentedTabProperties(0,DipToCurrent(Props.GetDefault("SegmentedTabCornerRadius",5dip)),Props.GetDefault("SegmentedTabShowSeperators",False),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabBackgroundColor",0xFF3D3C40)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSelectionColor",0xFF737278)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabSeperatorsColor",0x50FFFFFF)),xui.PaintOrColorToColor(Props.GetDefault("SegmentedTabTextColor",0xFFFFFFFF)),xui.CreateDefaultBoldFont(15))
 	#End If
