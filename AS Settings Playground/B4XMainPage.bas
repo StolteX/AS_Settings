@@ -77,7 +77,6 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	'Second Page
 	SettingPage2.Initialize(AS_Settings1,"Theme")
 	SettingPage2.Height = 600dip
-	
 	SettingPage2.AddProperty_Custom("","CustomButton1",80dip)
 	
 	SettingPage2.AddGroup("Basic","Accent Color")

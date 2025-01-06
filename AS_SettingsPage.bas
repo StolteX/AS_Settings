@@ -944,7 +944,10 @@ Private Sub AddCustomItem2List(xpnl_Background As B4XView,CustomItem As AS_Setti
 	If FromLazyLoading Then
 		
 		Dim xpnl_CustomDrawBackground As B4XView = xui.CreatePanel("")
-		xpnl_Background.AddView(xpnl_CustomDrawBackground,0,0,xpnl_Background.Width,xpnl_Background.Height)
+		xpnl_Background.AddView(xpnl_CustomDrawBackground,IIf(CustomItem.Property.Group.Key=Null,0,m_Settings.Padding),0,IIf(CustomItem.Property.Group.Key=Null,xpnl_Background.Width,xpnl_Page.Width - (m_Settings.Padding*2)),xpnl_Background.Height)
+		#if b4j
+		xpnl_CustomDrawBackground.Width = xpnl_CustomDrawBackground.Width - IIf(isMainPage,20dip,m_Settings.Padding/2)
+	    #End If
 		
 		Dim CustomDraw As AS_Settings_CustomDrawCustomProperty
 		CustomDraw.Initialize
@@ -956,6 +959,7 @@ Private Sub AddCustomItem2List(xpnl_Background As B4XView,CustomItem As AS_Setti
 	Else
 		xclv_Main.Add(xpnl_Background,CustomItem)
 	End If
+	
 End Sub
 
 Private Sub AddColor2List(xpnl_Background As B4XView,ColorItem As AS_Settings_Property_ColorChooser,FromLazyLoading As Boolean)
@@ -1202,7 +1206,6 @@ End Sub
 
 Private Sub AddInternSelectionItem(xpnl_Background As B4XView,SelectionListItem As AS_Settings_SelectionListItem)
 	xpnl_Background.Color = m_Settings.BackgroundColor
-	Dim Gap As Float = 5dip
 	
 	Dim xpnl_Property As B4XView = xui.CreatePanel("SelectionItem")
 	xpnl_Background.AddView(xpnl_Property,m_Settings.Padding,0,xpnl_Page.Width - (m_Settings.Padding*2),xpnl_Background.Height)
@@ -1214,7 +1217,7 @@ Private Sub AddInternSelectionItem(xpnl_Background As B4XView,SelectionListItem 
 	xpnl_Property.Color = m_Settings.PropertyProperties.BackgroundColor
 	Dim xlbl_PropertyName As B4XView = CreateLabel("")
 	xlbl_PropertyName.Text = SelectionListItem.DisplayName
-	xlbl_PropertyName.Font = m_Settings.PropertyProperties.NameFont
+	xlbl_PropertyName.Font = m_Settings.SelectionListItemProperties.xFont
 	xlbl_PropertyName.TextColor = m_Settings.PropertyProperties.TextColor
 	xlbl_PropertyName.SetTextAlignment("CENTER","LEFT")
 	#If B4I
@@ -1241,18 +1244,18 @@ Private Sub AddInternSelectionItem(xpnl_Background As B4XView,SelectionListItem 
 	Private xpnl_Seperator As B4XView = xui.CreatePanel("")
 	xpnl_Seperator.Color = m_Settings.PropertySeperatorColor
 
-	xpnl_Property.AddView(xlbl_PropertyName,m_Settings.Padding,0,xpnl_Property.Width - 40dip - 5dip - Gap,xpnl_Background.Height)
+	xpnl_Property.AddView(xlbl_PropertyName,m_Settings.Padding,0,xpnl_Property.Width - 40dip - m_Settings.Padding,xpnl_Background.Height)
 	xpnl_Property.AddView(xlbl_CheckItem,xpnl_Property.Width - 40dip,0,40dip,xpnl_Property.Height)
 	
 	Dim xiv_Icon As B4XView = CreateImageView("")
 	If SelectionListItem.Icon.IsInitialized Then
 		xpnl_Property.AddView(xiv_Icon,m_Settings.Padding,(xpnl_Background.Height)/2 - ((xpnl_Background.Height)/2)/2,(xpnl_Background.Height)/2,(xpnl_Background.Height)/2)
-		xlbl_PropertyName.Left = xiv_Icon.Left + xiv_Icon.Width + 5dip
-		xlbl_PropertyName.Width = xlbl_PropertyName.Width - xiv_Icon.Width - 5dip
+		xlbl_PropertyName.Left = xiv_Icon.Left + xiv_Icon.Width + m_Settings.Padding
+		xlbl_PropertyName.Width = xlbl_PropertyName.Width - xiv_Icon.Width - m_Settings.Padding
 		xiv_Icon.SetBitmap(SelectionListItem.Icon)
 	End If
 	
-	xpnl_Seperator.Visible = Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) > 0
+	xpnl_Seperator.Visible = Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) > 0 And m_Settings.SelectionListItemProperties.SeperatorsVisible
 	xpnl_Property.AddView(xpnl_Seperator,xlbl_PropertyName.Left,0,xpnl_Property.Width,1dip)
 	
 	If Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) = 0 Or Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.IndexOf(SelectionListItem) = Property.PropertyType.As(AS_Settings_Property_SelectionList).ListItems.Size -1 Then
@@ -1455,6 +1458,22 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			
 				PropertySettingViews.ActionButtonArrowLabel = xlbl_ActionIcon
 				PropertySettingViews.ActionValueLabel = xlbl_ActionValue
+			
+				Dim CustomDrawActionProperty As AS_Settings_CustomDrawActionProperty
+				CustomDrawActionProperty.Initialize
+				CustomDrawActionProperty.Property = Property
+				CustomDrawActionProperty.Group = Property.Group
+				CustomDrawActionProperty.Height = xpnl_Background.Height
+				CustomDrawActionProperty.RootBackgroundPanel = xpnl_Background
+				CustomDrawActionProperty.PropertyBackgroundPanel = xpnl_Property
+				CustomDrawActionProperty.IconImageView = xiv_Icon
+				CustomDrawActionProperty.PropertyNameLabel = xlbl_PropertyName
+				CustomDrawActionProperty.PropertyDescriptionLabel = xlbl_Description
+				CustomDrawActionProperty.ActionClickPanel = xpnl_ActionClickPanel
+				CustomDrawActionProperty.ActionIconLabel = xlbl_ActionIcon
+				CustomDrawActionProperty.ActionValueLabel = xlbl_ActionValue
+				
+				CallSubDelayed2(m_Settings,"CustomDrawActionProperty",CustomDrawActionProperty)
 			
 			End If
 			xpnl_PropertyBackground.Left = 0
@@ -1747,6 +1766,11 @@ End Sub
 'Indicates whether the page has already been filled with your properties
 Public Sub getisPagePopulated As Boolean
 	Return isReady
+End Sub
+
+'B4J only
+Public Sub getExitIconImageView As B4XView
+	Return xiv_ExitIcon
 End Sub
 
 #End Region

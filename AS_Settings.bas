@@ -164,6 +164,15 @@ V2.17
 		-Update AS_Settings_Property_Properties added NameFont and DescriptionFont
 			-NameFont Default: Bold 18
 			-DescriptionFont Default: Normal 15
+V2.18
+	-AS_Settings
+		-New AS_Settings_SelectionListItemProperties
+			-xFont Default: BoldFont(18)
+			-SeperatorVisible Default: True
+		-New CustomDrawActionProperty Event - only for Action and Link Property
+	-AS_SettingsPage
+		-New get ExitIconImageView - B4J only
+		-BugFix if the CustomProperty is in a group, the BackgroundPanel now has the correct width
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
@@ -217,6 +226,7 @@ V2.17
 
 #Event: ActionClicked(Property As AS_Settings_Property)
 #Event: ChooserTextFieldClicked(Property As AS_Settings_Property)
+#Event: CustomDrawActionProperty(ActionProperty AS AS_Settings_CustomDrawActionProperty)
 #Event: CustomDrawCustomProperty(CustomProperty AS AS_Settings_CustomDrawCustomProperty)
 #Event: CustomDrawProperty(CustomDrawProperty As AS_Settings_CustomDrawProperty)
 #Event: CustomDrawGroup(CustomDrawGroup As AS_Settings_CustomDrawGroup)
@@ -240,6 +250,7 @@ Sub Class_Globals
 	Type AS_Settings_Property_ColorChooser(Property As AS_Settings_Property,ColorList As List,WidthHeight As Float)
 	
 	Type AS_Settings_SelectionListItem(DisplayName As String,Icon As B4XBitmap,Value As Object)
+	Type AS_Settings_SelectionListItemProperties(xFont As B4XFont,SeperatorsVisible As Boolean)
 	
 	Type AS_Settings_SpaceItem(GroupKey As String,Height As Float)
 	Type AS_Settings_DescriptionItem(GroupKey As String,Text As String,SidePadding As Float,TopPadding As Float,xFont As B4XFont,HorizontalAlignment As String)
@@ -249,6 +260,7 @@ Sub Class_Globals
 	Type AS_Settings_Property(PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,PropertyType As Object,isLast As Boolean,isFirst As Boolean,Group As AS_Settings_Group,Value As Object,DefaultValue As Object,DisplayValueText As String,View As Object)
 	Type AS_Settings_CustomDrawProperty(Group As AS_Settings_Group,Property As AS_Settings_Property,PropertyViews As AS_Settings_PropertyViews,PropertySettingViews As AS_Settings_PropertySettingViews)
 	Type AS_Settings_CustomDrawGroup(Group As AS_Settings_Group,GroupViews As AS_Settings_GroupViews)
+	Type AS_Settings_CustomDrawActionProperty(Group As AS_Settings_Group,Property As AS_Settings_Property,Height As Float,RootBackgroundPanel As B4XView,PropertyBackgroundPanel As B4XView,IconImageView As B4XView,PropertyNameLabel As B4XView,PropertyDescriptionLabel As B4XView,ActionClickPanel As B4XView,ActionIconLabel As B4XView,ActionValueLabel As B4XView)
 	Type AS_Settings_CustomDrawCustomProperty(Group As AS_Settings_Group,Property As AS_Settings_Property,BackgroundPanel As B4XView,Height As Float)
 	Type AS_Settings_GroupViews(BackgroundPanel As B4XView,NameLabel As B4XView)
 	Type AS_Settings_PropertyViews(RootBackgroundPanel As B4XView,BackgroundPanel As B4XView,RightBackgroundPanel As B4XView,IconImageView As B4XView,NameLabel As B4XView,DescriptionLabel As B4XView)
@@ -270,6 +282,7 @@ Sub Class_Globals
 	Private g_PropertyProperties As AS_Settings_Property_Properties
 	Private g_BottomTextProperties As AS_Settings_BottomTextProperty
 	Private g_SwitchProperties As AS_Settings_SwitchProperties
+	Private g_SelectionListItemProperties As AS_Settings_SelectionListItemProperties
 	#IF SETTINGS_SegmentedTab
 	Private g_SegmentedTabProperties As AS_Settings_Property_SegmentedTab
 	#End IF
@@ -555,9 +568,17 @@ Private Sub IniProps(Props As Map)
 	g_BottomTextProperties = CreateAS_Settings_BottomTextProperty(xui.CreateDefaultFont(15),xui.PaintOrColorToColor(Props.GetDefault("BottomTextTextColor",0xFFFFFFFF)))
 	g_SwitchProperties = CreateAS_Settings_SwitchProperties(xui.PaintOrColorToColor(Props.Get("SwitchFalseColor")),xui.PaintOrColorToColor(Props.Get("SwitchTrueColor")),xui.PaintOrColorToColor(Props.Get("SwitchThumbColor")))
 
+	g_SelectionListItemProperties.Initialize
+	g_SelectionListItemProperties.xFont = xui.CreateDefaultBoldFont(18)
+	g_SelectionListItemProperties.SeperatorsVisible = True
+
 End Sub
 
 #Region Properties
+
+Public Sub getSelectionListItemProperties As AS_Settings_SelectionListItemProperties
+	Return g_SelectionListItemProperties
+End Sub
 
 Public Sub setExitIconColor(Color As Int)
 	m_ExitIconColor = Color
@@ -830,6 +851,12 @@ End Sub
 Private Sub CustomDrawCustomProperty(Property As AS_Settings_CustomDrawCustomProperty)
 	If xui.SubExists(mCallBack, mEventName & "_CustomDrawCustomProperty",1) Then
 		CallSub2(mCallBack, mEventName & "_CustomDrawCustomProperty",Property)
+	End If
+End Sub
+
+Private Sub CustomDrawActionProperty(Property As AS_Settings_CustomDrawActionProperty)
+	If xui.SubExists(mCallBack, mEventName & "_CustomDrawActionProperty",1) Then
+		CallSub2(mCallBack, mEventName & "_CustomDrawActionProperty",Property)
 	End If
 End Sub
 
