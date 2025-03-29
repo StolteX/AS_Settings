@@ -1451,7 +1451,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 					
 					xpnl_Property.Height = Max(m_Settings.PropertyProperties.Height, xlbl_Description.Top + xlbl_Description.Height + 5dip)
 					xclv_Main.ResizeItem(xclv_Main.GetItemFromView(xlbl_Description),xpnl_Property.Height)
-					xpnl_PropertySeperator.Top = xpnl_Property.Height - xpnl_PropertySeperator.Height*2
+					If m_Settings.PropertySeperator And Property.isLast = False Then xpnl_PropertySeperator.Top = xpnl_Property.Height - xpnl_PropertySeperator.Height*2
 					xlbl_ActionIcon.Top = xpnl_Property.Height/2 - xlbl_ActionIcon.Height/2
 					
 				End If
@@ -1500,7 +1500,7 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			xpnl_PropertyBackground.AddView(xlbl_TextField,xpnl_PropertyBackground.Width - m_Settings.PropertyProperties.Width - m_Settings.Padding,xpnl_PropertyBackground.Height/2 - m_Settings.PropertyProperties.FieldHeight/2,m_Settings.PropertyProperties.Width,m_Settings.PropertyProperties.FieldHeight)
 		
 		Case Property.PropertyType Is AS_Settings_Property_Text
-			
+			isDisableTextChangeEvent = True
 			Dim Property_Text As AS_Settings_Property_Text = Property.PropertyType
 			Dim xtf_TextBox As B4XView = CreateEditText("xtf_TextBox",Property_Text.InputType)
 			xtf_TextBox.TextColor = m_Settings.PropertyProperties.TextColor
@@ -1516,7 +1516,6 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 				xpnl_PropertyBackground.AddView(xtf_TextBox,xpnl_PropertyBackground.Width - m_Settings.PropertyProperties.Width - m_Settings.Padding,xpnl_PropertyBackground.Height/2 - m_Settings.PropertyProperties.FieldHeight/2, m_Settings.PropertyProperties.Width,m_Settings.PropertyProperties.FieldHeight)
 			End If
 			
-			isDisableTextChangeEvent = True
 			xtf_TextBox.Text = Property.Value
 			isDisableTextChangeEvent = False
 			Property.View = xtf_TextBox
@@ -1771,6 +1770,15 @@ End Sub
 'B4J only
 Public Sub getExitIconImageView As B4XView
 	Return xiv_ExitIcon
+End Sub
+
+'B4J only
+Public Sub getExitIconBackgroundPanel As B4XView
+	Return xpnl_ExitIcon
+End Sub
+
+Public Sub getPageBackgroundPanel As B4XView
+	Return xpnl_Page
 End Sub
 
 #End Region
@@ -2161,19 +2169,11 @@ Private Sub xtf_TextBox_TextChanged (Old As String, New As String)
 	
 		If xtf_TextBox.IsInitialized = False Then Return
 
-		'Dim ValueTypeTextProperties As AS_Settings_ValueTypeTextProperties = xtf_TextBox.Tag
-	
-'	If ValueTypeTextProperties.InputType = getInputType_IPv4 Then
-'		
-		'
-'		
-		''		xtf_TextBox.Text = New
-		''		xtf_TextBox.SelectionStart = xtf_TextBox.Text.Length
-'		
-'	else If ValueTypeTextProperties.InputType = getInputType_IPv6 Then
-'		
-'	End If
-		Dim Index As Int = xclv_Main.GetItemFromView(xtf_TextBox)
+	#If B4A
+		If Not(xtf_TextBox Is EditText) Then Return
+	#End If
+
+		Dim Index As Int = xclv_Main.GetItemFromView(xtf_TextBox.Parent)
 		Dim Property As AS_Settings_Property = xclv_Main.GetValue(Index)
 	
 		If m_Settings.SaveMode = m_Settings.SaveMode_Automatic Then
@@ -2183,7 +2183,7 @@ Private Sub xtf_TextBox_TextChanged (Old As String, New As String)
 		If isReady Then CallSubDelayed3(m_Settings,"ValueChanged",Property,xtf_TextBox.Text)
 	
 	Catch
-		Log(LastException)
+	Log(LastException)
 	End Try
 End Sub
 

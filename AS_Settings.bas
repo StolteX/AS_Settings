@@ -173,6 +173,14 @@ V2.18
 	-AS_SettingsPage
 		-New get ExitIconImageView - B4J only
 		-BugFix if the CustomProperty is in a group, the BackgroundPanel now has the correct width
+V2.19
+	-AS_SettingsPage
+		-New get ExitIconBackgroundPanel - B4J only
+		-New get PageBackgroundPanel
+		-BugFixes
+V2.20
+	-AS_SettingsPage
+		-BugFix on B4A with many TextFields
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"

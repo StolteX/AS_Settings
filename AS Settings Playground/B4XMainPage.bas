@@ -16,7 +16,7 @@ Sub Class_Globals
 	Private xui As XUI
 	Private AS_Settings1 As AS_Settings
 	Private SettingPage2 As AS_SettingsPage
-	Private ScrollPane1 As B4XView
+
 End Sub
 
 Public Sub Initialize
@@ -70,6 +70,9 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 	
 	AS_Settings1.MainPage.BottomText = "Alexander Stolte" & CRLF & "V1.0.2"
 	
+	For i = 0 To 15
+		AS_Settings1.MainPage.AddProperty_Text("Advanced","PropertyName_8","Text Example","",Null,"Test",100dip,AS_Settings1.InputType_Text)
+	Next
 
 	AS_Settings1.MainPage.Create
 

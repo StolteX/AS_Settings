@@ -13,6 +13,6 @@ ModuleClosedNodes1=
 ModuleClosedNodes2=
 ModuleClosedNodes3=
 ModuleClosedNodes4=1
-NavigationStack=AS_Settings,Class_Globals,255,6,Visual Designer,frm_main.bjl,-100,2,B4XMainPage,Class_Globals,11,0,AS_SettingsPage,getExitIconImageView,1764,0,AS_SettingsPage,Initialize,132,0,AS_SettingsPage,Class_Globals,0,0,AS_SettingsPage,AddInternProperty,1317,6,AS_SettingsPage,AddInternSelectionItem,1207,1,B4XMainPage,EnableAllItems,288,0,B4XMainPage,B4XPage_Created,26,6
+NavigationStack=AS_SettingsPage,AddInternProperty,1317,6,B4XMainPage,EnableAllItems,288,0,AS_SettingsPage,Class_Globals,37,0,AS_SettingsPage,Initialize,104,0,AS_SettingsPage,getisPagePopulated,1764,0,AS_SettingsPage,getExitIconImageView,1767,0,AS_SettingsPage,getPageBackgroundPanel,1775,2,AS_SettingsPage,Create,1863,0,AS_SettingsPage,AddInternSelectionItem,1207,1,B4XMainPage,B4XPage_Created,110,6
 SelectedBuild=0
 VisibleModules=4,2,3,1
