@@ -121,6 +121,8 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 
 	'AS_Properties.RemoveProperty("OptionsExample1")
 
+	Sleep(5000)
+	AS_Settings1.MainPage.GetProperty("PropertyName_5").View.As(B4XView).Text = "Test2"
 '	Sleep(4000)
 '	Log("jetzt")
 '	AS_Settings1.MainPage.GetProperty("PropertyName_1").Description = "Last Backup Backup Backup: Now"

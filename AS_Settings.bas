@@ -181,6 +181,9 @@ V2.19
 V2.20
 	-AS_SettingsPage
 		-BugFix on B4A with many TextFields
+V2.21
+	-AS_SettingsPage
+		-BugFixes
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"

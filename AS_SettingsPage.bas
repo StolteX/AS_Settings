@@ -1444,6 +1444,8 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 				xlbl_ActionValue.As(JavaObject).RunMethod("setMouseTransparent",Array As Object(True))
 			#End If
 			
+				Property.View = xlbl_ActionValue
+			
 				If Property.Description <> "" And xlbl_ActionValue.Text.Trim = "" Then
 					xlbl_Description.Width = xpnl_Property.Width - m_Settings.Padding - ActionIconWidth - Gap*2
 					xlbl_Description.Height = MeasureMultilineTextHeight(xlbl_Description) + 5dip
@@ -1492,6 +1494,8 @@ Private Sub AddInternProperty(xpnl_Background As B4XView,Property As AS_Settings
 			End If
 			xlbl_TextField.Tag = m_Settings.PropertyProperties
 			xlbl_TextField.TextColor = m_Settings.PropertyProperties.TextColor
+			
+			Property.View = xlbl_TextField
 			
 			If m_Settings.PropertyProperties.Width = 0 Then
 				m_Settings.PropertyProperties.Width = xpnl_Property.Width/2 - m_Settings.Padding
