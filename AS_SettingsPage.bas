@@ -2093,7 +2093,7 @@ End Sub
 
 Private Sub xclv_Main_VisibleRangeChanged (FirstIndex As Int, LastIndex As Int)
 
-	Dim ExtraSize As Int = 10
+	Dim ExtraSize As Int = 20
 	For i = 0 To xclv_Main.Size - 1
 		Dim p As B4XView = xclv_Main.GetPanel(i)
 		If i > FirstIndex - ExtraSize And i < LastIndex + ExtraSize Then
@@ -2315,10 +2315,12 @@ Private Sub PlusMinusChangeValue(PlusMinus As AS_PlusMinus,isAdding As Boolean)
 	
 	Dim FinalValue As Int = 0
 	If isAdding Then
-		FinalValue = Property.Value + Property_PlusMinus.Increment
+		FinalValue = Min(Property.Value + Property_PlusMinus.Increment,Property_PlusMinus.MaxValue)
 	Else
-		FinalValue = Property.Value - Property_PlusMinus.Increment
+		FinalValue = Min(Property.Value - Property_PlusMinus.Increment,Property_PlusMinus.MaxValue)
 	End If
+	
+	If Property.Value.As(Int) = FinalValue Then Return
 	
 	If FinalValue <= Property_PlusMinus.MaxValue And FinalValue >= Property_PlusMinus.MinValue Then
 	

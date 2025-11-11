@@ -127,6 +127,8 @@ Private Sub B4XPage_Created (Root1 As B4XView)
 '	Log("jetzt")
 '	AS_Settings1.MainPage.GetProperty("PropertyName_1").Description = "Last Backup Backup Backup: Now"
 '	AS_Settings1.MainPage.Refresh
+
+
 End Sub
 
 Private Sub B4XPage_KeyboardStateChanged (Height As Float)

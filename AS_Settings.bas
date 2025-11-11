@@ -184,6 +184,11 @@ V2.20
 V2.21
 	-AS_SettingsPage
 		-BugFixes
+V2.22 (nicht veröffentlicht)
+	-AS_Settings
+		-BugFixes on PlusMinus
+	-AS_SettingsPage
+		-LazyLoading Extra Size increased to 20
 #End If
 
 '-BreakingChange - AddProperty_Text has a new parameter "Format"
