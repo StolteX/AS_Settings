@@ -10,6 +10,7 @@ Sub Class_Globals
 	Private m_Settings As AS_Settings
 	Private m_DisplayName As String
 	Private lst_Items As List
+	Private m_PropertyMap As Map 'Cache for fast property lookups
 	
 	Private xpnl_Page As B4XView
 	Private xiv_RefreshImage As B4XView
@@ -47,6 +48,7 @@ End Sub
 Public Sub Initialize(Settings As AS_Settings,DisplayName As String)
 	isMainPage = Settings.Pages.NumberOfViews = 0
 	lst_Items.Initialize
+	m_PropertyMap.Initialize
 	m_Settings = Settings
 	m_DisplayName = DisplayName
 	
@@ -276,11 +278,14 @@ Public Sub AddProperty_Boolean(GroupKey As String,PropertyName As String,Display
 	End If
 	
 	Property.PropertyType = Property_Boolean
-	
+
 	If GroupKey <> "" Then
 		lst_Properties.Add(Property)
 	End If
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
 	
 End Sub
@@ -321,9 +326,12 @@ Public Sub AddProperty_ColorChooser(GroupKey As String,PropertyName As String,Co
 	Else
 		Property.Value = DefaultValue
 	End If
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 'MultiSelect - If true more than one item can selected. If false only one item is selected if you click, it deselect the previous item
@@ -390,9 +398,12 @@ Public Sub AddProperty_SelectionList(GroupKey As String,PropertyName As String,L
 	End If
 	
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 Private Sub CreateList As List
@@ -431,11 +442,14 @@ Public Sub AddProperty_Text(GroupKey As String,PropertyName As String,DisplayNam
 	End If
 	
 	Property.PropertyType = Property_Text
-	
+
 	lst_Property.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 '<code>https://www.b4x.com/android/forum/threads/b4x-as-settings-action-property.159263/</code>
@@ -468,9 +482,12 @@ Public Sub AddProperty_Action(GroupKey As String,PropertyName As String,DisplayN
 	
 	Property.PropertyType = Property_Action
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 Public Sub AddProperty_Link(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As Object) As AS_Settings_Property
@@ -502,9 +519,12 @@ Public Sub AddProperty_Link(GroupKey As String,PropertyName As String,DisplayNam
 	
 	Property.PropertyType = Property_Link
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 '<code>https://www.b4x.com/android/forum/threads/b4x-as-settings-actionclean-property.159264/</code>
@@ -535,9 +555,12 @@ Public Sub AddProperty_ActionClean(GroupKey As String,PropertyName As String,Dis
 	
 	Property.PropertyType = Property_ActionClean
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 '<code>https://www.b4x.com/android/forum/threads/b4x-as-settings-combobox-property.159266/#post-977923</code>
@@ -571,9 +594,12 @@ Public Sub AddProperty_ComboBox(GroupKey As String,PropertyName As String,Displa
 	
 	Property.PropertyType = Property_ComboBox
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 'The value is displayed in the ComboBox and the key is used for selection and stored in the database
@@ -611,9 +637,12 @@ Public Sub AddProperty_ComboBox2(GroupKey As String,PropertyName As String,Displ
 	
 	Property.PropertyType = Property_ComboBox
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 Public Sub AddProperty_Chooser(GroupKey As String,PropertyName As String,DisplayName As String,Description As String,Icon As B4XBitmap,DefaultValue As String,Width As Float) As AS_Settings_Property
@@ -656,11 +685,14 @@ Public Sub AddProperty_Chooser(GroupKey As String,PropertyName As String,Display
 	Else
 		Property.Value = DefaultValue
 	End If
-	
+
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 'Add your own layout over the CustomDraw Event
@@ -689,11 +721,14 @@ Public Sub AddProperty_Custom(GroupKey As String,PropertyName As String,Height A
 		Dim Group As AS_Settings_Group = GetGroup(GroupKey)
 		Dim lst_Properties As List = Group.Properties
 		lst_Properties.Add(Property)
-		
+
 	End If
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 #If SETTINGS_SegmentedTab
@@ -737,11 +772,14 @@ Public Sub AddProperty_SegmentedTab(GroupKey As String,PropertyName As String,Di
 	End If
 	
 	Property.PropertyType = Property_SegmentedTab
-	
+
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 
 #End If
@@ -792,11 +830,14 @@ Public Sub AddProperty_PlusMinus(GroupKey As String,PropertyName As String,Displ
 	Else
 		Property.Value = DefaultValue
 	End If
-	
+
 	lst_Properties.Add(Property)
-	
+
+	'Cache property for fast lookup
+	m_PropertyMap.Put(PropertyName, Property)
+
 	Return Property
-	
+
 End Sub
 #End If
 
@@ -1879,8 +1920,8 @@ Public Sub Create
 	xclv_Main.Add(xpnl_Placeholder,"Placeholder")
 	
 	'XUIViewsUtils.AddStubToCLVIfNeeded(xclv_Main, m_Settings.BackgroundColor)
-	
-	Sleep(500)
+
+	Sleep(0)
 	isReady = True
 End Sub
 
@@ -1918,7 +1959,7 @@ Public Sub Refresh
 		Dim LastY As Float = xclv_Main.sv.ScrollViewOffsetY
 		Create
 		xclv_Main.sv.ScrollViewOffsetY = LastY
-		Sleep(250)
+		Sleep(0)
 		xiv_RefreshImage.Visible = False
 	End If
 End Sub
@@ -1926,6 +1967,18 @@ End Sub
 'Sets the value of a property as if the user had clicked the switch
 'The _ValueChanged event is triggered
 Public Sub SetProperty_Boolean(PropertyName As String,Value As Boolean)
+	'Use cached map for fast lookup
+	If m_PropertyMap.ContainsKey(PropertyName) Then
+		Dim Property As AS_Settings_Property = m_PropertyMap.Get(PropertyName)
+		If Property.View <> Null And Property.View Is B4XSwitch Then
+			Dim Switch As B4XSwitch = Property.View
+			Switch.Value = Value
+			SwitchBooleanValueChanged(Switch,Value)
+			Return
+		End If
+	End If
+
+	'Fallback to old search method
 	For i = 0 To xclv_Main.Size -1
 		If xclv_Main.GetValue(i) Is AS_Settings_Property Then
 			Dim Property As AS_Settings_Property = xclv_Main.GetValue(i)
@@ -1933,6 +1986,7 @@ Public Sub SetProperty_Boolean(PropertyName As String,Value As Boolean)
 				Dim Switch As B4XSwitch = Property.View
 				Switch.Value = Value
 				SwitchBooleanValueChanged(Switch,Value)
+				Exit 'Early exit after found
 			End If
 		End If
 	Next
@@ -1940,8 +1994,14 @@ End Sub
 
 'Gets the Property object
 Public Sub GetProperty(PropertyName As String) As AS_Settings_Property
+	'Use cached map for fast lookup
+	If m_PropertyMap.ContainsKey(PropertyName) Then
+		Return m_PropertyMap.Get(PropertyName)
+	End If
+
+	'Fallback to old search method if not in cache
 	If xclv_Main.Size = 0 Then
-		For Each Item As Object In lst_Items	
+		For Each Item As Object In lst_Items
 			Select True
 				Case Item Is AS_Settings_Group
 					For Each Property As AS_Settings_Property In Item.As(AS_Settings_Group).Properties
@@ -1958,7 +2018,7 @@ Public Sub GetProperty(PropertyName As String) As AS_Settings_Property
 						Return Property
 					End If
 			End Select
-		
+
 		Next
 	Else
 		For i = 0 To xclv_Main.Size -1
@@ -2032,16 +2092,16 @@ Private Sub SelectionItem_Click
 	
 End Sub
 
-Private Sub RefreshSelectionListItems(Property As AS_Settings_Property,SelectionListItem As AS_Settings_SelectionListItem)
-	
+Private Sub RefreshSelectionListItems(Property As AS_Settings_Property,SelectionListItem AS_Settings_SelectionListItem)
+
 	For i = 0 To xclv_Main.Size -1
-				
-		If  xclv_Main.GetValue(i) Is AS_Settings_SelectionListItem And xclv_Main.GetPanel(i).NumberOfViews > 0 Then
-							
+
+		If xclv_Main.GetValue(i) Is AS_Settings_SelectionListItem And xclv_Main.GetPanel(i).NumberOfViews > 0 Then
+
 			Dim tmpProperty As AS_Settings_Property = xclv_Main.GetPanel(i).Tag
-				
+
 			If tmpProperty.PropertyName = Property.PropertyName Then
-								
+
 				Dim tmpSelectionListItem As AS_Settings_SelectionListItem = xclv_Main.GetValue(i)
 				Dim xlbl_CheckItem As B4XView = xclv_Main.GetPanel(i).Getview(0).GetView(1)
 				If tmpSelectionListItem.Value = SelectionListItem.Value Then
@@ -2049,13 +2109,13 @@ Private Sub RefreshSelectionListItems(Property As AS_Settings_Property,Selection
 				Else
 					xlbl_CheckItem.Text = ""
 				End If
-					
+
 			End If
 
 		End If
 
 	Next
-	
+
 End Sub
 
 #If B4J

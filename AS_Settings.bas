@@ -472,15 +472,15 @@ Public Sub setTheme(Theme As AS_Settings_Theme)
 	g_SwitchProperties.FalseColor = Theme.SwitchFalseColor
 	g_SwitchProperties.TrueColor = Theme.SwitchTrueColor
 	g_SwitchProperties.ThumbColor = Theme.SwitchThumbColor
-	
+
 	Sleep(0)
-	
+
 	For Each Page As AS_SettingsPage In lst_CreatedPages
 		Page.Refresh
 	Next
-	
-	Sleep(250)
-	
+
+	Sleep(0)
+
 	Select m_ThemeChangeTransition
 		Case "None"
 			xiv_RefreshImage.SetVisibleAnimated(0,False)
